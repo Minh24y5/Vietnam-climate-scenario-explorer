@@ -134,9 +134,22 @@ input[type=range]{width:100%;accent-color:var(--accent);min-height:28px}
 .split{stroke:var(--line);stroke-dasharray:4 4}
 #tip{position:absolute;display:none;pointer-events:none;background:var(--card);border:1px solid var(--line);border-radius:6px;padding:7px 11px;font-size:12px;line-height:1.45;font-variant-numeric:tabular-nums;box-shadow:0 4px 14px rgba(0,0,0,.12),0 1px 3px rgba(0,0,0,.08);z-index:3;white-space:nowrap}
 #tip div{display:flex;align-items:center;gap:6px}
-#legend{display:flex;flex-wrap:wrap;gap:4px 16px;margin:10px 4px 2px;font-size:12.5px;color:var(--muted)}
+#legend{display:flex;flex-wrap:wrap;gap:8px 20px;margin:12px 4px 6px;font-size:12.5px;color:var(--muted)}
 #legend span{display:inline-flex;align-items:center;gap:6px}
 .ln{display:inline-block;width:18px;height:4px;border-radius:2px}
+
+.legend-guide{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:8px 18px;margin:10px 4px 4px;padding-top:10px;border-top:1px solid var(--line);font-size:12px;line-height:1.45;color:var(--muted)}
+.guide-item{display:flex;align-items:flex-start;gap:8px}
+.guide-swatch{display:inline-block;flex-shrink:0;margin-top:3px;border-radius:2px}
+.guide-band{width:16px;height:12px;background:var(--muted);opacity:.25;border:1px dashed var(--muted)}
+.guide-line{width:16px;height:4px;background:var(--ink);margin-top:7px}
+.guide-box{width:16px;height:12px;background:var(--base);border:1px solid var(--line)}
+.guide-txt strong{color:var(--ink);font-weight:600}
+
+.model-legends{display:flex;flex-wrap:wrap;gap:6px 14px;width:100%;padding:6px 0 2px;align-items:center;border-top:1px dashed var(--line);margin-top:6px}
+.model-legend-label{font-size:11.5px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);margin-right:2px}
+.model-badge{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-family:var(--font-mono);color:var(--ink)}
+.model-dash-svg{width:24px;height:8px;vertical-align:middle}
 
 /* ---------- summary section ---------- */
 .section-title{font-size:15px;font-weight:650;letter-spacing:-.01em;margin:18px 0 8px;color:var(--ink)}

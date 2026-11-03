@@ -91,6 +91,20 @@
             <div id="chartHelp" class="sr-only">Interactive timeseries chart spanning 1950 to 2100. Press Left or Right Arrow keys to navigate year by year; Shift + Arrow to navigate by decade. Press Home for 1950 and End for 2100.</div>
             <div id="chartLiveAnnounce" class="sr-only" aria-live="polite" aria-atomic="true"></div>
             <div id="legend"></div>
+            <div class="legend-guide" id="legendGuide">
+                <div class="guide-item">
+                    <span class="guide-swatch guide-band" aria-hidden="true"></span>
+                    <span class="guide-txt"><strong>Shaded band:</strong> Model uncertainty envelope (lowest to highest CMIP6 projection for that year)</span>
+                </div>
+                <div class="guide-item">
+                    <span class="guide-swatch guide-line" aria-hidden="true"></span>
+                    <span class="guide-txt"><strong>Thick center line:</strong> Multi-model ensemble mean trend</span>
+                </div>
+                <div class="guide-item">
+                    <span class="guide-swatch guide-box" aria-hidden="true"></span>
+                    <span class="guide-txt"><strong>Vertical shading:</strong> Selected 30-year reference baseline period</span>
+                </div>
+            </div>
         </section>
 
         <section class="summary-section" aria-labelledby="statsHeading">

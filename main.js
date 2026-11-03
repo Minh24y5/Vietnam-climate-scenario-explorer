@@ -190,16 +190,29 @@ $('#chart').addEventListener('keydown', e => {
 
 /* ---------- text, legend, stats, accessible table ---------- */
 function labels() {
-  const V = VARS[st.v], anom = st.mode === 'anom';
+  const V = VARS[st.v], anom = st.mode === 'anom', ms = sel();
   $('#blabel').textContent = `${st.bs}–${st.bs + 29}`;
   $('#ctitle').textContent = `${V.name} over Vietnam${anom ? ', change vs ' + st.bs + '–' + (st.bs + 29) : ''}`;
-  $('#csub').textContent = `${V.unit}. Thick line is the ensemble mean; shaded band spans the lowest to highest of ${sel().length} selected model${sel().length === 1 ? '' : 's'}.`;
+  $('#csub').textContent = `${V.unit}. Thick lines show the multi-model ensemble mean; shaded bands represent the full range (uncertainty spread) across ${ms.length} selected model${ms.length === 1 ? '' : 's'}.`;
   
-  let legendHtml = `<span><i class="ln" style="background:var(--hist)" aria-hidden="true"></i>Historical</span>` +
-    Object.keys(SCEN).filter(s => st.scen.has(s)).map(s => `<span><i class="ln" style="background:${SCEN[s].c}" aria-hidden="true"></i>${SCEN[s].name}</span>`).join('');
-  if (st.ind) {
-    legendHtml += ` <span style="color:var(--muted);margin-left:8px">(Individual models shown with dashed strokes)</span>`;
+  let legendHtml = `<span><i class="ln" style="background:var(--hist)" aria-hidden="true"></i><strong>Historical</strong> (1950–2014)</span>` +
+    Object.keys(SCEN).filter(s => st.scen.has(s)).map(s => {
+      const desc = s === 'ssp245' ? 'Medium emissions' : 'High emissions';
+      return `<span><i class="ln" style="background:${SCEN[s].c}" aria-hidden="true"></i><strong>${SCEN[s].name}</strong> (${desc}, 2015–2100)</span>`;
+    }).join('');
+
+  if (st.ind && ms.length > 0) {
+    legendHtml += `<div class="model-legends">` +
+      `<span class="model-legend-label">Individual Model Traces:</span>` +
+      ms.map((m, mi) => {
+        const dash = DASHES[mi % DASHES.length] || 'none';
+        return `<span class="model-badge">` +
+          `<svg class="model-dash-svg" aria-hidden="true"><line x1="0" y1="4" x2="24" y2="4" stroke="currentColor" stroke-width="2" stroke-dasharray="${dash}"/></svg>` +
+          `${m}</span>`;
+      }).join('') +
+      `</div>`;
   }
+
   $('#legend').innerHTML = legendHtml;
 }
 
