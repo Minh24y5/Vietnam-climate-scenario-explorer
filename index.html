@@ -3,55 +3,112 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-    <title>Vietnam climate scenario explorer</title>
+    <title>Vietnam Climate Scenario Explorer</title>
     <meta name="description" content="Explore CMIP6 temperature and rainfall projections for Vietnam under two emissions scenarios.">
     <link rel="stylesheet" href="style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
 </head>
 <body>
     <main>
-        <h1>Vietnam climate scenario explorer</h1>
-        <p class="sub">How might temperature and rainfall across Vietnam change by 2100? Compare two emissions paths and see where climate models agree or disagree.</p>
+        <header class="header">
+            <h1>Vietnam Climate Scenario Explorer</h1>
+            <p class="sub">How might temperature and rainfall across Vietnam change by 2100? Compare two emissions paths and see where climate models agree or disagree.</p>
+        </header>
 
-        <div class="banner" id="banner"><span id="bmsg"></span><label class="file">Load your JSON<input type="file" id="file" accept=".json,application/json"></label></div>
+        <div class="banner" id="banner" role="status">
+            <span class="banner-badge" id="bbadge">Sample Data</span>
+            <span id="bmsg" class="banner-text"></span>
+            <div class="banner-actions">
+                <button type="button" id="resetBtn" class="link-btn" style="display:none">Reset to sample data</button>
+                <a id="dlSample" class="link-btn" href="#template" download="vietnam_cmip6_template.json">Download template JSON</a>
+                <label class="file">Load your JSON<input type="file" id="file" accept=".json,application/json" aria-label="Upload custom CMIP6 JSON file"></label>
+            </div>
+        </div>
 
-        <section class="controls" aria-label="Chart controls">
-            <div class="group"><span class="lbl">Variable</span>
-            <div class="seg" id="varSeg"><button data-v="tas" class="on">Temperature</button><button data-v="pr">Rainfall</button></div></div>
-            <div class="group"><span class="lbl">Values</span>
-            <div class="seg" id="modeSeg"><button data-m="abs" class="on">Absolute</button><button data-m="anom">Change vs baseline</button></div></div>
-            <div class="group"><span class="lbl">Scenarios</span>
-            <div class="checks" id="scens">
-                <label><input type="checkbox" value="ssp245" checked><span class="sw" style="background:var(--s245)"></span>SSP2-4.5</label>
-                <label><input type="checkbox" value="ssp585" checked><span class="sw" style="background:var(--s585)"></span>SSP5-8.5</label>
-            </div></div>
-            <div class="group"><span class="lbl">Models</span><div class="checks" id="models"></div></div>
-            <div class="group"><span class="lbl">Baseline period: <b id="blabel"></b></span>
-            <input type="range" id="base" min="1950" max="1985" value="1985" aria-label="Baseline start year"></div>
-            <div class="group"><span class="lbl">Display</span>
-            <div class="checks">
-                <label><input type="checkbox" id="ind">Show individual models</label>
-                <label><input type="checkbox" id="smooth" checked>10-year running mean</label>
-            </div></div>
+        <section class="controls-panel" aria-label="Chart controls">
+            <div class="primary-controls">
+                <div class="control-group">
+                    <span class="lbl">Variable</span>
+                    <div class="seg" id="varSeg" role="group" aria-label="Climate variable">
+                        <button data-v="tas" class="on" aria-pressed="true">Temperature</button>
+                        <button data-v="pr" aria-pressed="false">Rainfall</button>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <span class="lbl">Values</span>
+                    <div class="seg" id="modeSeg" role="group" aria-label="Values representation">
+                        <button data-m="abs" class="on" aria-pressed="true">Absolute</button>
+                        <button data-m="anom" aria-pressed="false">Change vs baseline</button>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <span class="lbl">Scenarios</span>
+                    <div class="checks" id="scens">
+                        <label class="check-chip"><input type="checkbox" value="ssp245" checked><span class="sw" style="background:var(--s245)"></span>SSP2-4.5</label>
+                        <label class="check-chip"><input type="checkbox" value="ssp585" checked><span class="sw" style="background:var(--s585)"></span>SSP5-8.5</label>
+                    </div>
+                </div>
+
+                <div class="control-group toggle-adv-group">
+                    <span class="lbl">&nbsp;</span>
+                    <button type="button" id="advToggle" class="adv-toggle-btn" aria-expanded="false" aria-controls="advControls">
+                        <span>Ensemble settings</span> <span class="adv-chevron" aria-hidden="true">▾</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="secondary-controls" id="advControls" style="display:none">
+                <div class="adv-grid">
+                    <div class="adv-group">
+                        <span class="lbl">Models (<span id="modelCount">4</span> active)</span>
+                        <div class="checks" id="models"></div>
+                    </div>
+                    <div class="adv-group">
+                        <span class="lbl">Baseline Period: <b id="blabel"></b></span>
+                        <input type="range" id="base" min="1950" max="1985" value="1985" aria-label="Baseline 30-year start year">
+                    </div>
+                    <div class="adv-group">
+                        <span class="lbl">Display</span>
+                        <div class="checks">
+                            <label class="check-chip"><input type="checkbox" id="ind">Show individual models</label>
+                            <label class="check-chip"><input type="checkbox" id="smooth" checked>10-year running mean</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </section>
 
-        <section class="card">
-            <p class="ctitle" id="ctitle"></p>
+        <section class="card" aria-labelledby="ctitle">
+            <h2 class="ctitle" id="ctitle"></h2>
             <p class="csub" id="csub"></p>
-            <div id="chart"><div id="tip"></div></div>
+            <div id="chart" tabindex="0" role="region" aria-label="Interactive climate projection chart. Use left and right arrow keys to navigate years." aria-describedby="chartHelp">
+                <div id="tip" role="tooltip" aria-hidden="true"></div>
+            </div>
+            <div id="chartHelp" class="sr-only">Interactive timeseries chart spanning 1950 to 2100. Press Left or Right Arrow keys to navigate year by year; Shift + Arrow to navigate by decade. Press Home for 1950 and End for 2100.</div>
+            <div id="chartLiveAnnounce" class="sr-only" aria-live="polite" aria-atomic="true"></div>
             <div id="legend"></div>
         </section>
 
-        <section id="stats" aria-live="polite"></section>
+        <section class="summary-section" aria-labelledby="statsHeading">
+            <h2 id="statsHeading" class="section-title">End-of-century summary (2071–2100)</h2>
+            <div id="stats" aria-live="polite"></div>
+        </section>
+
+        <details id="tableDetails">
+            <summary>View milestone data table</summary>
+            <div id="accessibleTable" class="data-table-wrap"></div>
+        </details>
 
         <details>
             <summary>Use your own CMIP6 results</summary>
             <p>Export one value per year (Vietnam area-weighted annual mean) for each model and load the file above. Temperature is in °C and rainfall in mm per month. <code>historical</code> has 65 values (1950–2014) and each scenario has 86 values (2015–2100).</p>
         <pre><code>import json
-        out = {"tas": {}, "pr": {}}
-        # for every variable v, model m and scenario s:
-        out[v].setdefault(m, {})[s] = [float(x) for x in annual_values]   # s: historical, ssp245, ssp585
-        json.dump(out, open("vietnam_cmip6.json", "w"))</code></pre>
+out = {"tas": {}, "pr": {}}
+# for every variable v, model m and scenario s:
+out[v].setdefault(m, {})[s] = [float(x) for x in annual_values]   # s: historical, ssp245, ssp585
+json.dump(out, open("vietnam_cmip6.json", "w"))</code></pre>
         </details>
     </main>
     <script src="main.js"></script>
