@@ -78,6 +78,13 @@ function draw() {
   }
 
   const B = {ssp245: band('ssp245'), ssp585: band('ssp585')}, vis = Object.keys(SCEN).filter(s => st.scen.has(s));
+
+  if (!vis.length) {
+    svg.append('text').attr('x', W / 2).attr('y', H / 2 - 10).attr('text-anchor', 'middle').attr('class', 'note').text('Select SSP2-4.5 or SSP5-8.5 above to view future projections.');
+    svg.append('text').attr('x', W / 2).attr('y', H / 2 + 10).attr('text-anchor', 'middle').attr('class', 'note').style('fill-opacity', .6).text('Historical data (1950–2014) is still computed but hidden until a scenario is chosen.');
+    activeShowFn = null;
+    return;
+  }
   const rows = B.ssp245.out.slice(0, 65).concat(...vis.map(s => B[s].out.slice(65)));
   let lo = d3.min(rows, d => d.min), hi = d3.max(rows, d => d.max);
   if (st.mode === 'anom') { lo = Math.min(lo, 0); hi = Math.max(hi, 0); }
@@ -124,8 +131,9 @@ function draw() {
     fg.style('display', null);
     vl.attr('x1', x(yr)).attr('x2', x(yr));
     fg.selectAll('circle').data(list).join('circle').attr('cx', x(yr)).attr('cy', d => y(d.d.mean)).attr('r', 4.5).style('fill', d => d.c).style('stroke', 'var(--card)').style('stroke-width', 1.5);
-    tip.innerHTML = `<b>${yr}</b>` + list.map(l => `<div><span class="sw" style="background:${l.c}"></span>${l.n}: <b>${sg(l.d.mean)}</b> ${V.unit} <span style="color:var(--muted)">(${sg(l.d.min)} to ${sg(l.d.max)})</span></div>`).join('');
+    tip.innerHTML = `<b>${yr}</b>` + list.map(l => `<div><span class="sw" style="background:${l.c}" aria-hidden="true"></span>${l.n}: <b>${sg(l.d.mean)}</b> ${V.unit} <span style="color:var(--muted)">(${sg(l.d.min)} to ${sg(l.d.max)})</span></div>`).join('');
     tip.style.display = 'block';
+    tip.removeAttribute('aria-hidden');
     const w = tip.offsetWidth, px = x(yr);
     tip.style.left = (px + 14 + w > W ? Math.max(0, px - w - 14) : px + 14) + 'px';
     tip.style.top = (mg.t + 6) + 'px';
@@ -145,6 +153,7 @@ function draw() {
     .on('pointerleave', () => {
       fg.style('display', 'none');
       tip.style.display = 'none';
+      tip.setAttribute('aria-hidden', 'true');
     });
 }
 
@@ -169,6 +178,7 @@ $('#chart').addEventListener('keydown', e => {
     handled = true;
   } else if (e.key === 'Escape') {
     $('#tip').style.display = 'none';
+    $('#tip').setAttribute('aria-hidden', 'true');
     handled = true;
   }
 
@@ -185,8 +195,8 @@ function labels() {
   $('#ctitle').textContent = `${V.name} over Vietnam${anom ? ', change vs ' + st.bs + '–' + (st.bs + 29) : ''}`;
   $('#csub').textContent = `${V.unit}. Thick line is the ensemble mean; shaded band spans the lowest to highest of ${sel().length} selected model${sel().length === 1 ? '' : 's'}.`;
   
-  let legendHtml = `<span><i class="ln" style="background:var(--hist)"></i>Historical</span>` +
-    Object.keys(SCEN).filter(s => st.scen.has(s)).map(s => `<span><i class="ln" style="background:${SCEN[s].c}"></i>${SCEN[s].name}</span>`).join('');
+  let legendHtml = `<span><i class="ln" style="background:var(--hist)" aria-hidden="true"></i>Historical</span>` +
+    Object.keys(SCEN).filter(s => st.scen.has(s)).map(s => `<span><i class="ln" style="background:${SCEN[s].c}" aria-hidden="true"></i>${SCEN[s].name}</span>`).join('');
   if (st.ind) {
     legendHtml += ` <span style="color:var(--muted);margin-left:8px">(Individual models shown with dashed strokes)</span>`;
   }
@@ -219,7 +229,7 @@ function stats() {
     const big = st.v === 'tas' ? `${fmt(m, 1, 1)} ${V.unit}` : `${fmt(m, 1, 1)} mm/mo (${fmt(p, 1, 1)}%)`;
     const el = document.createElement('div');
     el.className = 'stat';
-    el.innerHTML = `<div class="stat-header"><span class="sw" style="background:${SCEN[s].c}"></span><h3>${SCEN[s].name}, 2071–2100 vs ${st.bs}–${st.bs + 29}</h3></div>` +
+    el.innerHTML = `<div class="stat-header"><span class="sw" style="background:${SCEN[s].c}" aria-hidden="true"></span><h3>${SCEN[s].name}, 2071–2100 vs ${st.bs}–${st.bs + 29}</h3></div>` +
       `<div class="big">${big}</div>` +
       `<p>Model range ${fmt(lo, 1, 1)} to ${fmt(hi, 1, 1)} ${V.unit} (spread ${fmt(hi - lo, 1)}). ` +
       (ms.length < 2 ? 'Select more models to assess consensus.' : agree ? 'All selected models agree on the direction.' : 'Models disagree on the direction.') + '</p>';

@@ -59,8 +59,9 @@
 ::-webkit-scrollbar-thumb:hover{background:var(--muted)}
 
 body{margin:0;background:var(--bg);color:var(--ink);font:400 15px/1.55 var(--font-sans);-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility}
-main{max-width:1000px;margin:0 auto;padding:clamp(16px,4vw,36px) clamp(14px,3vw,24px) 40px}
-.header{margin-bottom:12px}
+main{max-width:1000px;margin:0 auto;padding:clamp(12px,3vw,28px) clamp(14px,3vw,24px) 40px}
+.header{background:var(--bg)}
+.header-inner{max-width:1000px;margin:0 auto;padding:clamp(16px,4vw,36px) clamp(14px,3vw,24px) 0}
 h1{font:650 clamp(24px,4.5vw,34px)/1.15 var(--font-sans);margin:0 0 8px;letter-spacing:-.025em;text-wrap:balance;color:var(--ink)}
 .sub{margin:0 0 14px;color:var(--muted);font-size:15px;line-height:1.5;max-width:65ch;text-wrap:pretty}
 
@@ -68,9 +69,12 @@ h1{font:650 clamp(24px,4.5vw,34px)/1.15 var(--font-sans);margin:0 0 8px;letter-s
 .banner{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:9px 14px;font-size:13px;line-height:1.45;color:var(--muted);margin-bottom:12px;box-shadow:0 1px 3px rgba(0,0,0,.02)}
 .banner.ok{border-color:var(--line)}
 .banner.error{border-color:var(--s585)}
-.banner-badge{display:inline-flex;align-items:center;padding:3px 8px;border-radius:4px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;background:rgba(217,145,0,.15);color:var(--s245)}
+/* Default (sample-data) badge: neutral muted styling — no amber alarm before user interaction */
+.banner-badge{display:inline-flex;align-items:center;padding:3px 8px;border-radius:4px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;background:var(--base);color:var(--muted)}
+/* Custom-data badge: accent tint */
 .banner.ok .banner-badge{background:rgba(11,110,127,.15);color:var(--accent)}
-.banner.error .banner-badge{background:rgba(207,58,33,.15);color:var(--s585)}
+/* Error badge: solid background ensures contrast ≥4.5:1 at 11px */
+.banner.error .banner-badge{background:var(--s585);color:#fff}
 .banner-actions{display:flex;align-items:center;gap:14px;margin-left:auto;flex-wrap:wrap}
 .link-btn{font:inherit;font-size:13px;color:var(--accent);background:transparent;border:0;padding:0;font-weight:600;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
 .link-btn:hover{color:var(--ink)}
@@ -107,6 +111,7 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline
 .checks{display:flex;flex-wrap:wrap;gap:6px 12px}
 .check-chip{display:inline-flex;align-items:center;gap:6px;cursor:pointer;font-size:13.5px;min-height:32px;padding:2px 8px;border-radius:4px;transition:background .12s ease}
 .check-chip:hover{background:var(--base)}
+.chip-desc{font-size:12px;color:var(--muted);font-weight:400}
 .checks input{accent-color:var(--accent);width:16px;height:16px;margin:0}
 .sw{display:inline-block;width:10px;height:10px;border-radius:2px}
 input[type=range]{width:100%;accent-color:var(--accent);min-height:28px}

@@ -9,15 +9,17 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
 </head>
 <body>
-    <main>
-        <header class="header">
+    <header class="header">
+        <div class="header-inner">
             <h1>Vietnam Climate Scenario Explorer</h1>
             <p class="sub">How might temperature and rainfall across Vietnam change by 2100? Compare two emissions paths and see where climate models agree or disagree.</p>
-        </header>
+        </div>
+    </header>
+    <main>
 
         <div class="banner" id="banner" role="status">
             <span class="banner-badge" id="bbadge">Sample Data</span>
-            <span id="bmsg" class="banner-text"></span>
+            <span id="bmsg" class="banner-text">Displaying illustrative synthetic data — load your own CMIP6 JSON to explore real projections.</span>
             <div class="banner-actions">
                 <button type="button" id="resetBtn" class="link-btn" style="display:none">Reset to sample data</button>
                 <a id="dlSample" class="link-btn" href="#template" download="vietnam_cmip6_template.json">Download template JSON</a>
@@ -44,10 +46,10 @@
                 </div>
 
                 <div class="control-group">
-                    <span class="lbl">Scenarios</span>
-                    <div class="checks" id="scens">
-                        <label class="check-chip"><input type="checkbox" value="ssp245" checked><span class="sw" style="background:var(--s245)"></span>SSP2-4.5</label>
-                        <label class="check-chip"><input type="checkbox" value="ssp585" checked><span class="sw" style="background:var(--s585)"></span>SSP5-8.5</label>
+                    <span class="lbl" id="scenLbl">Scenarios</span>
+                    <div class="checks" id="scens" role="group" aria-labelledby="scenLbl">
+                        <label class="check-chip"><input type="checkbox" value="ssp245" checked><span class="sw" style="background:var(--s245)" aria-hidden="true"></span>SSP2-4.5 <span class="chip-desc">(medium)</span></label>
+                        <label class="check-chip"><input type="checkbox" value="ssp585" checked><span class="sw" style="background:var(--s585)" aria-hidden="true"></span>SSP5-8.5 <span class="chip-desc">(high)</span></label>
                     </div>
                 </div>
 
@@ -62,16 +64,16 @@
             <div class="secondary-controls" id="advControls" style="display:none">
                 <div class="adv-grid">
                     <div class="adv-group">
-                        <span class="lbl">Models (<span id="modelCount">4</span> active)</span>
-                        <div class="checks" id="models"></div>
+                        <span class="lbl" id="modelsLbl">Models (<span id="modelCount">4</span> active)</span>
+                        <div class="checks" id="models" role="group" aria-labelledby="modelsLbl"></div>
                     </div>
                     <div class="adv-group">
                         <span class="lbl">Baseline Period: <b id="blabel"></b></span>
                         <input type="range" id="base" min="1950" max="1985" value="1985" aria-label="Baseline 30-year start year">
                     </div>
                     <div class="adv-group">
-                        <span class="lbl">Display</span>
-                        <div class="checks">
+                        <span class="lbl" id="displayLbl">Display</span>
+                        <div class="checks" role="group" aria-labelledby="displayLbl">
                             <label class="check-chip"><input type="checkbox" id="ind">Show individual models</label>
                             <label class="check-chip"><input type="checkbox" id="smooth" checked>10-year running mean</label>
                         </div>
@@ -81,10 +83,10 @@
         </section>
 
         <section class="card" aria-labelledby="ctitle">
-            <h2 class="ctitle" id="ctitle"></h2>
+            <h2 class="ctitle" id="ctitle">Annual mean temperature over Vietnam</h2>
             <p class="csub" id="csub"></p>
             <div id="chart" tabindex="0" role="region" aria-label="Interactive climate projection chart. Use left and right arrow keys to navigate years." aria-describedby="chartHelp">
-                <div id="tip" role="tooltip" aria-hidden="true"></div>
+                <div id="tip" role="tooltip"></div>
             </div>
             <div id="chartHelp" class="sr-only">Interactive timeseries chart spanning 1950 to 2100. Press Left or Right Arrow keys to navigate year by year; Shift + Arrow to navigate by decade. Press Home for 1950 and End for 2100.</div>
             <div id="chartLiveAnnounce" class="sr-only" aria-live="polite" aria-atomic="true"></div>
