@@ -23,7 +23,10 @@ function synth(){
 }
 
 /* ---------- state ---------- */
-let DATA = synth();
+const SAMPLE = synth();
+let REAL = null;          
+let source = 'sample';     
+let DATA = SAMPLE;
 const st = {
   v: 'tas',
   mode: 'abs',
@@ -377,8 +380,21 @@ $('#smooth').addEventListener('change', e => {
 
 window.addEventListener('resize', draw);
 
-/* ---------- template download & data management ---------- */
-let placeholder = true;
+/* ---------- data sources: sample / data folder / uploaded file ---------- */
+const REAL_URL = 'data/vietnam_cmip6.json';
+
+function checkData(d) {
+  for (const v of ['tas', 'pr']) {
+    if (!d[v] || !Object.keys(d[v]).length) throw new Error('Missing variable "' + v + '". Expected "tas" and "pr".');
+    for (const [m, o] of Object.entries(d[v])) {
+      if (!o.historical || o.historical.length !== 65) throw new Error(`${v}/${m} needs 65 historical values (1950–2014). Found ${o.historical ? o.historical.length : 0}.`);
+      for (const s of ['ssp245', 'ssp585']) {
+        if (!o[s] || o[s].length !== 86) throw new Error(`${v}/${m}/${s} needs 86 projection values (2015–2100). Found ${o[s] ? o[s].length : 0}.`);
+      }
+    }
+  }
+}
+
 function updateBanner(status, badgeText, message) {
   const b = $('#banner');
   b.classList.remove('ok', 'error');
@@ -386,30 +402,64 @@ function updateBanner(status, badgeText, message) {
   if (status === 'error') b.classList.add('error');
   $('#bbadge').textContent = badgeText;
   $('#bmsg').textContent = message;
-  $('#resetBtn').style.display = placeholder ? 'none' : 'inline-block';
+  $('#resetBtn').style.display = source === 'custom' ? 'inline-block' : 'none';
 }
 
 function banner() {
-  if (placeholder) {
-    updateBanner('normal', 'Sample Data', 'You are viewing synthetic placeholder data. Load your own JSON export to replace it.');
+  const n = Object.keys(DATA.tas).length;
+  if (source === 'sample') {
+    updateBanner('normal', 'Sample Data', 'You are viewing synthetic placeholder data. ' +
+      (REAL ? 'Switch to “CMIP6 data” above to see real projections.' : 'Load your own JSON export to replace it.'));
+  } else if (source === 'real') {
+    updateBanner('ok', 'CMIP6 Data', `Showing CMIP6 results for ${n} models from ${REAL_URL}.`);
   } else {
-    updateBanner('ok', 'Custom Data', `Showing verified data with ${Object.keys(DATA.tas).length} models.`);
+    updateBanner('ok', 'Custom Data', `Showing your uploaded data with ${n} models.`);
   }
 }
 
-$('#resetBtn').addEventListener('click', () => {
-  DATA = synth();
-  placeholder = true;
-  st.models = new Set(Object.keys(DATA.tas));
+// switch the whole page to one dataset
+function useData(src, d) {
+  source = src;
+  DATA = d;
+  st.models = new Set(Object.keys(d.tas));     // model lists differ between datasets
+  document.querySelectorAll('#srcSeg button').forEach(b => {
+    const on = b.dataset.s === src;            // uploaded data: neither button is highlighted
+    b.classList.toggle('on', on);
+    b.setAttribute('aria-pressed', on ? 'true' : 'false');
+  });
   buildModels();
   banner();
   render();
+}
+
+$('#srcSeg').addEventListener('click', e => {
+  const b = e.target.closest('button');
+  if (!b || b.disabled) return;
+  useData(b.dataset.s, b.dataset.s === 'real' ? REAL : SAMPLE);
 });
+
+$('#resetBtn').addEventListener('click', () => useData('sample', SAMPLE));
+
+// load the real file from the data folder (button stays disabled if this fails)
+fetch(REAL_URL)
+  .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+  .then(d => {
+    checkData(d);
+    REAL = d;
+    const btn = $('#realBtn');
+    btn.disabled = false;
+    btn.removeAttribute('title');
+    if (source === 'sample') useData('real', REAL);   // default to real data once available
+    else banner();
+  })
+  .catch(err => {
+    $('#realBtn').title = `Could not load ${REAL_URL} (${err.message}). Serve the site over http(s), not file://.`;
+    console.warn('CMIP6 data not loaded:', err);
+  });
 
 $('#dlSample').addEventListener('click', e => {
   e.preventDefault();
-  const sample = synth();
-  const blob = new Blob([JSON.stringify(sample, null, 2)], {type: 'application/json'});
+  const blob = new Blob([JSON.stringify(SAMPLE, null, 2)], {type: 'application/json'});
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
@@ -425,21 +475,8 @@ $('#file').addEventListener('change', e => {
   if (!f) return;
   f.text().then(t => {
     const d = JSON.parse(t);
-    for (const v of ['tas', 'pr']) {
-      if (!d[v] || !Object.keys(d[v]).length) throw new Error('Missing variable "' + v + '". Expected "tas" and "pr".');
-      for (const [m, o] of Object.entries(d[v])) {
-        if (!o.historical || o.historical.length !== 65) throw new Error(`${v}/${m} needs 65 historical values (1950–2014). Found ${o.historical ? o.historical.length : 0}.`);
-        for (const s of ['ssp245', 'ssp585']) {
-          if (!o[s] || o[s].length !== 86) throw new Error(`${v}/${m}/${s} needs 86 projection values (2015–2100). Found ${o[s] ? o[s].length : 0}.`);
-        }
-      }
-    }
-    DATA = d;
-    placeholder = false;
-    st.models = new Set(Object.keys(d.tas));
-    buildModels();
-    banner();
-    render();
+    checkData(d);
+    useData('custom', d);
   }).catch(err => {
     updateBanner('error', 'Upload Error', `Could not load file: ${err.message}`);
     $('#resetBtn').style.display = 'inline-block';

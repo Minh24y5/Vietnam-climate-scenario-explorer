@@ -30,6 +30,14 @@
         <section class="controls-panel" aria-label="Chart controls">
             <div class="primary-controls">
                 <div class="control-group">
+                    <span class="lbl">Data</span>
+                    <div class="seg" id="srcSeg" role="group" aria-label="Data source">
+                        <button data-s="sample" class="on" aria-pressed="true">Sample</button>
+                        <button data-s="real" id="realBtn" aria-pressed="false" disabled title="Loading data/vietnam_cmip6.json…">CMIP6 data</button>
+                    </div>
+                </div>
+                
+                <div class="control-group">
                     <span class="lbl">Variable</span>
                     <div class="seg" id="varSeg" role="group" aria-label="Climate variable">
                         <button data-v="tas" class="on" aria-pressed="true">Temperature</button>
