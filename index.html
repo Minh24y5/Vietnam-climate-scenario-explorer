@@ -1,140 +1,233 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-    <title>Vietnam Climate Scenario Explorer</title>
-    <meta name="description" content="Explore CMIP6 temperature and rainfall projections for Vietnam under two emissions scenarios.">
+    <title>Vietnam Climate Scenario Explorer · Kịch bản khí hậu Việt Nam</title>
+    <meta name="description" content="Việt Nam sẽ nóng và mưa nhiều thêm bao nhiêu vào năm 2100? Năm mô hình khí hậu CMIP6 theo hai kịch bản phát thải, kèm công cụ tự khám phá. How much warmer and wetter will Vietnam get by 2100? Five CMIP6 models under two emissions scenarios.">
+    <meta name="theme-color" content="#f1efe9" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#141619" media="(prefers-color-scheme: dark)">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,700;0,900;1,400&display=swap">
     <link rel="stylesheet" href="style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
 </head>
 <body>
-    <header class="header">
-        <div class="header-inner">
-            <h1>Vietnam Climate Scenario Explorer</h1>
-            <p class="sub">How might temperature and rainfall across Vietnam change by 2100? Compare two emissions paths and see where climate models agree or disagree.</p>
+    <a class="skip" href="#explore" data-i18n="skip"></a>
+
+    <header class="folio">
+        <div class="folio-in">
+            <span class="sec-block" data-i18n="section"></span>
+            <a class="nameplate" href="#top" data-i18n="nameplate"></a>
+            <nav class="chapters" data-i18n-attr="aria-label:navLabel">
+                <ul>
+                    <li><a href="#ch-models" data-i18n="navModels"></a></li>
+                    <li><a href="#ch-change" data-i18n="navChange"></a></li>
+                    <li><a href="#ch-futures" data-i18n="navFutures"></a></li>
+                    <li><a href="#ch-rain" data-i18n="navRain"></a></li>
+                    <li><a href="#explore" data-i18n="navExplore"></a></li>
+                </ul>
+            </nav>
+            <div class="lang" id="langSeg" role="group" data-i18n-attr="aria-label:langLabel">
+                <button type="button" data-lang="vi" lang="vi" aria-pressed="true">VI</button>
+                <button type="button" data-lang="en" lang="en" aria-pressed="false">EN</button>
+            </div>
+            <a class="data-badge" id="dataBadge" href="#about"></a>
         </div>
     </header>
-    <main>
 
-        <div class="banner" id="banner" role="status">
-            <span class="banner-badge" id="bbadge">Sample Data</span>
-            <span id="bmsg" class="banner-text">Displaying illustrative synthetic data — load your own CMIP6 JSON to explore real projections.</span>
-            <div class="banner-actions">
-                <button type="button" id="resetBtn" class="link-btn" style="display:none">Reset to sample data</button>
-                <a id="dlSample" class="link-btn" href="#template" download="vietnam_cmip6_template.json">Download template JSON</a>
-                <label class="file">Load your JSON<input type="file" id="file" accept=".json,application/json" aria-label="Upload custom CMIP6 JSON file"></label>
-            </div>
-        </div>
+    <main id="top">
+        <article class="lead" aria-labelledby="heroTitle">
+            <div class="wrap">
+                <h1 id="heroTitle"></h1>
+                <p class="sapo" data-i18n="sapo"></p>
 
-        <section class="controls-panel" aria-label="Chart controls">
-            <div class="primary-controls">
-                <div class="control-group">
-                    <span class="lbl">Data</span>
-                    <div class="seg" id="srcSeg" role="group" aria-label="Data source">
-                        <button data-s="sample" class="on" aria-pressed="true">Sample</button>
-                        <button data-s="real" id="realBtn" aria-pressed="false" disabled title="Loading data/vietnam_cmip6.json…">CMIP6 data</button>
-                    </div>
-                </div>
-                
-                <div class="control-group">
-                    <span class="lbl">Variable</span>
-                    <div class="seg" id="varSeg" role="group" aria-label="Climate variable">
-                        <button data-v="tas" class="on" aria-pressed="true">Temperature</button>
-                        <button data-v="pr" aria-pressed="false">Rainfall</button>
-                    </div>
-                </div>
-
-                <div class="control-group">
-                    <span class="lbl">Values</span>
-                    <div class="seg" id="modeSeg" role="group" aria-label="Values representation">
-                        <button data-m="abs" class="on" aria-pressed="true">Absolute</button>
-                        <button data-m="anom" aria-pressed="false">Change vs baseline</button>
-                    </div>
-                </div>
-
-                <div class="control-group">
-                    <span class="lbl" id="scenLbl">Scenarios</span>
-                    <div class="checks" id="scens" role="group" aria-labelledby="scenLbl">
-                        <label class="check-chip"><input type="checkbox" value="ssp245" checked><span class="sw" style="background:var(--s245)" aria-hidden="true"></span>SSP2-4.5 <span class="chip-desc">(medium)</span></label>
-                        <label class="check-chip"><input type="checkbox" value="ssp585" checked><span class="sw" style="background:var(--s585)" aria-hidden="true"></span>SSP5-8.5 <span class="chip-desc">(high)</span></label>
-                    </div>
-                </div>
-
-                <div class="control-group toggle-adv-group">
-                    <span class="lbl">&nbsp;</span>
-                    <button type="button" id="advToggle" class="adv-toggle-btn" aria-expanded="false" aria-controls="advControls">
-                        <span>Ensemble settings</span> <span class="adv-chevron" aria-hidden="true">▾</span>
-                    </button>
-                </div>
-            </div>
-
-            <div class="secondary-controls" id="advControls" style="display:none">
-                <div class="adv-grid">
-                    <div class="adv-group">
-                        <span class="lbl" id="modelsLbl">Models (<span id="modelCount">4</span> active)</span>
-                        <div class="checks" id="models" role="group" aria-labelledby="modelsLbl"></div>
-                    </div>
-                    <div class="adv-group">
-                        <span class="lbl">Baseline Period: <b id="blabel"></b></span>
-                        <input type="range" id="base" min="1950" max="1985" value="1985" aria-label="Baseline 30-year start year">
-                    </div>
-                    <div class="adv-group">
-                        <span class="lbl" id="displayLbl">Display</span>
-                        <div class="checks" role="group" aria-labelledby="displayLbl">
-                            <label class="check-chip"><input type="checkbox" id="ind">Show individual models</label>
-                            <label class="check-chip"><input type="checkbox" id="smooth" checked>10-year running mean</label>
+                <div class="lead-grid">
+                    <figure class="lead-fig">
+                        <div class="stripes" role="img" id="stripesFig">
+                            <div class="stripes-band">
+                                <svg id="stripes" viewBox="0 0 151 2" preserveAspectRatio="none" aria-hidden="true" focusable="false"></svg>
+                                <div class="stripes-labels" aria-hidden="true">
+                                    <span><b>SSP2-4.5</b> <span class="long" data-i18n="medShort"></span></span>
+                                    <span><b>SSP5-8.5</b> <span class="long" data-i18n="highShort"></span></span>
+                                </div>
+                            </div>
+                            <div class="stripes-axis" aria-hidden="true">
+                                <span class="t0">1950</span>
+                                <span class="t1">2015</span>
+                                <span class="t2">2100</span>
+                            </div>
                         </div>
+                        <figcaption class="cap" id="stripesCap"></figcaption>
+                        <div class="key" id="stripesKey" aria-hidden="true"></div>
+                    </figure>
+
+                    <div class="lead-col">
+                        <p class="byline" id="byline"></p>
+                        <p id="leadP1"></p>
+                    </div>
+
+                    <div class="lead-col">
+                        <p data-i18n="leadP2"></p>
+                        <div class="pull" id="pull"></div>
+                        <p class="jump"><a href="#ch-models" data-i18n="jumpStory"></a> <span class="pg" data-i18n="jumpStoryPg"></span></p>
+                        <p class="jump"><a href="#explore" data-i18n="jumpExplore"></a> <span class="pg" data-i18n="jumpExplorePg"></span></p>
                     </div>
                 </div>
             </div>
-        </section>
+        </article>
 
-        <section class="card" aria-labelledby="ctitle">
-            <h2 class="ctitle" id="ctitle">Annual mean temperature over Vietnam</h2>
-            <p class="csub" id="csub"></p>
-            <div id="chart" tabindex="0" role="region" aria-label="Interactive climate projection chart. Use left and right arrow keys to navigate years." aria-describedby="chartHelp">
-                <div id="tip" role="tooltip"></div>
+        <section class="story" id="story" data-i18n-attr="aria-label:storyLabel">
+            <div class="story-graphic">
+                <div class="story-frame">
+                    <div id="storyChart" class="story-chart" role="img"></div>
+                    <div class="story-legend" id="storyLegend" aria-hidden="true"></div>
+                    <p class="story-source" id="storySource"></p>
+                </div>
             </div>
-            <div id="chartHelp" class="sr-only">Interactive timeseries chart spanning 1950 to 2100. Press Left or Right Arrow keys to navigate year by year; Shift + Arrow to navigate by decade. Press Home for 1950 and End for 2100.</div>
-            <div id="chartLiveAnnounce" class="sr-only" aria-live="polite" aria-atomic="true"></div>
-            <div id="legend"></div>
-            <div class="legend-guide" id="legendGuide">
-                <div class="guide-item">
-                    <span class="guide-swatch guide-band" aria-hidden="true"></span>
-                    <span class="guide-txt"><strong>Shaded band:</strong> Model uncertainty envelope (lowest to highest CMIP6 projection for that year)</span>
-                </div>
-                <div class="guide-item">
-                    <span class="guide-swatch guide-line" aria-hidden="true"></span>
-                    <span class="guide-txt"><strong>Thick center line:</strong> Multi-model ensemble mean trend</span>
-                </div>
-                <div class="guide-item">
-                    <span class="guide-swatch guide-box" aria-hidden="true"></span>
-                    <span class="guide-txt"><strong>Vertical shading:</strong> Selected 30-year reference baseline period</span>
-                </div>
+
+            <div class="story-steps">
+                <article class="step" data-step="tas-abs" id="ch-models"><div class="step-body" data-text="tas-abs"></div></article>
+                <article class="step" data-step="tas-anom" id="ch-change"><div class="step-body" data-text="tas-anom"></div></article>
+                <article class="step" data-step="tas-245" id="ch-futures"><div class="step-body" data-text="tas-245"></div></article>
+                <article class="step" data-step="tas-585"><div class="step-body" data-text="tas-585"></div></article>
+                <article class="step" data-step="pr-abs" id="ch-rain"><div class="step-body" data-text="pr-abs"></div></article>
+                <article class="step" data-step="pr-agree"><div class="step-body" data-text="pr-agree"></div></article>
+                <article class="step" data-step="pr-hatch"><div class="step-body" data-text="pr-hatch"></div></article>
             </div>
         </section>
 
-        <section class="summary-section" aria-labelledby="statsHeading">
-            <h2 id="statsHeading" class="section-title">End-of-century summary (2071–2100)</h2>
-            <div id="stats" aria-live="polite"></div>
+        <section class="explore" id="explore" aria-labelledby="exploreTitle">
+            <div class="wrap">
+                <div class="explore-head">
+                    <h2 id="exploreTitle" data-i18n="exploreTitle"></h2>
+                    <p data-i18n="exploreIntro"></p>
+                </div>
+
+                <div class="explore-grid">
+                    <div class="explore-main">
+                        <div class="chart-head">
+                            <h3 id="ctitle"></h3>
+                            <p id="csub"></p>
+                        </div>
+                        <div id="chart" tabindex="0" role="group" aria-roledescription="chart" aria-describedby="chartHelp">
+                            <div id="tip" role="tooltip" aria-hidden="true"></div>
+                        </div>
+                        <div id="legend" class="legend"></div>
+                        <p class="chart-help" id="chartHelp" data-i18n-html="chartHelp"></p>
+                        <div id="chartLiveAnnounce" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+
+                        <section class="results" aria-labelledby="statsHeading">
+                            <h3 id="statsHeading"></h3>
+                            <div id="stats" aria-live="polite"></div>
+                        </section>
+
+                        <details class="disclosure" id="tableDetails">
+                            <summary data-i18n="tableSummary"></summary>
+                            <div id="accessibleTable" class="data-table-wrap"></div>
+                        </details>
+                    </div>
+
+                    <aside class="rail" data-i18n-attr="aria-label:railLabel">
+                        <fieldset class="ctl">
+                            <legend data-i18n="ctlVariable"></legend>
+                            <div class="seg" id="varSeg" role="group" data-i18n-attr="aria-label:ctlVariable">
+                                <button type="button" data-v="tas" aria-pressed="true" data-i18n="varTas"></button>
+                                <button type="button" data-v="pr" aria-pressed="false" data-i18n="varPr"></button>
+                            </div>
+                        </fieldset>
+
+                        <fieldset class="ctl">
+                            <legend data-i18n="ctlValues"></legend>
+                            <div class="seg" id="modeSeg" role="group" data-i18n-attr="aria-label:ctlValues">
+                                <button type="button" data-m="anom" aria-pressed="true" data-i18n="modeAnom"></button>
+                                <button type="button" data-m="abs" aria-pressed="false" data-i18n="modeAbs"></button>
+                            </div>
+                            <label class="range-label" for="base"><span data-i18n="ctlBaseline"></span> <b id="blabel">1985–2014</b></label>
+                            <input type="range" id="base" min="1950" max="1985" step="1" value="1985">
+                            <p class="ctl-note" data-i18n="baselineNote"></p>
+                        </fieldset>
+
+                        <fieldset class="ctl">
+                            <legend data-i18n="ctlScenarios"></legend>
+                            <div class="checks" id="scens">
+                                <label class="check"><input type="checkbox" value="ssp245" checked><span class="sw" style="--c:var(--s245)" aria-hidden="true"></span><span>SSP2-4.5 <span class="muted" data-i18n="medShort"></span></span></label>
+                                <label class="check"><input type="checkbox" value="ssp585" checked><span class="sw" style="--c:var(--s585)" aria-hidden="true"></span><span>SSP5-8.5 <span class="muted" data-i18n="highShort"></span></span></label>
+                            </div>
+                        </fieldset>
+
+                        <fieldset class="ctl">
+                            <legend><span data-i18n="ctlModels"></span> <span class="muted" id="modelCount"></span></legend>
+                            <div class="checks" id="models"></div>
+                            <p class="ctl-note" id="modelHint" aria-live="polite"></p>
+                            <button type="button" class="link-btn" id="allModels" data-i18n="allModels"></button>
+                        </fieldset>
+
+                        <fieldset class="ctl">
+                            <legend data-i18n="ctlDisplay"></legend>
+                            <div class="checks">
+                                <label class="check"><input type="checkbox" id="ind"><span data-i18n="showEach"></span></label>
+                                <label class="check"><input type="checkbox" id="smooth" checked><span data-i18n="smooth10"></span></label>
+                            </div>
+                        </fieldset>
+
+                        <fieldset class="ctl">
+                            <legend data-i18n="ctlData"></legend>
+                            <div class="seg" id="srcSeg" role="group" data-i18n-attr="aria-label:ctlData">
+                                <button type="button" data-s="real" id="realBtn" aria-pressed="false" data-i18n="srcReal"></button>
+                                <button type="button" data-s="sample" aria-pressed="false" data-i18n="srcSample"></button>
+                            </div>
+                            <p class="ctl-note" id="dataMsg" role="status"></p>
+                            <div class="ctl-links">
+                                <label class="link-btn file"><span data-i18n="loadJson"></span><input type="file" id="file" accept=".json,application/json"></label>
+                                <button type="button" class="link-btn" id="dlSample" data-i18n="dlExample"></button>
+                                <button type="button" class="link-btn" id="resetBtn" hidden></button>
+                            </div>
+                        </fieldset>
+                    </aside>
+                </div>
+            </div>
         </section>
 
-        <details id="tableDetails">
-            <summary>View milestone data table</summary>
-            <div id="accessibleTable" class="data-table-wrap"></div>
-        </details>
-
-        <details>
-            <summary>Use your own CMIP6 results</summary>
-            <p>Export one value per year (Vietnam area-weighted annual mean) for each model and load the file above. Temperature is in °C and rainfall in mm per month. <code>historical</code> has 65 values (1950–2014) and each scenario has 86 values (2015–2100).</p>
-        <pre><code>import json
+        <section class="about" id="about" aria-labelledby="aboutTitle">
+            <div class="wrap about-grid">
+                <div class="about-col">
+                    <h2 id="aboutTitle" data-i18n="aboutTitle"></h2>
+                    <p id="aboutData" data-i18n-html="aboutData"></p>
+                    <p data-i18n="aboutRuns"></p>
+                    <details class="disclosure">
+                        <summary data-i18n="ownTitle"></summary>
+                        <p data-i18n-html="ownText"></p>
+<pre><code>import json
 out = {"tas": {}, "pr": {}}
 # for every variable v, model m and scenario s:
 out[v].setdefault(m, {})[s] = [float(x) for x in annual_values]   # s: historical, ssp245, ssp585
 json.dump(out, open("vietnam_cmip6.json", "w"))</code></pre>
-        </details>
+                    </details>
+                </div>
+                <dl class="glossary">
+                    <dt>CMIP6</dt>
+                    <dd data-i18n="gCmip"></dd>
+                    <dt>SSP2-4.5 · SSP5-8.5</dt>
+                    <dd data-i18n="gSsp"></dd>
+                    <dt data-i18n="gBaseT"></dt>
+                    <dd data-i18n="gBase"></dd>
+                    <dt data-i18n="gEnsT"></dt>
+                    <dd data-i18n="gEns"></dd>
+                    <dt data-i18n="gSmoothT"></dt>
+                    <dd data-i18n="gSmooth"></dd>
+                </dl>
+            </div>
+        </section>
     </main>
+
+    <footer class="imprint">
+        <div class="wrap">
+            <p data-i18n="imprint"></p>
+        </div>
+    </footer>
+
     <script src="main.js"></script>
 </body>
 </html>
