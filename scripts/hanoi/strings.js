@@ -7,6 +7,7 @@ const HN_URL = 'data/hanoi/hanoi.json';
 Object.assign(S.vi, {
   skip: 'Bỏ qua, đến phần tự khám phá', section: 'Hà Nội', nameplate: 'Kịch bản khí hậu Việt Nam', navLabel: 'Các chương',
   navPast: 'Đã trải qua', navLevels: 'Mức ấm lên', navHeat: 'Nắng nóng', navRain: 'Mưa', navCheck: 'Độ tin cậy', navExplore: 'Tự khám phá',
+  navNationalKicker: 'Trang chính', navNational: 'Cả nước',
   storyLabel: 'Bài viết theo chương',
   jumpStory: 'Xem tiếp: Những gì Hà Nội đã trải qua', jumpStoryPg: '(chương 1)',
   jumpNational: 'Cả nước: Việt Nam sẽ nóng thêm bao nhiêu?', jumpNationalPg: '(trang chính)',
@@ -37,6 +38,7 @@ Object.assign(S.vi, {
 Object.assign(S.en, {
   skip: 'Skip to the explorer', section: 'Hanoi', nameplate: 'Vietnam Climate Scenario Explorer', navLabel: 'Chapters',
   navPast: 'So far', navLevels: 'Warming levels', navHeat: 'Heat', navRain: 'Rain', navCheck: 'Can we trust it', navExplore: 'Explorer',
+  navNationalKicker: 'Main page', navNational: 'All of Vietnam',
   storyLabel: 'Story in chapters',
   jumpStory: 'Continued: what Hanoi has lived through', jumpStoryPg: '(chapter 1)',
   jumpNational: 'Nationwide: how much warmer will Vietnam get?', jumpNationalPg: '(main page)',

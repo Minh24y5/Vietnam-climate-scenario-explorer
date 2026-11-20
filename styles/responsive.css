@@ -4,12 +4,11 @@
   .data-badge .d,.data-badge .sep{display:none}
   .byline .bydate{display:block}
 }
-@media (max-width:1240px){
-  .chapters a{padding:0 7px;font-size:14px}
-}
 @media (max-width:1120px){
+  /* no room for the rail: it leaves, and the page takes the full width again */
   .chapters{display:none}
-  .folio-ctl{margin-left:auto}
+  .folio{padding-left:0}
+  main,.imprint{margin-left:0}
 }
 @media (max-width:980px){
   .lead-grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}

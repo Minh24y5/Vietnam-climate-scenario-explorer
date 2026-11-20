@@ -27,6 +27,7 @@ const S = {
   vi: {
     skip: 'Bỏ qua, đến phần tự khám phá', section: 'Khí hậu', nameplate: 'Kịch bản khí hậu Việt Nam', navLabel: 'Các chương',
     navModels: 'Mô hình', navChange: 'Thay đổi', navFutures: 'Hai tương lai', navRegions: 'Các vùng', navRain: 'Lượng mưa', navExplore: 'Tự khám phá',
+    navHanoiKicker: 'Bài riêng', navHanoi: 'Hà Nội nóng lên',
     ctlRegion: 'Vùng', allVn: 'Cả nước', noModelData: 'không có dữ liệu mô hình', regionOnlyReal: 'Số liệu từng vùng chỉ có với dữ liệu CMIP6.',
     mapTitle: 'Thay đổi nhiệt độ 2071–2100 so với 1985–2014, trung bình các mô hình', mapTitleShort: 'Thay đổi nhiệt độ 2071–2100', gridKey: 'Ô lưới của', seaName: 'Biển Đông',
     nbChina: 'TRUNG QUỐC', nbLaos: 'LÀO', nbCambodia: 'CAMPUCHIA',
@@ -69,6 +70,7 @@ const S = {
   en: {
     skip: 'Skip to the explorer', section: 'Climate', nameplate: 'Vietnam Climate Scenario Explorer', navLabel: 'Chapters',
     navModels: 'Models', navChange: 'Change', navFutures: 'Two futures', navRegions: 'Regions', navRain: 'Rain', navExplore: 'Explorer',
+    navHanoiKicker: 'Special report', navHanoi: 'Hanoi heats up',
     ctlRegion: 'Region', allVn: 'All of Vietnam', noModelData: 'no model data', regionOnlyReal: 'Regional series exist only for the CMIP6 data.',
     mapTitle: 'Temperature change by 2071–2100 from 1985–2014, model average', mapTitleShort: 'Warming by 2071–2100', gridKey: 'Grid cells of', seaName: 'East Sea',
     nbChina: 'CHINA', nbLaos: 'LAOS', nbCambodia: 'CAMBODIA',
