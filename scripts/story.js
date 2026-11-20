@@ -6,7 +6,7 @@ const story = StoryChart($('#storyChart'));
 const STEP_CHAPTER = {'tas-abs': 'ch-models', 'tas-anom': 'ch-change', 'tas-245': 'ch-futures', 'tas-585': 'ch-futures',
   'map-zones': 'ch-regions', 'map-grid': 'ch-regions', 'pr-abs': 'ch-rain', 'pr-agree': 'ch-rain', 'pr-hatch': 'ch-rain'};
 let activeStep = null, stepObserver = null;
-function markChapter(id) { $$('.chapters a').forEach(a => a.setAttribute('aria-current', a.getAttribute('href') === '#' + id ? 'true' : 'false')); }
+function markChapter(id) { $$('.chapters a').forEach(a => a.setAttribute('aria-current', a.getAttribute('href') === '#' + id ? 'true' : 'false')); revealChapter(); }
 
 /* the pinned figure holds either the line chart or the zone map */
 const storyMap = ZoneMap($('#storyMap'), {story: true});
@@ -59,11 +59,12 @@ $('#mapScen').addEventListener('click', e => {
 function storySourceText() { const C = copy(facts(SITE)); $('#storySource').textContent = REAL ? C.source : `${t('synthetic')}.`; }
 function activate(step) {
   const k = step.dataset.step;
+  /* mark the rail first: returning from the explorer re-enters the same step, which must win back the rail */
+  markChapter(STEP_CHAPTER[k]);
   if (k === activeStep) return;
   activeStep = k;
   $$('.step').forEach(s => s.classList.toggle('is-active', s === step));
   showStep(k);
-  markChapter(STEP_CHAPTER[k]);
 }
 function observeSteps() {
   if (stepObserver) stepObserver.disconnect();

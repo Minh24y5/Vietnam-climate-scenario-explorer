@@ -1,6 +1,19 @@
 /* Hà Nội report: the parts index.html doesn't have. Loaded after styles/main.css, so it reuses
    every token, the folio, lead grid, story, explorer and about styles as they are. */
 
+/* ---------- lead measure ---------- */
+/* the sa-po reads as one bold paragraph: hold it to a book measure, not the full 900px */
+.hn .sapo{max-width:68ch}
+/* the shared lead justifies its columns. In the three-column lead, once the grid is under ~1120px
+   (text columns under ~240px) that opens rivers in Vietnamese too, so both columns set ragged
+   together. Measured on the grid, not the viewport, since the chapter rail takes its own share. */
+.hn .lead-grid{container:lead/inline-size}
+@media (min-width:1301px){
+  @container lead (max-width:1120px){.hn .lead-col p{text-align:left}}
+}
+/* no one-word last lines in the reading copy */
+.hn main p,.hn main li{text-wrap:pretty}
+
 /* ---------- heat calendar (lead figure; built like the warming stripes) ---------- */
 .cal-band{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;height:clamp(150px,18vw,210px)}
 #cal{display:block;width:100%;height:100%}
@@ -10,6 +23,10 @@
 .cal-labels b{color:var(--ink);font-size:14px;font-variant-numeric:tabular-nums}
 .cal-axis{position:relative;height:22px;margin-right:var(--labels-w,0px);font-size:12px;color:var(--muted)}
 .cal-axis span{position:absolute;top:5px;padding-left:3px;border-left:1px solid var(--ctl-line);line-height:1}
+/* set by sizeCalAxis when the widest month label doesn't fit its month: every other month goes,
+   tick and label, so a kept label may run over into the next month. visibility, not display, so
+   the hidden labels can still be measured on the next resize */
+.cal-axis.is-tight span:nth-child(even){visibility:hidden}
 
 /* ---------- story frame: a title line over the chart ---------- */
 .hn .story-frame .map-head{padding-bottom:4px}
@@ -20,10 +37,21 @@
 .hn-bar{fill:var(--hist)}
 .hn-trend{stroke:var(--ink);stroke-width:2;stroke-dasharray:6 4}
 .hn-dot{fill:var(--muted);fill-opacity:.62;stroke:var(--bg);stroke-width:.8}
+/* warming-level dots in the calendar's ramp (charts.js levelInk) read near-solid, as the calendar's cells do */
+.hn-dot.is-warm{fill-opacity:.9}
 .hn-dot.is-dim{fill-opacity:.22}
 .hn-dot.is-hl{fill:var(--ink);fill-opacity:1}
 .hn-hl-line{fill:none;stroke:var(--ink);stroke-width:1.25}
 .hn-med{stroke:var(--ink);stroke-width:3;stroke-linecap:butt}
+/* a second, rarer threshold's median (bands chart: 39 °C): a thin dashed ink bar with its value */
+.hn-med2{stroke:var(--ink);stroke-width:1.5;stroke-dasharray:4 2}
+.hn .hn-med2lab{font-weight:400}
+/* the explorer's keyboard position: an ink ring round the dot, like a focus ring */
+.hn-focus{fill:none;stroke:var(--ink);stroke-width:2;pointer-events:none}
+
+/* headline while the data loads or after it failed: seventy black, not yet the answer */
+.hn h1.is-pending{color:var(--muted)}
+.hn .sapo .link-btn{font:inherit;font-weight:700;padding:0 2px;vertical-align:baseline}
 .hn-obs{stroke:var(--hist);stroke-width:2;stroke-dasharray:5 4}
 .hn-obslab{fill:var(--hist);font-weight:700}
 .hn-row{stroke:var(--line)}
@@ -31,7 +59,7 @@
 .hn-cols text{fill:var(--ink);font-weight:700}
 /* values set over dots get a paper halo, like the zone-map labels on the national page */
 .hn .endlabel{fill:var(--ink)}
-.hn .endlabel,.hn .hn-obslab{paint-order:stroke;stroke:var(--bg);stroke-width:3.5px;stroke-linejoin:round}
+.hn .endlabel,.hn .hn-obslab,.hn .hn-halo{paint-order:stroke;stroke:var(--bg);stroke-width:3.5px;stroke-linejoin:round}
 
 /* legend swatches */
 .hn-barsw{display:inline-block;width:10px;height:12px;background:var(--hist);flex-shrink:0}
@@ -39,6 +67,9 @@
 .hn-dotsw{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--muted);opacity:.7;flex-shrink:0}
 .hn-medsw{display:inline-block;width:18px;height:3px;background:var(--ink);flex-shrink:0}
 .hn-medsw.v{width:3px;height:14px}
+.hn-med2sw{display:inline-block;width:18px;height:0;border-top:1.5px dashed var(--ink);flex-shrink:0}
+.hn-dotsw+.hn-dotsw{margin-left:-2px}
+.hn-dotsw.is-warm{opacity:.9}
 .hn-obssw{display:inline-block;width:20px;height:0;border-top:2px dashed var(--hist);flex-shrink:0}
 .hn-obssw.v{width:0;height:14px;border-top:0;border-left:2px dashed var(--hist)}
 
@@ -52,11 +83,31 @@
 .about-list li::marker{color:var(--muted)}
 
 /* ---------- breakpoints (same steps as styles/responsive.css) ---------- */
+/* with the chapter rail beside it (1120–1300px) and just after it leaves (980–1120px), three lead
+   columns leave the calendar ~300px wide for 365 days and the text columns ~235px. Take the
+   980px layout early: the calendar runs the full measure, the text sits in two columns under it. */
+@media (max-width:1300px){
+  .hn .lead-grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+  .hn .lead-fig{grid-column:1/-1;padding:0 0 16px!important;border-bottom:1px solid var(--rule);margin-bottom:14px}
+  .hn .lead-grid>.lead-col:nth-child(2){padding-left:0;border-left:0}
+}
+/* once the explorer is one column, its three controls come first: pick, then read the chart's
+   title and the chart right under them, instead of scrolling past the chart to change it */
+@media (max-width:980px){
+  .hn .explore .rail{order:1;margin-top:0;padding-top:12px}
+  .hn .explore .chart-head{order:2;margin-top:18px;padding-top:14px;border-top:1px solid var(--rule)}
+}
 @media (max-width:620px){
   .cal-band{height:clamp(130px,36vw,170px);gap:8px}
   .cal-labels .long{display:none}
-  .cal-axis span:nth-child(even){display:none}
 }
 
 /* the page hides sections it has no data for; [hidden] must beat the grid and flex displays above */
 .hn [hidden]{display:none!important}
+
+/* explorer: the model count said once under the result cards, when it holds at every level */
+.hn .stats-note{margin:16px 0 0;font-size:15px;color:var(--muted)}
+.hn .stats-note:empty{display:none}
+/* the code behind the numbers, and run-label housekeeping: for the reader who wants to check */
+.about-methods{margin:18px 0 0;max-width:62ch;font-size:13px;line-height:1.5;color:var(--muted)}
+.about-methods code{font-size:inherit;overflow-wrap:anywhere}

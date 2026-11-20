@@ -25,6 +25,8 @@
   --ease-out:cubic-bezier(.23,1,.32,1);
   --gutter:clamp(16px,4vw,40px);
   --topbar:56px;
+  /* height of the horizontal chapter strip under the folio; 0 while the rail sits at the left */
+  --strip:0px;
   color-scheme:light;
 }
 @media (prefers-color-scheme:dark){

@@ -84,6 +84,7 @@ async function init() {
   const first = $('.step');
   activeStep = first.dataset.step;
   first.classList.add('is-active');
+  markChapter(STEP_CHAPTER[activeStep]);
   story.render(activeStep, false);
   observeSteps();
   useData(REAL ? 'real' : 'sample', SITE);

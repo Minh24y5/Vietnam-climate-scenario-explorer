@@ -6,14 +6,14 @@ const HN_STEPS = {
   past:   el => chartPast(el),
   when:   el => chartWhen(el, '2.0'),
   hot:    el => chartLevels(el, 'tx35'),
-  bands:  el => chartLevels(el, 'tx37'),
+  bands:  el => chartLevels(el, 'tx37', 'abs', {also: 'tx39'}),
   nights: el => chartLevels(el, 'tn28'),
   rain:   el => chartLevels(el, 'r50'),
   check:  el => chartTrend(el)
 };
 const HN_CHAPTER = {past: 'ch-past', when: 'ch-levels', hot: 'ch-heat', bands: 'ch-heat', nights: 'ch-heat', rain: 'ch-rain', check: 'ch-check'};
 let hnStep = null, hnObserver = null, hnSwapT = null, hnPending = null;
-function markChapter(id) { $$('.chapters a').forEach(a => a.setAttribute('aria-current', a.getAttribute('href') === '#' + id ? 'true' : 'false')); }
+function markChapter(id) { $$('.chapters a').forEach(a => a.setAttribute('aria-current', a.getAttribute('href') === '#' + id ? 'true' : 'false')); revealChapter(); }
 
 function drawHnStep(k) {
   const C = HN_C, el = $('#storyChart');
@@ -35,11 +35,12 @@ function showHnStep(k) {
 }
 function activateHn(step) {
   const k = step.dataset.step;
+  /* mark the rail first: returning from the explorer re-enters the same step, which must win back the rail */
+  markChapter(HN_CHAPTER[k]);
   if (k === hnStep) return;
   hnStep = k;
   $$('.step').forEach(s => s.classList.toggle('is-active', s === step));
   showHnStep(k);
-  markChapter(HN_CHAPTER[k]);
 }
 function observeHnSteps() {
   if (hnObserver) hnObserver.disconnect();

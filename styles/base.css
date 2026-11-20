@@ -1,6 +1,6 @@
 /* Reset, body, links and small utilities. */
 *,*::before,*::after{box-sizing:border-box}
-html{scroll-behavior:smooth;scroll-padding-top:calc(var(--topbar) + 12px)}
+html{scroll-behavior:smooth;scroll-padding-top:calc(var(--topbar) + var(--strip) + 12px)}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.6 var(--font);-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;padding-bottom:env(safe-area-inset-bottom,0px)}
 ::selection{background:var(--ink);color:var(--bg)}

@@ -27,7 +27,7 @@ const S = {
   vi: {
     skip: 'Bỏ qua, đến phần tự khám phá', section: 'Khí hậu', nameplate: 'Kịch bản khí hậu Việt Nam', navLabel: 'Các chương',
     navModels: 'Mô hình', navChange: 'Thay đổi', navFutures: 'Hai tương lai', navRegions: 'Các vùng', navRain: 'Lượng mưa', navExplore: 'Tự khám phá',
-    navHanoiKicker: 'Bài riêng', navHanoi: 'Hà Nội nóng lên',
+    navHanoiKicker: 'Bài riêng', navHanoi: 'Hà\u00a0Nội nóng lên',
     ctlRegion: 'Vùng', allVn: 'Cả nước', noModelData: 'không có dữ liệu mô hình', regionOnlyReal: 'Số liệu từng vùng chỉ có với dữ liệu CMIP6.',
     mapTitle: 'Thay đổi nhiệt độ 2071–2100 so với 1985–2014, trung bình các mô hình', mapTitleShort: 'Thay đổi nhiệt độ 2071–2100', gridKey: 'Ô lưới của', seaName: 'Biển Đông',
     nbChina: 'TRUNG QUỐC', nbLaos: 'LÀO', nbCambodia: 'CAMPUCHIA',
@@ -36,7 +36,7 @@ const S = {
     sapo: 'Năm mô hình khí hậu CMIP6 cùng cho thấy Việt Nam tiếp tục nóng lên trong thế kỷ này. Mức tăng phụ thuộc vào con đường phát thải mà thế giới lựa chọn.',
     leadP2: 'CMIP6 là dự án so sánh mô hình khí hậu đứng sau báo cáo mới nhất của IPCC. Mỗi sọc trong hình là một năm: xanh là lạnh hơn, đỏ là nóng hơn trung bình 1985–2014. Từ năm 2015, dải sọc tách đôi theo hai con đường phát thải.',
     jumpStory: 'Xem tiếp: Năm mô hình, năm Việt Nam', jumpStoryPg: '(chương 1)', jumpExplore: 'Tự khám phá số liệu', jumpExplorePg: '(cuối trang)',
-    jumpHanoi: 'Hà Nội: bao nhiêu ngày nắng nóng khi Trái Đất nóng thêm 2 °C?', jumpHanoiPg: '(bài riêng)',
+    jumpHanoi: 'Hà\u00a0Nội: bao nhiêu ngày nắng nóng khi Trái Đất nóng thêm 2 °C?', jumpHanoiPg: '(bài riêng)',
     exploreBlock: 'Tự khám phá', exploreTitle: 'Tự khám phá các dự tính',
     exploreIntro: 'Chọn vùng, biến, kịch bản và mô hình. Biểu đồ và phần tóm tắt 2071–2100 cập nhật ngay khi bạn thay đổi.',
     chartHelp: 'Rê chuột hoặc chạm vào biểu đồ để đọc từng năm. Khi biểu đồ đang được chọn, <kbd>←</kbd> <kbd>→</kbd> chuyển một năm, <kbd>Shift</kbd> + mũi tên chuyển mười năm, <kbd>Home</kbd> và <kbd>End</kbd> về hai đầu.',

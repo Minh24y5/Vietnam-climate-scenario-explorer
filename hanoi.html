@@ -129,11 +129,13 @@
                             <div id="tip" role="tooltip" aria-hidden="true"></div>
                         </div>
                         <div id="legend" class="legend"></div>
-                        <p class="chart-help" id="chartHelp" data-i18n="chartHelp"></p>
+                        <p class="chart-help" id="chartHelp" data-i18n-html="chartHelp"></p>
+                        <div id="chartLiveAnnounce" class="sr-only" aria-live="polite" aria-atomic="true"></div>
 
                         <section class="results" aria-labelledby="statsHeading">
                             <h3 id="statsHeading"></h3>
                             <div id="stats" aria-live="polite"></div>
+                            <p class="stats-note" id="statsNote"></p>
                         </section>
 
                         <details class="disclosure" id="tableDetails">
@@ -146,7 +148,6 @@
                         <fieldset class="ctl">
                             <legend><label for="ind" data-i18n="ctlIndicator"></label></legend>
                             <select id="ind" class="select"></select>
-                            <p class="ctl-note" id="indNote"></p>
                         </fieldset>
 
                         <fieldset class="ctl">
@@ -177,6 +178,7 @@
                     <p id="aboutRuns"></p>
                     <h3 class="about-h" data-i18n="unknownTitle"></h3>
                     <ul class="about-list" id="unknownList"></ul>
+                    <p class="about-methods" id="aboutMethods"></p>
                 </div>
                 <dl class="glossary">
                     <dt data-i18n="gGwlT"></dt>

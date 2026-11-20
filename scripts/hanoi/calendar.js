@@ -1,15 +1,22 @@
 'use strict';
 /* Hà Nội page: the heat calendar in the lead. One row per period (observed 1995–2014, then each
    warming level), one column per day of the year, coloured by the share of years reaching 35 °C.
-   The colours are the warm half of the warming stripes' RdBu scale. */
 
-/* rare days fade into the paper (opacity) instead of showing the scale's white, so the calendar
-   reads the same on light and dark pages */
+   Each theme has its own ramp, built so that more heat always reads as more colour against that
+   page's ground:
+   - light: the warm half of the warming stripes' RdBu scale, pale peach to dark red (darker = more);
+   - dark: YlOrRd run the other way, dim burgundy to bright orange (brighter = more). RdBu on the
+     dark ground would make rare days glow near-white and the hottest sink into the background.
+   Below a 20% share the colour fades out by opacity, so rare days recede into the page in both. */
+const calDark = () => typeof curTheme === 'function' ? curTheme() === 'dark' : document.documentElement.dataset.theme === 'dark';
 const calColor = p => {
-  const q = Math.min(1, Math.max(0, p)), c = d3.color(d3.interpolateRdBu(0.5 - 0.5 * Math.max(q, 0.2)));
+  const q = Math.min(1, Math.max(0, p)), s = Math.max(q, 0.2);
+  const c = d3.color(calDark() ? d3.interpolateYlOrRd(1 - 0.8 * s) : d3.interpolateRdBu(0.5 - 0.5 * s));
   c.opacity = Math.min(1, q / 0.2);
   return c.formatRgb();
 };
+/* the key stops at the highest share any row reaches (rounded up to 10%), not at an unused 100% */
+const calTop = () => Math.min(1, Math.ceil(d3.max(calRows(), r => d3.max(r.d)) * 10) / 10);
 const MONTH_START = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334];
 
 function calRows() {
@@ -36,15 +43,26 @@ function calText() {
   sizeCalAxis();
 }
 function calKey(C) {
-  rampKeyHn($('#calKey'), calColor, [0, 0.25, 0.5, 0.75, 1], v => v === 1 ? `${fmt('.0%')(v)}` : fmt('.0%')(v), C.keyLabel);
+  const top = calTop(), step = top > 0.5 ? 0.2 : 0.1;
+  const ticks = d3.range(0, top + 1e-9, step).map(v => Math.round(v * 100) / 100);
+  if (ticks[ticks.length - 1] < top - 1e-9) ticks.push(top);
+  rampKeyHn($('#calKey'), calColor, ticks, v => fmt('.0%')(v), C.keyLabel);
 }
 function rampKeyHn(el, scale, ticks, fmtTick, label) {
   const [a, b] = [ticks[0], ticks[ticks.length - 1]];
   const sw = d3.range(26).map(i => `<i style="background:${scale(a + (b - a) * (i + .5) / 26)}"></i>`).join('');
   el.innerHTML = (label ? `<span>${label}</span>` : '') + `<div class="key-row">${sw}</div><div class="key-ticks">${ticks.map(v => `<span>${fmtTick(v)}</span>`).join('')}</div>`;
 }
-/* the month axis spans the calendar only, not its labels column */
+/* the month axis spans the calendar only, not its labels column. A month is 1/12 of the calendar;
+   if the widest label (T10, "Sep") plus a gap won't fit in the shortest month (February), every
+   other label goes, measured rather than guessed from the viewport */
 function sizeCalAxis() {
-  const band = $('.cal-band'), svg = $('#cal');
-  if (band && svg) $('#calAxis').style.setProperty('--labels-w', (band.clientWidth - svg.clientWidth) + 'px');
+  const band = $('.cal-band'), svg = $('#cal'), axis = $('#calAxis');
+  if (!band || !svg || !axis) return;
+  axis.style.setProperty('--labels-w', (band.clientWidth - svg.clientWidth) + 'px');
+  const widest = d3.max([...axis.children], s => s.offsetWidth) || 0;
+  axis.classList.toggle('is-tight', svg.clientWidth * 28 / 365 < widest + 4);
 }
+/* follow the calendar's own width (the lead re-flows at 1300px and when the rail comes and goes),
+   not only window resizes */
+if ('ResizeObserver' in window) new ResizeObserver(() => { if (HN) sizeCalAxis(); }).observe($('.cal-band'));
