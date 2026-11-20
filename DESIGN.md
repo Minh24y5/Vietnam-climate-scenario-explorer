@@ -167,6 +167,8 @@ components:
 
 Files: `styles/main.css` imports the style parts in cascade order (tokens, base, folio, lead, story, charts, maps, explorer, about, responsive); `scripts/` holds plain scripts that `index.html` loads in order, ending with `scripts/main.js`. All copy lives in `scripts/i18n.js` (static strings), `scripts/copy.js` (story) and `scripts/regions.js` (map chapter).
 
+The Hà Nội report, `hanoi.html`, is a second page in the same paper. It loads the same `styles/main.css` plus `styles/hanoi.css`, and the shared `scripts/util.js`, `scripts/i18n.js` and `scripts/theme.js`, then its own scripts in `scripts/hanoi/` (strings, data, copy, calendar, charts, story, explorer, main). See **Hà Nội report** below.
+
 **Creative North Star: "The Inside News Page"**
 
 The page is a Vietnamese daily's inside news page about Vietnam's climate future, set the way Lao Động sets its pages: grey newsprint, one ink, one nameplate red, Roboto in four weights, hairline column rules. It refuses both the online-dashboard and the online-article defaults; it reads as print that happens to move. The headline answers the question in its red second clause, the bold sa-pô states the story, a ruled three-part grid carries the lead, and the scroll story and explorer below keep the same paper, rules and type.
@@ -319,6 +321,18 @@ Terms in Black 15px separated by hairlines, definitions in seventy black, ruled 
 
 ### Motion
 Story transitions run 750ms with cubic in-out easing (lines collapse to the baseline, futures draw in); future series reveal through a clip that widens over 900ms, delayed by 60% of the transition. Step text colour changes in 300ms; controls change colour in 150ms. The explorer redraws instantly. Under reduced motion the figure swaps state with a 160ms opacity dip and smooth scrolling is off.
+
+## Hà Nội report (`hanoi.html`)
+
+Same paper, same parts, a narrower subject. Everything the national page defines (tokens, folio, lead grid, story frame, explorer, about, imprint, breakpoints) applies unchanged; `styles/hanoi.css` adds only what the report needs.
+
+- **Folio:** the section block reads "Hà Nội" / "Hanoi"; the nameplate links back to `index.html`. Chapters: Đã trải qua, Mức ấm lên, Nắng nóng, Mưa, Độ tin cậy, Tự khám phá. The national page's lead carries a jump line to the report, and the report's lead carries one back.
+- **Axis of the story:** global warming levels (+1.5, +2, +3 °C above 1850–1900), not years. Scenarios appear only in the chapter that explains when each level arrives.
+- **Heat calendar (lead figure):** built like the warming stripes. One row per period (observed 1995–2014, then each warming level), one column per day of the year, coloured by the share of years whose city-wide high reaches 35 °C. The ink is the warm half of the stripes' RdBu scale (`d3.interpolateRdBu(0.5 − 0.5p)`), so darker red reads as "more heat" on both pages; days below 0.5% are left as paper. Row labels sit at the right like the stripes' scenario labels; a month axis (T1–T12 / Jan–Dec) runs under the calendar only; a 0–100% key sits below.
+- **Dot charts (story and explorer):** every model is a dot (seventy black at 62%, a newsprint edge), set without overlap in its column; the model median is a 3px ink bar with a bold tabular value; the observed 1995–2014 value is a 2px dashed line in history graphite with a bold graphite label. Columns are 1995–2014 and the three levels, labelled in bold ink. In the explorer one model can be highlighted: ink dot, a 1.25px ink line across the columns, the others drop to 22%.
+- **Other charts:** observed yearly bars in history graphite with a dashed ink trend line and the baseline wash; the "when" chart puts the four scenarios in rows, models as dots on a year axis, the median as a vertical ink tick and a seventy-black count of models that don't get there; the trust chart sets the models' 1980–2014 trends as dots against a dashed graphite line for the observed trend.
+- **No new inks.** Dots, medians and observed lines use the existing neutrals and history graphite. Scenario rows are told apart by position and label, not colour, so SSP1-2.6 and SSP3-7.0 need no inks of their own.
+- **Copy rules:** the national page's rules hold. Every narrated number is computed from `data/hanoi/hanoi.json`; levels print through `lvName` ("+1,5 °C" / "+1.5 °C"); the copy says "city-wide average" wherever a reader might expect a station count, and the about section lists what the page doesn't know yet.
 
 ## Do's and Don'ts
 

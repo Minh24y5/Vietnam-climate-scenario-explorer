@@ -1,0 +1,1331 @@
+{
+ "meta": {
+  "what": "Global warming level windows for the CMIP6-VN models and scenarios",
+  "baseline": "1850-1900",
+  "window_years": 20,
+  "convention": "central year n = first year the 20-year centred mean exceeds the level; window [n-10, n+9]",
+  "fits_cmip6vn": "window inside 1980-2099",
+  "sources": {
+   "gmst": "https://storage.googleapis.com/cmip6/cmip6-zarr-consolidated-stores.csv",
+   "hauser": "Hauser, Engelbrecht & Fischer, cmip_warming_levels, doi:10.5281/zenodo.3591806, CC BY-SA 4.0",
+   "ipcc_atlas": "IPCC AR6 WGI Atlas, https://raw.githubusercontent.com/IPCC-WG1/Atlas/main/warming-levels/CMIP6_Atlas_WarmingLevels.csv",
+   "cmip6vn_table1": "Tran-Anh et al. 2023, Sci Data 10:257, Table 1"
+  },
+  "built": "2026-11-20"
+ },
+ "levels": [
+  1.0,
+  1.5,
+  2.0,
+  3.0,
+  4.0
+ ],
+ "summary": {
+  "ssp119": {
+   "1.0": {
+    "models": 4,
+    "reached": 4,
+    "usable_with_cmip6vn": 4,
+    "usable_with_temperature": 4,
+    "central_median": 2014,
+    "central_min": 2003,
+    "central_max": 2026
+   },
+   "1.5": {
+    "models": 4,
+    "reached": 3,
+    "usable_with_cmip6vn": 3,
+    "usable_with_temperature": 3,
+    "central_median": 2025,
+    "central_min": 2019,
+    "central_max": 2031
+   },
+   "2.0": {
+    "models": 4,
+    "reached": 2,
+    "usable_with_cmip6vn": 2,
+    "usable_with_temperature": 2,
+    "central_median": 2039,
+    "central_min": 2038,
+    "central_max": 2040
+   },
+   "3.0": {
+    "models": 4,
+    "reached": 0,
+    "usable_with_cmip6vn": 0,
+    "usable_with_temperature": 0,
+    "central_median": null,
+    "central_min": null,
+    "central_max": null
+   },
+   "4.0": {
+    "models": 4,
+    "reached": 0,
+    "usable_with_cmip6vn": 0,
+    "usable_with_temperature": 0,
+    "central_median": null,
+    "central_min": null,
+    "central_max": null
+   }
+  },
+  "ssp126": {
+   "1.0": {
+    "models": 5,
+    "reached": 5,
+    "usable_with_cmip6vn": 5,
+    "usable_with_temperature": 5,
+    "central_median": 2013,
+    "central_min": 2003,
+    "central_max": 2026
+   },
+   "1.5": {
+    "models": 5,
+    "reached": 5,
+    "usable_with_cmip6vn": 5,
+    "usable_with_temperature": 5,
+    "central_median": 2030,
+    "central_min": 2020,
+    "central_max": 2064
+   },
+   "2.0": {
+    "models": 5,
+    "reached": 2,
+    "usable_with_cmip6vn": 2,
+    "usable_with_temperature": 2,
+    "central_median": 2038,
+    "central_min": 2037,
+    "central_max": 2039
+   },
+   "3.0": {
+    "models": 5,
+    "reached": 0,
+    "usable_with_cmip6vn": 0,
+    "usable_with_temperature": 0,
+    "central_median": null,
+    "central_min": null,
+    "central_max": null
+   },
+   "4.0": {
+    "models": 5,
+    "reached": 0,
+    "usable_with_cmip6vn": 0,
+    "usable_with_temperature": 0,
+    "central_median": null,
+    "central_min": null,
+    "central_max": null
+   }
+  },
+  "ssp245": {
+   "1.0": {
+    "models": 5,
+    "reached": 5,
+    "usable_with_cmip6vn": 5,
+    "usable_with_temperature": 5,
+    "central_median": 2014,
+    "central_min": 2003,
+    "central_max": 2026
+   },
+   "1.5": {
+    "models": 5,
+    "reached": 5,
+    "usable_with_cmip6vn": 5,
+    "usable_with_temperature": 5,
+    "central_median": 2031,
+    "central_min": 2019,
+    "central_max": 2047
+   },
+   "2.0": {
+    "models": 5,
+    "reached": 5,
+    "usable_with_cmip6vn": 5,
+    "usable_with_temperature": 5,
+    "central_median": 2050,
+    "central_min": 2034,
+    "central_max": 2074
+   },
+   "3.0": {
+    "models": 5,
+    "reached": 2,
+    "usable_with_cmip6vn": 2,
+    "usable_with_temperature": 2,
+    "central_median": 2063,
+    "central_min": 2060,
+    "central_max": 2066
+   },
+   "4.0": {
+    "models": 5,
+    "reached": 1,
+    "usable_with_cmip6vn": 0,
+    "usable_with_temperature": 0,
+    "central_median": 2091,
+    "central_min": 2091,
+    "central_max": 2091
+   }
+  },
+  "ssp370": {
+   "1.0": {
+    "models": 5,
+    "reached": 5,
+    "usable_with_cmip6vn": 5,
+    "usable_with_temperature": 5,
+    "central_median": 2014,
+    "central_min": 2003,
+    "central_max": 2027
+   },
+   "1.5": {
+    "models": 5,
+    "reached": 5,
+    "usable_with_cmip6vn": 5,
+    "usable_with_temperature": 5,
+    "central_median": 2032,
+    "central_min": 2020,
+    "central_max": 2044
+   },
+   "2.0": {
+    "models": 5,
+    "reached": 5,
+    "usable_with_cmip6vn": 5,
+    "usable_with_temperature": 5,
+    "central_median": 2046,
+    "central_min": 2032,
+    "central_max": 2060
+   },
+   "3.0": {
+    "models": 5,
+    "reached": 4,
+    "usable_with_cmip6vn": 4,
+    "usable_with_temperature": 4,
+    "central_median": 2065,
+    "central_min": 2051,
+    "central_max": 2082
+   },
+   "4.0": {
+    "models": 5,
+    "reached": 2,
+    "usable_with_cmip6vn": 2,
+    "usable_with_temperature": 2,
+    "central_median": 2073,
+    "central_min": 2070,
+    "central_max": 2077
+   }
+  },
+  "ssp434": {
+   "1.0": {
+    "models": 3,
+    "reached": 3,
+    "usable_with_cmip6vn": 3,
+    "usable_with_temperature": 3,
+    "central_median": 2014,
+    "central_min": 2003,
+    "central_max": 2026
+   },
+   "1.5": {
+    "models": 3,
+    "reached": 3,
+    "usable_with_cmip6vn": 3,
+    "usable_with_temperature": 3,
+    "central_median": 2031,
+    "central_min": 2019,
+    "central_max": 2057
+   },
+   "2.0": {
+    "models": 3,
+    "reached": 2,
+    "usable_with_cmip6vn": 2,
+    "usable_with_temperature": 2,
+    "central_median": 2043,
+    "central_min": 2035,
+    "central_max": 2052
+   },
+   "3.0": {
+    "models": 3,
+    "reached": 0,
+    "usable_with_cmip6vn": 0,
+    "usable_with_temperature": 0,
+    "central_median": null,
+    "central_min": null,
+    "central_max": null
+   },
+   "4.0": {
+    "models": 3,
+    "reached": 0,
+    "usable_with_cmip6vn": 0,
+    "usable_with_temperature": 0,
+    "central_median": null,
+    "central_min": null,
+    "central_max": null
+   }
+  },
+  "ssp460": {
+   "1.0": {
+    "models": 3,
+    "reached": 3,
+    "usable_with_cmip6vn": 3,
+    "usable_with_temperature": 3,
+    "central_median": 2014,
+    "central_min": 2003,
+    "central_max": 2027
+   },
+   "1.5": {
+    "models": 3,
+    "reached": 3,
+    "usable_with_cmip6vn": 3,
+    "usable_with_temperature": 3,
+    "central_median": 2029,
+    "central_min": 2019,
+    "central_max": 2043
+   },
+   "2.0": {
+    "models": 3,
+    "reached": 3,
+    "usable_with_cmip6vn": 3,
+    "usable_with_temperature": 3,
+    "central_median": 2046,
+    "central_min": 2035,
+    "central_max": 2062
+   },
+   "3.0": {
+    "models": 3,
+    "reached": 2,
+    "usable_with_cmip6vn": 2,
+    "usable_with_temperature": 2,
+    "central_median": 2075,
+    "central_min": 2060,
+    "central_max": 2090
+   },
+   "4.0": {
+    "models": 3,
+    "reached": 1,
+    "usable_with_cmip6vn": 1,
+    "usable_with_temperature": 1,
+    "central_median": 2087,
+    "central_min": 2087,
+    "central_max": 2087
+   }
+  },
+  "ssp585": {
+   "1.0": {
+    "models": 5,
+    "reached": 5,
+    "usable_with_cmip6vn": 5,
+    "usable_with_temperature": 5,
+    "central_median": 2014,
+    "central_min": 2003,
+    "central_max": 2023
+   },
+   "1.5": {
+    "models": 5,
+    "reached": 5,
+    "usable_with_cmip6vn": 5,
+    "usable_with_temperature": 5,
+    "central_median": 2027,
+    "central_min": 2019,
+    "central_max": 2041
+   },
+   "2.0": {
+    "models": 5,
+    "reached": 5,
+    "usable_with_cmip6vn": 5,
+    "usable_with_temperature": 5,
+    "central_median": 2039,
+    "central_min": 2032,
+    "central_max": 2054
+   },
+   "3.0": {
+    "models": 5,
+    "reached": 5,
+    "usable_with_cmip6vn": 5,
+    "usable_with_temperature": 5,
+    "central_median": 2065,
+    "central_min": 2047,
+    "central_max": 2077
+   },
+   "4.0": {
+    "models": 5,
+    "reached": 3,
+    "usable_with_cmip6vn": 3,
+    "usable_with_temperature": 3,
+    "central_median": 2067,
+    "central_min": 2061,
+    "central_max": 2084
+   }
+  }
+ },
+ "checks": {
+  "start_year_vs_hauser": {
+   "pairs": 83,
+   "same_start_year": 83,
+   "within_1_year": 83,
+   "max_diff_years": 0,
+   "reached_in_one_only": 0,
+   "largest": [
+    {
+     "model": "IPSL-CM6A-LR",
+     "exp": "ssp119",
+     "level": 1.0,
+     "ours": 1993.0,
+     "hauser": 1993.0
+    },
+    {
+     "model": "IPSL-CM6A-LR",
+     "exp": "ssp119",
+     "level": 1.5,
+     "ours": 2009.0,
+     "hauser": 2009.0
+    },
+    {
+     "model": "IPSL-CM6A-LR",
+     "exp": "ssp119",
+     "level": 2.0,
+     "ours": 2028.0,
+     "hauser": 2028.0
+    },
+    {
+     "model": "IPSL-CM6A-LR",
+     "exp": "ssp126",
+     "level": 1.0,
+     "ours": 1993.0,
+     "hauser": 1993.0
+    },
+    {
+     "model": "IPSL-CM6A-LR",
+     "exp": "ssp126",
+     "level": 1.5,
+     "ours": 2010.0,
+     "hauser": 2010.0
+    }
+   ]
+  },
+  "start_year_vs_ipcc_atlas": {
+   "pairs": 53,
+   "same_start_year": 52,
+   "within_1_year": 53,
+   "max_diff_years": 1,
+   "reached_in_one_only": 1,
+   "largest": [
+    {
+     "model": "MIROC6",
+     "exp": "ssp370",
+     "level": 1.5,
+     "ours": 2034.0,
+     "atlas": 2033.0
+    },
+    {
+     "model": "IPSL-CM6A-LR",
+     "exp": "ssp126",
+     "level": 2.0,
+     "ours": 2029.0,
+     "atlas": 2029.0
+    },
+    {
+     "model": "IPSL-CM6A-LR",
+     "exp": "ssp245",
+     "level": 1.5,
+     "ours": 2009.0,
+     "atlas": 2009.0
+    },
+    {
+     "model": "IPSL-CM6A-LR",
+     "exp": "ssp245",
+     "level": 2.0,
+     "ours": 2024.0,
+     "atlas": 2024.0
+    },
+    {
+     "model": "IPSL-CM6A-LR",
+     "exp": "ssp126",
+     "level": 1.5,
+     "ours": 2010.0,
+     "atlas": 2010.0
+    }
+   ]
+  }
+ },
+ "models": {
+  "IPSL-CM6A-LR": {
+   "run": "r1i1p1f1",
+   "run_paper": "r1i1p1f1",
+   "run_note": NaN,
+   "cmip6vn_historical": "rain and temperature",
+   "scenarios": {
+    "ssp119": {
+     "source": "computed",
+     "1.0": {
+      "central": 2003,
+      "start": 1993,
+      "end": 2012,
+      "fits_cmip6vn": true
+     },
+     "1.5": {
+      "central": 2019,
+      "start": 2009,
+      "end": 2028,
+      "fits_cmip6vn": true
+     },
+     "2.0": {
+      "central": 2038,
+      "start": 2028,
+      "end": 2047,
+      "fits_cmip6vn": true
+     },
+     "3.0": null,
+     "4.0": null,
+     "warming_2081_2100": 1.761,
+     "cmip6vn_data": "rain and temperature"
+    },
+    "ssp126": {
+     "source": "computed",
+     "1.0": {
+      "central": 2003,
+      "start": 1993,
+      "end": 2012,
+      "fits_cmip6vn": true
+     },
+     "1.5": {
+      "central": 2020,
+      "start": 2010,
+      "end": 2029,
+      "fits_cmip6vn": true
+     },
+     "2.0": {
+      "central": 2039,
+      "start": 2029,
+      "end": 2048,
+      "fits_cmip6vn": true
+     },
+     "3.0": null,
+     "4.0": null,
+     "warming_2081_2100": 2.351,
+     "cmip6vn_data": "rain and temperature"
+    },
+    "ssp245": {
+     "source": "computed",
+     "1.0": {
+      "central": 2003,
+      "start": 1993,
+      "end": 2012,
+      "fits_cmip6vn": true
+     },
+     "1.5": {
+      "central": 2019,
+      "start": 2009,
+      "end": 2028,
+      "fits_cmip6vn": true
+     },
+     "2.0": {
+      "central": 2034,
+      "start": 2024,
+      "end": 2043,
+      "fits_cmip6vn": true
+     },
+     "3.0": {
+      "central": 2066,
+      "start": 2056,
+      "end": 2075,
+      "fits_cmip6vn": true
+     },
+     "4.0": null,
+     "warming_2081_2100": 3.635,
+     "cmip6vn_data": "rain and temperature"
+    },
+    "ssp370": {
+     "source": "computed",
+     "1.0": {
+      "central": 2003,
+      "start": 1993,
+      "end": 2012,
+      "fits_cmip6vn": true
+     },
+     "1.5": {
+      "central": 2020,
+      "start": 2010,
+      "end": 2029,
+      "fits_cmip6vn": true
+     },
+     "2.0": {
+      "central": 2035,
+      "start": 2025,
+      "end": 2044,
+      "fits_cmip6vn": true
+     },
+     "3.0": {
+      "central": 2056,
+      "start": 2046,
+      "end": 2065,
+      "fits_cmip6vn": true
+     },
+     "4.0": {
+      "central": 2077,
+      "start": 2067,
+      "end": 2086,
+      "fits_cmip6vn": true
+     },
+     "warming_2081_2100": 4.862,
+     "cmip6vn_data": "rain and temperature"
+    },
+    "ssp434": {
+     "source": "computed",
+     "1.0": {
+      "central": 2003,
+      "start": 1993,
+      "end": 2012,
+      "fits_cmip6vn": true
+     },
+     "1.5": {
+      "central": 2019,
+      "start": 2009,
+      "end": 2028,
+      "fits_cmip6vn": true
+     },
+     "2.0": {
+      "central": 2035,
+      "start": 2025,
+      "end": 2044,
+      "fits_cmip6vn": true
+     },
+     "3.0": null,
+     "4.0": null,
+     "warming_2081_2100": 2.897,
+     "cmip6vn_data": "rain and temperature"
+    },
+    "ssp460": {
+     "source": "computed",
+     "1.0": {
+      "central": 2003,
+      "start": 1993,
+      "end": 2012,
+      "fits_cmip6vn": true
+     },
+     "1.5": {
+      "central": 2019,
+      "start": 2009,
+      "end": 2028,
+      "fits_cmip6vn": true
+     },
+     "2.0": {
+      "central": 2035,
+      "start": 2025,
+      "end": 2044,
+      "fits_cmip6vn": true
+     },
+     "3.0": {
+      "central": 2060,
+      "start": 2050,
+      "end": 2069,
+      "fits_cmip6vn": true
+     },
+     "4.0": {
+      "central": 2087,
+      "start": 2077,
+      "end": 2096,
+      "fits_cmip6vn": true
+     },
+     "warming_2081_2100": 4.11,
+     "cmip6vn_data": "rain and temperature"
+    },
+    "ssp585": {
+     "source": "computed",
+     "1.0": {
+      "central": 2003,
+      "start": 1993,
+      "end": 2012,
+      "fits_cmip6vn": true
+     },
+     "1.5": {
+      "central": 2019,
+      "start": 2009,
+      "end": 2028,
+      "fits_cmip6vn": true
+     },
+     "2.0": {
+      "central": 2035,
+      "start": 2025,
+      "end": 2044,
+      "fits_cmip6vn": true
+     },
+     "3.0": {
+      "central": 2051,
+      "start": 2041,
+      "end": 2060,
+      "fits_cmip6vn": true
+     },
+     "4.0": {
+      "central": 2067,
+      "start": 2057,
+      "end": 2076,
+      "fits_cmip6vn": true
+     },
+     "warming_2081_2100": 6.032,
+     "cmip6vn_data": "rain and temperature"
+    }
+   },
+   "baseline_1850_1900_degC": 12.818,
+   "gmst_weighting": "areacella",
+   "warming_by_period": {
+    "1980-2014": 0.894,
+    "1995-2014": 1.083
+   }
+  },
+  "MIROC6": {
+   "run": "r1i1p1f1",
+   "run_paper": "r1i1p1f2",
+   "run_note": "MIROC6 has no f2 runs (the label looks swapped with MIROC-ES2L)",
+   "cmip6vn_historical": "rain and temperature",
+   "scenarios": {
+    "ssp119": {
+     "source": "computed",
+     "1.0": {
+      "central": 2026,
+      "start": 2016,
+      "end": 2035,
+      "fits_cmip6vn": true
+     },
+     "1.5": null,
+     "2.0": null,
+     "3.0": null,
+     "4.0": null,
+     "warming_2081_2100": 1.08,
+     "cmip6vn_data": "rain and temperature"
+    },
+    "ssp126": {
+     "source": "computed",
+     "1.0": {
+      "central": 2026,
+      "start": 2016,
+      "end": 2035,
+      "fits_cmip6vn": true
+     },
+     "1.5": {
+      "central": 2064,
+      "start": 2054,
+      "end": 2073,
+      "fits_cmip6vn": true
+     },
+     "2.0": null,
+     "3.0": null,
+     "4.0": null,
+     "warming_2081_2100": 1.463,
+     "cmip6vn_data": "rain and temperature"
+    },
+    "ssp245": {
+     "source": "computed",
+     "1.0": {
+      "central": 2026,
+      "start": 2016,
+      "end": 2035,
+      "fits_cmip6vn": true
+     },
+     "1.5": {
+      "central": 2047,
+      "start": 2037,
+      "end": 2056,
+      "fits_cmip6vn": true
+     },
+     "2.0": {
+      "central": 2074,
+      "start": 2064,
+      "end": 2083,
+      "fits_cmip6vn": true
+     },
+     "3.0": null,
+     "4.0": null,
+     "warming_2081_2100": 2.171,
+     "cmip6vn_data": "rain and temperature"
+    },
+    "ssp370": {
+     "source": "computed",
+     "1.0": {
+      "central": 2027,
+      "start": 2017,
+      "end": 2036,
+      "fits_cmip6vn": true
+     },
+     "1.5": {
+      "central": 2044,
+      "start": 2034,
+      "end": 2053,
+      "fits_cmip6vn": true
+     },
+     "2.0": {
+      "central": 2060,
+      "start": 2050,
+      "end": 2069,
+      "fits_cmip6vn": true
+     },
+     "3.0": null,
+     "4.0": null,
+     "warming_2081_2100": 2.979,
+     "cmip6vn_data": "rain and temperature"
+    },
+    "ssp434": {
+     "source": "computed",
+     "1.0": {
+      "central": 2026,
+      "start": 2016,
+      "end": 2035,
+      "fits_cmip6vn": true
+     },
+     "1.5": {
+      "central": 2057,
+      "start": 2047,
+      "end": 2066,
+      "fits_cmip6vn": true
+     },
+     "2.0": null,
+     "3.0": null,
+     "4.0": null,
+     "warming_2081_2100": 1.769,
+     "cmip6vn_data": "rain and temperature"
+    },
+    "ssp460": {
+     "source": "computed",
+     "1.0": {
+      "central": 2027,
+      "start": 2017,
+      "end": 2036,
+      "fits_cmip6vn": true
+     },
+     "1.5": {
+      "central": 2043,
+      "start": 2033,
+      "end": 2052,
+      "fits_cmip6vn": true
+     },
+     "2.0": {
+      "central": 2062,
+      "start": 2052,
+      "end": 2071,
+      "fits_cmip6vn": true
+     },
+     "3.0": null,
+     "4.0": null,
+     "warming_2081_2100": 2.53,
+     "cmip6vn_data": "rain and temperature"
+    },
+    "ssp585": {
+     "source": "computed",
+     "1.0": {
+      "central": 2023,
+      "start": 2013,
+      "end": 2032,
+      "fits_cmip6vn": true
+     },
+     "1.5": {
+      "central": 2041,
+      "start": 2031,
+      "end": 2050,
+      "fits_cmip6vn": true
+     },
+     "2.0": {
+      "central": 2054,
+      "start": 2044,
+      "end": 2063,
+      "fits_cmip6vn": true
+     },
+     "3.0": {
+      "central": 2077,
+      "start": 2067,
+      "end": 2086,
+      "fits_cmip6vn": true
+     },
+     "4.0": null,
+     "warming_2081_2100": 3.783,
+     "cmip6vn_data": "rain and temperature"
+    }
+   },
+   "baseline_1850_1900_degC": 15.257,
+   "gmst_weighting": "areacella",
+   "warming_by_period": {
+    "1980-2014": 0.463,
+    "1995-2014": 0.59
+   }
+  },
+  "MPI-ESM1-2-HR": {
+   "run": "r1i1p1f1",
+   "run_paper": "r1i1p1f1",
+   "run_note": NaN,
+   "cmip6vn_historical": "rain and temperature",
+   "scenarios": {
+    "ssp126": {
+     "source": "computed",
+     "1.0": {
+      "central": 2012,
+      "start": 2002,
+      "end": 2021,
+      "fits_cmip6vn": true
+     },
+     "1.5": {
+      "central": 2042,
+      "start": 2032,
+      "end": 2051,
+      "fits_cmip6vn": true
+     },
+     "2.0": null,
+     "3.0": null,
+     "4.0": null,
+     "warming_2081_2100": 1.58,
+     "cmip6vn_data": "rain and temperature"
+    },
+    "ssp245": {
+     "source": "computed",
+     "1.0": {
+      "central": 2012,
+      "start": 2002,
+      "end": 2021,
+      "fits_cmip6vn": true
+     },
+     "1.5": {
+      "central": 2038,
+      "start": 2028,
+      "end": 2047,
+      "fits_cmip6vn": true
+     },
+     "2.0": {
+      "central": 2064,
+      "start": 2054,
+      "end": 2073,
+      "fits_cmip6vn": true
+     },
+     "3.0": null,
+     "4.0": null,
+     "warming_2081_2100": 2.411,
+     "cmip6vn_data": "rain and temperature"
+    },
+    "ssp370": {
+     "source": "computed",
+     "1.0": {
+      "central": 2011,
+      "start": 2001,
+      "end": 2020,
+      "fits_cmip6vn": true
+     },
+     "1.5": {
+      "central": 2035,
+      "start": 2025,
+      "end": 2044,
+      "fits_cmip6vn": true
+     },
+     "2.0": {
+      "central": 2051,
+      "start": 2041,
+      "end": 2060,
+      "fits_cmip6vn": true
+     },
+     "3.0": {
+      "central": 2082,
+      "start": 2072,
+      "end": 2091,
+      "fits_cmip6vn": true
+     },
+     "4.0": null,
+     "warming_2081_2100": 3.377,
+     "cmip6vn_data": "rain and temperature"
+    },
+    "ssp585": {
+     "source": "computed",
+     "1.0": {
+      "central": 2012,
+      "start": 2002,
+      "end": 2021,
+      "fits_cmip6vn": true
+     },
+     "1.5": {
+      "central": 2034,
+      "start": 2024,
+      "end": 2043,
+      "fits_cmip6vn": true
+     },
+     "2.0": {
+      "central": 2050,
+      "start": 2040,
+      "end": 2059,
+      "fits_cmip6vn": true
+     },
+     "3.0": {
+      "central": 2074,
+      "start": 2064,
+      "end": 2083,
+      "fits_cmip6vn": true
+     },
+     "4.0": null,
+     "warming_2081_2100": 3.916,
+     "cmip6vn_data": "rain and temperature"
+    }
+   },
+   "baseline_1850_1900_degC": 13.925,
+   "gmst_weighting": "areacella",
+   "warming_by_period": {
+    "1980-2014": 0.701,
+    "1995-2014": 0.828
+   }
+  },
+  "MRI-ESM2-0": {
+   "run": "r1i1p1f1",
+   "run_paper": "r1i1p1f1",
+   "run_note": NaN,
+   "cmip6vn_historical": "rain and temperature",
+   "scenarios": {
+    "ssp119": {
+     "source": "computed",
+     "1.0": {
+      "central": 2015,
+      "start": 2005,
+      "end": 2024,
+      "fits_cmip6vn": true
+     },
+     "1.5": {
+      "central": 2031,
+      "start": 2021,
+      "end": 2040,
+      "fits_cmip6vn": true
+     },
+     "2.0": null,
+     "3.0": null,
+     "4.0": null,
+     "warming_2081_2100": 1.37,
+     "cmip6vn_data": "rain and temperature"
+    },
+    "ssp126": {
+     "source": "computed",
+     "1.0": {
+      "central": 2015,
+      "start": 2005,
+      "end": 2024,
+      "fits_cmip6vn": true
+     },
+     "1.5": {
+      "central": 2030,
+      "start": 2020,
+      "end": 2039,
+      "fits_cmip6vn": true
+     },
+     "2.0": null,
+     "3.0": null,
+     "4.0": null,
+     "warming_2081_2100": 1.74,
+     "cmip6vn_data": "rain and temperature"
+    },
+    "ssp245": {
+     "source": "computed",
+     "1.0": {
+      "central": 2015,
+      "start": 2005,
+      "end": 2024,
+      "fits_cmip6vn": true
+     },
+     "1.5": {
+      "central": 2031,
+      "start": 2021,
+      "end": 2040,
+      "fits_cmip6vn": true
+     },
+     "2.0": {
+      "central": 2050,
+      "start": 2040,
+      "end": 2059,
+      "fits_cmip6vn": true
+     },
+     "3.0": null,
+     "4.0": null,
+     "warming_2081_2100": 2.703,
+     "cmip6vn_data": "rain and temperature"
+    },
+    "ssp370": {
+     "source": "computed",
+     "1.0": {
+      "central": 2015,
+      "start": 2005,
+      "end": 2024,
+      "fits_cmip6vn": true
+     },
+     "1.5": {
+      "central": 2032,
+      "start": 2022,
+      "end": 2041,
+      "fits_cmip6vn": true
+     },
+     "2.0": {
+      "central": 2046,
+      "start": 2036,
+      "end": 2055,
+      "fits_cmip6vn": true
+     },
+     "3.0": {
+      "central": 2074,
+      "start": 2064,
+      "end": 2083,
+      "fits_cmip6vn": true
+     },
+     "4.0": null,
+     "warming_2081_2100": 3.612,
+     "cmip6vn_data": "rain and temperature"
+    },
+    "ssp434": {
+     "source": "computed",
+     "1.0": {
+      "central": 2014,
+      "start": 2004,
+      "end": 2023,
+      "fits_cmip6vn": true
+     },
+     "1.5": {
+      "central": 2031,
+      "start": 2021,
+      "end": 2040,
+      "fits_cmip6vn": true
+     },
+     "2.0": {
+      "central": 2052,
+      "start": 2042,
+      "end": 2061,
+      "fits_cmip6vn": true
+     },
+     "3.0": null,
+     "4.0": null,
+     "warming_2081_2100": 2.427,
+     "cmip6vn_data": "rain and temperature"
+    },
+    "ssp460": {
+     "source": "computed",
+     "1.0": {
+      "central": 2014,
+      "start": 2004,
+      "end": 2023,
+      "fits_cmip6vn": true
+     },
+     "1.5": {
+      "central": 2029,
+      "start": 2019,
+      "end": 2038,
+      "fits_cmip6vn": true
+     },
+     "2.0": {
+      "central": 2046,
+      "start": 2036,
+      "end": 2055,
+      "fits_cmip6vn": true
+     },
+     "3.0": {
+      "central": 2090,
+      "start": 2080,
+      "end": 2099,
+      "fits_cmip6vn": true
+     },
+     "4.0": null,
+     "warming_2081_2100": 3.031,
+     "cmip6vn_data": "rain and temperature"
+    },
+    "ssp585": {
+     "source": "computed",
+     "1.0": {
+      "central": 2014,
+      "start": 2004,
+      "end": 2023,
+      "fits_cmip6vn": true
+     },
+     "1.5": {
+      "central": 2027,
+      "start": 2017,
+      "end": 2036,
+      "fits_cmip6vn": true
+     },
+     "2.0": {
+      "central": 2039,
+      "start": 2029,
+      "end": 2048,
+      "fits_cmip6vn": true
+     },
+     "3.0": {
+      "central": 2065,
+      "start": 2055,
+      "end": 2074,
+      "fits_cmip6vn": true
+     },
+     "4.0": {
+      "central": 2084,
+      "start": 2074,
+      "end": 2093,
+      "fits_cmip6vn": true
+     },
+     "warming_2081_2100": 4.393,
+     "cmip6vn_data": "rain and temperature"
+    }
+   },
+   "baseline_1850_1900_degC": 13.732,
+   "gmst_weighting": "areacella",
+   "warming_by_period": {
+    "1980-2014": 0.535,
+    "1995-2014": 0.708
+   }
+  },
+  "UKESM1-0-LL": {
+   "run": "r1i1p1f2",
+   "run_paper": "r1i1p1f2",
+   "run_note": NaN,
+   "cmip6vn_historical": "rain and temperature",
+   "scenarios": {
+    "ssp119": {
+     "source": "computed",
+     "1.0": {
+      "central": 2014,
+      "start": 2004,
+      "end": 2023,
+      "fits_cmip6vn": true
+     },
+     "1.5": {
+      "central": 2025,
+      "start": 2015,
+      "end": 2034,
+      "fits_cmip6vn": true
+     },
+     "2.0": {
+      "central": 2040,
+      "start": 2030,
+      "end": 2049,
+      "fits_cmip6vn": true
+     },
+     "3.0": null,
+     "4.0": null,
+     "warming_2081_2100": 2.17,
+     "cmip6vn_data": "rain and temperature"
+    },
+    "ssp126": {
+     "source": "computed",
+     "1.0": {
+      "central": 2013,
+      "start": 2003,
+      "end": 2022,
+      "fits_cmip6vn": true
+     },
+     "1.5": {
+      "central": 2024,
+      "start": 2014,
+      "end": 2033,
+      "fits_cmip6vn": true
+     },
+     "2.0": {
+      "central": 2037,
+      "start": 2027,
+      "end": 2046,
+      "fits_cmip6vn": true
+     },
+     "3.0": null,
+     "4.0": null,
+     "warming_2081_2100": 2.674,
+     "cmip6vn_data": "rain and temperature"
+    },
+    "ssp245": {
+     "source": "computed",
+     "1.0": {
+      "central": 2014,
+      "start": 2004,
+      "end": 2023,
+      "fits_cmip6vn": true
+     },
+     "1.5": {
+      "central": 2024,
+      "start": 2014,
+      "end": 2033,
+      "fits_cmip6vn": true
+     },
+     "2.0": {
+      "central": 2035,
+      "start": 2025,
+      "end": 2044,
+      "fits_cmip6vn": true
+     },
+     "3.0": {
+      "central": 2060,
+      "start": 2050,
+      "end": 2069,
+      "fits_cmip6vn": true
+     },
+     "4.0": {
+      "central": 2091,
+      "start": 2081,
+      "end": 2100,
+      "fits_cmip6vn": false
+     },
+     "warming_2081_2100": 4.009,
+     "cmip6vn_data": "rain and temperature"
+    },
+    "ssp370": {
+     "source": "computed",
+     "1.0": {
+      "central": 2014,
+      "start": 2004,
+      "end": 2023,
+      "fits_cmip6vn": true
+     },
+     "1.5": {
+      "central": 2023,
+      "start": 2013,
+      "end": 2032,
+      "fits_cmip6vn": true
+     },
+     "2.0": {
+      "central": 2032,
+      "start": 2022,
+      "end": 2041,
+      "fits_cmip6vn": true
+     },
+     "3.0": {
+      "central": 2051,
+      "start": 2041,
+      "end": 2060,
+      "fits_cmip6vn": true
+     },
+     "4.0": {
+      "central": 2070,
+      "start": 2060,
+      "end": 2079,
+      "fits_cmip6vn": true
+     },
+     "warming_2081_2100": 5.475,
+     "cmip6vn_data": "rain and temperature"
+    },
+    "ssp585": {
+     "source": "computed",
+     "1.0": {
+      "central": 2014,
+      "start": 2004,
+      "end": 2023,
+      "fits_cmip6vn": true
+     },
+     "1.5": {
+      "central": 2024,
+      "start": 2014,
+      "end": 2033,
+      "fits_cmip6vn": true
+     },
+     "2.0": {
+      "central": 2032,
+      "start": 2022,
+      "end": 2041,
+      "fits_cmip6vn": true
+     },
+     "3.0": {
+      "central": 2047,
+      "start": 2037,
+      "end": 2056,
+      "fits_cmip6vn": true
+     },
+     "4.0": {
+      "central": 2061,
+      "start": 2051,
+      "end": 2070,
+      "fits_cmip6vn": true
+     },
+     "warming_2081_2100": 6.519,
+     "cmip6vn_data": "rain and temperature"
+    }
+   },
+   "baseline_1850_1900_degC": 13.387,
+   "gmst_weighting": "areacella",
+   "warming_by_period": {
+    "1980-2014": 0.381,
+    "1995-2014": 0.688
+   }
+  }
+ }
+}

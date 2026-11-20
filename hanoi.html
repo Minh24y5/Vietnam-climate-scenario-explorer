@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Hà Nội nóng lên · Hanoi at +2 °C</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <meta name="description" content="Hà Nội sẽ có thêm bao nhiêu ngày nắng nóng khi Trái Đất ấm thêm 1,5, 2 hay 3 °C? Số liệu quan trắc dạng lưới và năm mô hình CMIP6-VN. How many more hot days will Hanoi get at 1.5, 2 or 3 °C of global warming? Gridded observations and five models from the CMIP6-VN dataset.">
+    <meta name="theme-color" content="#f1efe9" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#141619" media="(prefers-color-scheme: dark)">
+    <script>
+        /* apply the reader's saved light/dark choice before the page paints */
+        try { var th = localStorage.getItem('theme'); if (th === 'light' || th === 'dark') document.documentElement.setAttribute('data-theme', th); } catch (e) {}
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,700;0,900;1,400&display=swap">
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/hanoi.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+</head>
+<body class="hn">
+    <a class="skip" href="#explore" data-i18n="skip"></a>
+
+    <header class="folio">
+        <div class="folio-in">
+            <span class="sec-block" data-i18n="section"></span>
+            <a class="nameplate" href="index.html" data-i18n="nameplate"></a>
+            <nav class="chapters" data-i18n-attr="aria-label:navLabel">
+                <ul>
+                    <li><a href="#ch-past" data-i18n="navPast"></a></li>
+                    <li><a href="#ch-levels" data-i18n="navLevels"></a></li>
+                    <li><a href="#ch-heat" data-i18n="navHeat"></a></li>
+                    <li><a href="#ch-rain" data-i18n="navRain"></a></li>
+                    <li><a href="#ch-check" data-i18n="navCheck"></a></li>
+                    <li><a href="#explore" data-i18n="navExplore"></a></li>
+                </ul>
+            </nav>
+            <div class="folio-ctl">
+                <div class="lang" id="langSeg" role="group" data-i18n-attr="aria-label:langLabel">
+                    <button type="button" data-lang="vi" lang="vi" aria-pressed="true">VI</button>
+                    <button type="button" data-lang="en" lang="en" aria-pressed="false">EN</button>
+                </div>
+                <div class="lang theme" id="themeSeg" role="group" data-i18n-attr="aria-label:themeLabel">
+                    <button type="button" data-theme="light" aria-pressed="false" data-i18n-attr="aria-label:themeLight">
+                        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.6M12 18.9v2.6M2.5 12h2.6M18.9 12h2.6M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8"/></svg>
+                    </button>
+                    <button type="button" data-theme="dark" aria-pressed="false" data-i18n-attr="aria-label:themeDark">
+                        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19.5 14.6A8 8 0 0 1 9.4 4.5a8 8 0 1 0 10.1 10.1z"/></svg>
+                    </button>
+                </div>
+            </div>
+            <a class="data-badge" id="dataBadge" href="#about"></a>
+        </div>
+    </header>
+
+    <main id="top">
+        <article class="lead" aria-labelledby="heroTitle">
+            <div class="wrap">
+                <h1 id="heroTitle"></h1>
+                <p class="sapo" id="sapo"></p>
+
+                <div class="lead-grid">
+                    <figure class="lead-fig">
+                        <div class="cal" role="img" id="calFig">
+                            <div class="cal-band">
+                                <svg id="cal" preserveAspectRatio="none" aria-hidden="true" focusable="false"></svg>
+                                <div class="cal-labels" id="calLabels" aria-hidden="true"></div>
+                            </div>
+                            <div class="cal-axis" id="calAxis" aria-hidden="true"></div>
+                        </div>
+                        <figcaption class="cap" id="calCap"></figcaption>
+                        <div class="key" id="calKey" aria-hidden="true"></div>
+                    </figure>
+
+                    <div class="lead-col">
+                        <p class="byline" id="byline"></p>
+                        <p id="leadP1"></p>
+                    </div>
+
+                    <div class="lead-col">
+                        <p id="leadP2"></p>
+                        <div class="pull" id="pull"></div>
+                        <p class="jump"><a href="#ch-past" data-i18n="jumpStory"></a> <span class="pg" data-i18n="jumpStoryPg"></span></p>
+                        <p class="jump"><a href="index.html" data-i18n="jumpNational"></a> <span class="pg" data-i18n="jumpNationalPg"></span></p>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <section class="story" id="story" data-i18n-attr="aria-label:storyLabel">
+            <div class="story-graphic">
+                <div class="story-frame">
+                    <div class="map-head"><span class="map-title" id="storyTitle"></span></div>
+                    <div id="storyChart" class="story-chart" role="img"></div>
+                    <div class="story-legend" id="storyLegend" aria-hidden="true"></div>
+                    <p class="story-source" id="storySource"></p>
+                </div>
+            </div>
+
+            <div class="story-steps">
+                <article class="step" data-step="past" id="ch-past"><div class="step-body" data-text="past"></div></article>
+                <article class="step" data-step="when" id="ch-levels"><div class="step-body" data-text="when"></div></article>
+                <article class="step" data-step="hot" id="ch-heat"><div class="step-body" data-text="hot"></div></article>
+                <article class="step" data-step="bands"><div class="step-body" data-text="bands"></div></article>
+                <article class="step" data-step="nights"><div class="step-body" data-text="nights"></div></article>
+                <article class="step" data-step="rain" id="ch-rain"><div class="step-body" data-text="rain"></div></article>
+                <article class="step" data-step="check" id="ch-check"><div class="step-body" data-text="check"></div></article>
+            </div>
+        </section>
+
+        <section class="explore" id="explore" aria-labelledby="exploreTitle">
+            <div class="wrap">
+                <div class="explore-head">
+                    <h2 id="exploreTitle" data-i18n="exploreTitle"></h2>
+                    <p data-i18n="exploreIntro"></p>
+                </div>
+
+                <div class="explore-grid">
+                    <div class="explore-main">
+                        <div class="chart-head">
+                            <h3 id="ctitle"></h3>
+                            <p id="csub"></p>
+                        </div>
+                        <div id="chart" tabindex="0" role="group" aria-roledescription="chart" aria-describedby="chartHelp">
+                            <div id="tip" role="tooltip" aria-hidden="true"></div>
+                        </div>
+                        <div id="legend" class="legend"></div>
+                        <p class="chart-help" id="chartHelp" data-i18n="chartHelp"></p>
+
+                        <section class="results" aria-labelledby="statsHeading">
+                            <h3 id="statsHeading"></h3>
+                            <div id="stats" aria-live="polite"></div>
+                        </section>
+
+                        <details class="disclosure" id="tableDetails">
+                            <summary data-i18n="tableSummary"></summary>
+                            <div id="accessibleTable" class="data-table-wrap"></div>
+                        </details>
+                    </div>
+
+                    <aside class="rail" data-i18n-attr="aria-label:railLabel">
+                        <fieldset class="ctl">
+                            <legend><label for="ind" data-i18n="ctlIndicator"></label></legend>
+                            <select id="ind" class="select"></select>
+                            <p class="ctl-note" id="indNote"></p>
+                        </fieldset>
+
+                        <fieldset class="ctl">
+                            <legend data-i18n="ctlValues"></legend>
+                            <div class="seg" id="modeSeg" role="group" data-i18n-attr="aria-label:ctlValues">
+                                <button type="button" data-m="abs" aria-pressed="true" data-i18n="modeAbs"></button>
+                                <button type="button" data-m="anom" aria-pressed="false" data-i18n="modeAnom"></button>
+                            </div>
+                            <p class="ctl-note" data-i18n="modeNote"></p>
+                        </fieldset>
+
+                        <fieldset class="ctl">
+                            <legend><label for="hl" data-i18n="ctlHighlight"></label></legend>
+                            <select id="hl" class="select"></select>
+                            <p class="ctl-note" id="hlNote"></p>
+                        </fieldset>
+                    </aside>
+                </div>
+            </div>
+        </section>
+
+        <section class="about" id="about" aria-labelledby="aboutTitle">
+            <div class="wrap about-grid">
+                <div class="about-col">
+                    <h2 id="aboutTitle" data-i18n="aboutTitle"></h2>
+                    <p data-i18n-html="aboutData"></p>
+                    <p data-i18n-html="aboutLevels"></p>
+                    <p id="aboutRuns"></p>
+                    <h3 class="about-h" data-i18n="unknownTitle"></h3>
+                    <ul class="about-list" id="unknownList"></ul>
+                </div>
+                <dl class="glossary">
+                    <dt data-i18n="gGwlT"></dt>
+                    <dd data-i18n="gGwl"></dd>
+                    <dt>CMIP6-VN</dt>
+                    <dd data-i18n="gVn"></dd>
+                    <dt data-i18n="gCityT"></dt>
+                    <dd data-i18n="gCity"></dd>
+                    <dt data-i18n="gHeatT"></dt>
+                    <dd data-i18n="gHeat"></dd>
+                    <dt data-i18n="gNightT"></dt>
+                    <dd data-i18n="gNight"></dd>
+                    <dt data-i18n="gRainT"></dt>
+                    <dd data-i18n="gRain"></dd>
+                    <dt data-i18n="gSspT"></dt>
+                    <dd data-i18n="gSsp"></dd>
+                </dl>
+            </div>
+        </section>
+    </main>
+
+    <footer class="imprint">
+        <div class="wrap">
+            <p data-i18n="imprint"></p>
+        </div>
+    </footer>
+
+    <!-- shared scripts first (helpers, language, theme), then the Hà Nội scripts; order matters,
+         scripts/hanoi/main.js starts the page -->
+    <script src="scripts/util.js"></script>
+    <script src="scripts/i18n.js"></script>
+    <script src="scripts/hanoi/strings.js"></script>
+    <script src="scripts/hanoi/data.js"></script>
+    <script src="scripts/hanoi/copy.js"></script>
+    <script src="scripts/hanoi/calendar.js"></script>
+    <script src="scripts/hanoi/charts.js"></script>
+    <script src="scripts/hanoi/story.js"></script>
+    <script src="scripts/hanoi/explorer.js"></script>
+    <script src="scripts/theme.js"></script>
+    <script src="scripts/hanoi/main.js"></script>
+</body>
+</html>

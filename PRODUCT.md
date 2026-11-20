@@ -41,7 +41,9 @@ Classrooms, university lectures, research group presentations, and self-directed
 - Working static web application implementation in `index.html`, `styles/` (entry `styles/main.css`, which imports the part files in cascade order), and `scripts/` (plain scripts loaded in order by `index.html`, ending with the entry `scripts/main.js`).
 - Real CMIP6 results bundled in `data/vietnam_cmip6.json`: area-weighted annual means for Vietnam from 5 models (`CESM2`, `GFDL-ESM4`, `MPI-ESM1-2-LR`, `MIROC6`, `IPSL-CM6A-LR`), built from NOAA's public CMIP6 archive on Google Cloud. This is the default for the story and the explorer.
 - Built-in synthetic sample (4 models, deterministic Gaussian series) as a labelled fallback when the CMIP6 file can't load, and as an option in the explorer.
-- Absence: regional (sub-national) series and monthly data are not yet produced, so the planned climate-zone map and seasonal rainfall views are not implemented.
+- Regional series for the 7 climate zones (`data/vietnam_regions.json`) behind the zone-map chapter and the explorer's region control.
+- A Hà Nội special report, `hanoi.html`: city-wide daily indicators (hot days at 35/37/39 °C, hot nights, heavy rain) from five models of the 35-model CMIP6-VN dataset (MIROC6, MPI-ESM1-2-HR, MRI-ESM2-0, IPSL-CM6A-LR, UKESM1-0-LL: slow- to fast-warming) and its gridded observations, compared at +1.5, +2 and +3 °C of global warming. Data: `data/hanoi/hanoi.json` (built by `pipeline/build_hanoi.py` from `pipeline/fetch_cmip6vn.py` downloads) and `data/hanoi/warming_levels.json` (`pipeline/warming_levels.py`). The data audit behind it is `docs/hanoi-data-audit.md`.
+- Absence: monthly and seasonal views; humidity and humid heat; consequences (health, work, electricity, flooding); observations after 2014.
 
 ## Product Principles
 - **Scientific Transparency**: Never obscure model disagreement or uncertainty; distinguish historical runs from projections clearly, and explicitly signal when synthetic data is in use.
