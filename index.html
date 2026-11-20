@@ -3,10 +3,15 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-    <title>★ Vietnam Climate Scenario Explorer · Kịch bản khí hậu Việt Nam</title>
+    <title>Vietnam Climate Scenario Explorer · Kịch bản khí hậu Việt Nam</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
     <meta name="description" content="Việt Nam sẽ nóng và mưa nhiều thêm bao nhiêu vào năm 2100? Năm mô hình khí hậu CMIP6 theo hai kịch bản phát thải, kèm công cụ tự khám phá. How much warmer and wetter will Vietnam get by 2100? Five CMIP6 models under two emissions scenarios.">
     <meta name="theme-color" content="#f1efe9" media="(prefers-color-scheme: light)">
     <meta name="theme-color" content="#141619" media="(prefers-color-scheme: dark)">
+    <script>
+        /* apply the reader's saved light/dark choice before the page paints */
+        try { var th = localStorage.getItem('theme'); if (th === 'light' || th === 'dark') document.documentElement.setAttribute('data-theme', th); } catch (e) {}
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,700;0,900;1,400&display=swap">
@@ -31,9 +36,19 @@
                     <li><a href="#explore" data-i18n="navExplore"></a></li>
                 </ul>
             </nav>
-            <div class="lang" id="langSeg" role="group" data-i18n-attr="aria-label:langLabel">
-                <button type="button" data-lang="vi" lang="vi" aria-pressed="true">VI</button>
-                <button type="button" data-lang="en" lang="en" aria-pressed="false">EN</button>
+            <div class="folio-ctl">
+                <div class="lang" id="langSeg" role="group" data-i18n-attr="aria-label:langLabel">
+                    <button type="button" data-lang="vi" lang="vi" aria-pressed="true">VI</button>
+                    <button type="button" data-lang="en" lang="en" aria-pressed="false">EN</button>
+                </div>
+                <div class="lang theme" id="themeSeg" role="group" data-i18n-attr="aria-label:themeLabel">
+                    <button type="button" data-theme="light" aria-pressed="false" data-i18n-attr="aria-label:themeLight">
+                        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.6M12 18.9v2.6M2.5 12h2.6M18.9 12h2.6M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8"/></svg>
+                    </button>
+                    <button type="button" data-theme="dark" aria-pressed="false" data-i18n-attr="aria-label:themeDark">
+                        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19.5 14.6A8 8 0 0 1 9.4 4.5a8 8 0 1 0 10.1 10.1z"/></svg>
+                    </button>
+                </div>
             </div>
             <a class="data-badge" id="dataBadge" href="#about"></a>
         </div>

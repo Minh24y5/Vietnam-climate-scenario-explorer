@@ -1,3 +1,5 @@
 .gemini
 .impeccable
 pipeline/.cache
+.claude
+skills-lock.json

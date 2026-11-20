@@ -39,7 +39,7 @@ const S = {
     ctlRegion: 'Vùng', allVn: 'Cả nước', noModelData: 'không có dữ liệu mô hình', regionOnlyReal: 'Số liệu từng vùng chỉ có với dữ liệu CMIP6.',
     mapTitle: 'Thay đổi nhiệt độ 2071–2100 so với 1985–2014, trung bình các mô hình', mapTitleShort: 'Thay đổi nhiệt độ 2071–2100', gridKey: 'Ô lưới của', seaName: 'Biển Đông',
     nbChina: 'TRUNG QUỐC', nbLaos: 'LÀO', nbCambodia: 'CAMPUCHIA',
-    langLabel: 'Ngôn ngữ', storyLabel: 'Bài viết theo chương',
+    langLabel: 'Ngôn ngữ', themeLabel: 'Giao diện', themeLight: 'Giao diện sáng', themeDark: 'Giao diện tối', storyLabel: 'Bài viết theo chương',
     medShort: 'trung bình', highShort: 'cao', medLong: 'phát thải trung bình', highLong: 'phát thải cao',
     sapo: 'Năm mô hình khí hậu CMIP6 cùng cho thấy Việt Nam tiếp tục nóng lên trong thế kỷ này. Mức tăng phụ thuộc vào con đường phát thải mà thế giới lựa chọn.',
     leadP2: 'CMIP6 là dự án so sánh mô hình khí hậu đứng sau báo cáo mới nhất của IPCC. Mỗi sọc trong hình là một năm: xanh là lạnh hơn, đỏ là nóng hơn trung bình 1985–2014. Từ năm 2015, dải sọc tách đôi theo hai con đường phát thải.',
@@ -80,7 +80,7 @@ const S = {
     ctlRegion: 'Region', allVn: 'All of Vietnam', noModelData: 'no model data', regionOnlyReal: 'Regional series exist only for the CMIP6 data.',
     mapTitle: 'Temperature change by 2071–2100 from 1985–2014, model average', mapTitleShort: 'Warming by 2071–2100', gridKey: 'Grid cells of', seaName: 'East Sea',
     nbChina: 'CHINA', nbLaos: 'LAOS', nbCambodia: 'CAMBODIA',
-    langLabel: 'Language', storyLabel: 'Story in chapters',
+    langLabel: 'Language', themeLabel: 'Theme', themeLight: 'Light theme', themeDark: 'Dark theme', storyLabel: 'Story in chapters',
     medShort: 'medium', highShort: 'high', medLong: 'medium emissions', highLong: 'high emissions',
     sapo: 'Five CMIP6 climate models agree that Vietnam will keep warming this century. How much depends on the emissions path the world takes.',
     leadP2: 'CMIP6 is the model comparison project behind the IPCC\'s latest assessment. Each stripe in the figure is one year: blue is cooler and red warmer than the 1985–2014 average. From 2015 the band splits along the two emissions paths.',
@@ -381,20 +381,20 @@ function mapCopy(Z) {
   const G = Z.grp, both = Z.ns.ssp245 === Z.n && Z.ns.ssp585 === Z.n, need = agreeNeed(Z.n);
   const names = ids => ids.map(zoneIn).join(', ').replace(/, ([^,]*)$/, LANG === 'vi' ? ' và $1' : ' and $1');
   if (LANG === 'vi') return {
-    'map-zones': `<h2>Nơi nóng lên nhiều nhất</h2><p>Con số cả nước là trung bình của những vùng khác nhau. Chia Việt Nam thành bảy vùng khí hậu, theo SSP5-8.5 ba vùng phía Bắc (${names(NORTH)}) nóng lên <b>${span(G.ssp585.north)}</b> vào 2071–2100, còn ba vùng phía Nam (${names(SOUTH)}) nóng lên <b>${span(G.ssp585.south)}</b>. Theo SSP2-4.5 là <b>${span(G.ssp245.north)}</b> so với <b>${span(G.ssp245.south)}</b>.</p>` +
+    'map-zones': `<h2>Nơi nóng lên nhiều nhất</h2><p>Con số cả nước là trung bình của những vùng nóng lên với mức khác nhau. Chia Việt Nam thành bảy vùng khí hậu, theo SSP5-8.5 ba vùng phía Bắc (${names(NORTH)}) nóng lên <b>${span(G.ssp585.north)}</b> vào 2071–2100, còn ba vùng phía Nam (${names(SOUTH)}) nóng lên <b>${span(G.ssp585.south)}</b>. Theo SSP2-4.5 là <b>${span(G.ssp245.north)}</b> so với <b>${span(G.ssp245.south)}</b>.</p>` +
       `<p>${both ? `Cả ${numWord(Z.n)} mô hình, theo cả hai kịch bản, đều cho mọi vùng phía Bắc nóng lên nhiều hơn mọi vùng phía Nam.` : `${cap(numWord(Z.ns.ssp585))} trong ${numWord(Z.n)} mô hình cho mọi vùng phía Bắc nóng lên nhiều hơn mọi vùng phía Nam theo SSP5-8.5.`} ` +
       `${Z.agree.ssp585 < need ? 'Nhưng vùng nào nóng nhất thì các mô hình không thống nhất.' : `${zoneIn(hi('ssp585'))} đứng đầu trong ${Z.agree.ssp585}/${Z.n} mô hình.`}</p>` +
-      `<p>${spread < Z.gap ? `Chênh lệch giữa vùng nóng nhất và vùng ít nóng nhất (<b>${deg(spread)}</b>) nhỏ hơn chênh lệch giữa hai kịch bản (<b>${deg(Z.gap)}</b>). Con đường phát thải quyết định nhiều hơn nơi ta sống.` : `Chênh lệch giữa vùng nóng nhất và vùng ít nóng nhất (<b>${deg(spread)}</b>) lớn ngang chênh lệch giữa hai kịch bản (<b>${deg(Z.gap)}</b>).`}</p>`,
-    'map-grid': `<p>Cần đọc bản đồ này thận trọng. Các ô vuông là lưới của <b>${Z.coarse}</b>, mô hình thô nhất trong ${numWord(Z.n)} mô hình: mỗi ô khoảng ${nf(dl)}° × ${nf(dn)}°, chỉ <b>${Z.cells(Z.coarse)}</b> ô chạm đất liền Việt Nam, và cả ${zoneIn(Z.small)} chỉ bằng khoảng <b>${nf(eq)}</b> ô.</p>` +
-      `<p>Giá trị của một vùng nhỏ vì thế phần lớn đến từ những ô nó chung với vùng bên cạnh. Ngay cả mô hình chi tiết nhất, ${Z.fine}, cũng chỉ có ${Z.cells(Z.fine)} ô. Bản đồ cho thấy bức tranh chung giữa các vùng; muốn biết từng tỉnh cần mô hình chi tiết hơn (hạ quy mô).</p>`
+      `<p>${spread < Z.gap ? `Theo SSP5-8.5, mức nóng lên của vùng nhiều nhất và vùng ít nhất chênh nhau <b>${deg(spread)}</b>. Con đường phát thải tạo khác biệt lớn hơn: tính cả nước, hai kịch bản cách nhau <b>${deg(Z.gap)}</b> vào 2071–2100.` : `Theo SSP5-8.5, mức nóng lên của vùng nhiều nhất và vùng ít nhất chênh nhau <b>${deg(spread)}</b>, gần bằng khoảng cách <b>${deg(Z.gap)}</b> giữa hai kịch bản tính cả nước.`}</p>`,
+    'map-grid': `<p>Các ô vuông là lưới của <b>${Z.coarse}</b>, mô hình thô nhất trong ${numWord(Z.n)} mô hình. Mỗi ô khoảng ${nf(dl)}° × ${nf(dn)}°, chỉ <b>${Z.cells(Z.coarse)}</b> ô chạm đất liền Việt Nam, và cả ${zoneIn(Z.small)} chỉ có diện tích bằng khoảng <b>${nf(eq)}</b> ô.</p>` +
+      `<p>Vì vậy, giá trị của một vùng nhỏ phần lớn đến từ những ô nó chung với vùng bên cạnh. Mô hình chi tiết nhất, ${Z.fine}, cũng chỉ có ${Z.cells(Z.fine)} ô. Bản đồ dùng được để so sánh các vùng; muốn biết từng tỉnh cần mô hình chi tiết hơn (hạ quy mô).</p>`
   };
   return {
-    'map-zones': `<h2>Where it warms most</h2><p>The national figure averages over very different places. Split Vietnam into its seven climate zones and, under SSP5-8.5, the three northern zones (${names(NORTH)}) warm by <b>${span(G.ssp585.north)}</b> by 2071–2100, while the three southern zones (${names(SOUTH)}) warm by <b>${span(G.ssp585.south)}</b>. Under SSP2-4.5 it is <b>${span(G.ssp245.north)}</b> against <b>${span(G.ssp245.south)}</b>.</p>` +
+    'map-zones': `<h2>Where it warms most</h2><p>The national figure is an average over zones that warm at different rates. Split Vietnam into its seven climate zones and, under SSP5-8.5, the three northern zones (${names(NORTH)}) are <b>${span(G.ssp585.north)}</b> warmer by 2071–2100, and the three southern zones (${names(SOUTH)}) <b>${span(G.ssp585.south)}</b> warmer. Under SSP2-4.5 the figures are <b>${span(G.ssp245.north)}</b> and <b>${span(G.ssp245.south)}</b>.</p>` +
       `<p>${both ? `In all ${numWord(Z.n)} models, under both scenarios, every northern zone warms more than every southern one.` : `${cap(numWord(Z.ns.ssp585))} of ${numWord(Z.n)} models have every northern zone warming more than every southern one under SSP5-8.5.`} ` +
-      `${Z.agree.ssp585 < need ? 'Which zone warms most, though, the models do not agree.' : `${cap(zoneIn(hi('ssp585')))} comes first in ${Z.agree.ssp585} of ${Z.n} models.`}</p>` +
-      `<p>${spread < Z.gap ? `The gap between the warmest and the least-warming zone (<b>${deg(spread)}</b>) is smaller than the gap between the two scenarios (<b>${deg(Z.gap)}</b>). The emissions path matters more than where you live.` : `The gap between the warmest and the least-warming zone (<b>${deg(spread)}</b>) is as large as the gap between the two scenarios (<b>${deg(Z.gap)}</b>).`}</p>`,
-    'map-grid': `<p>Read this map with care. The squares are the grid of <b>${Z.coarse}</b>, the coarsest of the ${numWord(Z.n)} models: each cell is about ${nf(dl)}° × ${nf(dn)}°, only <b>${Z.cells(Z.coarse)}</b> of them touch Vietnam's land, and all of ${zoneIn(Z.small)} adds up to about <b>${nf(eq)}</b> of a cell.</p>` +
-      `<p>A small zone's value therefore comes mostly from cells it shares with its neighbours. Even the most detailed model, ${Z.fine}, has only ${Z.cells(Z.fine)} cells. The map shows broad differences between zones; for individual provinces you need finer, downscaled models.</p>`
+      `${Z.agree.ssp585 < need ? 'The models do not agree on which single zone warms most.' : `${cap(zoneIn(hi('ssp585')))} comes first in ${Z.agree.ssp585} of ${Z.n} models.`}</p>` +
+      `<p>${spread < Z.gap ? `Under SSP5-8.5 the warmest zone warms <b>${deg(spread)}</b> more than the least-warming one. The emissions path makes a bigger difference: nationally, the two scenarios are <b>${deg(Z.gap)}</b> apart by 2071–2100.` : `Under SSP5-8.5 the warmest zone warms <b>${deg(spread)}</b> more than the least-warming one, about as much as the <b>${deg(Z.gap)}</b> that separates the two scenarios nationally.`}</p>`,
+    'map-grid': `<p>The squares are the grid of <b>${Z.coarse}</b>, the coarsest of the ${numWord(Z.n)} models. Each cell is about ${nf(dl)}° × ${nf(dn)}°, only <b>${Z.cells(Z.coarse)}</b> of them touch Vietnam's land, and all of ${zoneIn(Z.small)} has the area of about <b>${nf(eq)}</b> of a cell.</p>` +
+      `<p>So a small zone's value comes mostly from cells it shares with its neighbours. The most detailed model, ${Z.fine}, still has only ${Z.cells(Z.fine)} cells. The map is good for comparing zones; for single provinces you need finer, downscaled models.</p>`
   };
 }
 
@@ -1187,12 +1187,36 @@ function setLang(l) {
   LANG = l;
   try { localStorage.setItem('lang', l); } catch (_) { /* per-viewer convenience only */ }
   writePage();
+  syncTheme();
   $('#modelHint').textContent = '';
   if (figMode === 'map') renderStoryMap(activeStep); else story.redraw();
   render();
   sizeStripeAxis();
 }
 $('#langSeg').addEventListener('click', e => { const b = e.target.closest('button'); if (b) setLang(b.dataset.lang); });
+
+/* ---------- light / dark ---------- */
+/* until the reader picks one, the page follows the system setting; a pick is remembered */
+const darkMQ = window.matchMedia('(prefers-color-scheme: dark)');
+const curTheme = () => document.documentElement.dataset.theme || (darkMQ.matches ? 'dark' : 'light');
+function syncTheme() {
+  const th = curTheme();
+  $$('#themeSeg button').forEach(b => {
+    b.setAttribute('aria-pressed', b.dataset.theme === th ? 'true' : 'false');
+    b.title = t(b.dataset.theme === 'dark' ? 'themeDark' : 'themeLight');
+  });
+  /* browser chrome follows the chosen page colour */
+  const bg = th === 'dark' ? '#141619' : '#f1efe9';
+  $$('meta[name="theme-color"]').forEach(m => m.setAttribute('content', bg));
+}
+function setTheme(th) {
+  document.documentElement.dataset.theme = th;
+  try { localStorage.setItem('theme', th); } catch (_) { /* per-viewer convenience only */ }
+  syncTheme();
+}
+$('#themeSeg').addEventListener('click', e => { const b = e.target.closest('button'); if (b && b.dataset.theme !== curTheme()) setTheme(b.dataset.theme); });
+darkMQ.addEventListener('change', syncTheme);
+syncTheme();
 
 /* ---------- init ---------- */
 async function getJson(url) {

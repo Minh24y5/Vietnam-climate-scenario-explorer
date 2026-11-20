@@ -276,6 +276,9 @@ Roboto Black 20px in nameplate red beside the section block; stays red on hover;
 ### Language control (VI | EN)
 A 1px ink box with two buttons divided by an ink line; pressed is ink fill with newsprint text; hover a baseline wash; focus ring red, inset.
 
+### Theme control (light | dark)
+Sits right of VI | EN in the same 1px ink box: a sun and a moon icon (16px, ink, square caps), pressed in ink fill. Until the reader picks, the page follows the system setting and the control shows it; a pick sets `data-theme` on the root, is saved in `localStorage` ("theme"), and is applied by a tiny inline script in `<head>` before first paint. The language choice is saved the same way ("lang"; `?lang=` still wins). Under 520px only the button for the other mode shows.
+
 ### Folio date/data line
 Medium 12px seventy black, tabular, left hairline: the date in the reader's locale (Vietnamese weekday plus dd.mm.yyyy) and the data source. In synthetic-data mode it turns bold nameplate red.
 

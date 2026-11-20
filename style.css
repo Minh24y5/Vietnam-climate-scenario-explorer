@@ -74,7 +74,11 @@ kbd{font:500 12px/1 var(--font);border:1px solid var(--ctl-line);border-bottom-w
 .chapters a:hover{color:var(--red)}
 .chapters a[aria-current="true"]{box-shadow:inset 0 -3px 0 var(--ink)}
 
+.folio-ctl{display:flex;align-items:center;gap:8px}
 .lang{display:flex;border:1px solid var(--ink)}
+.theme svg{width:16px;height:16px;display:block;margin:auto;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:square}
+.theme svg circle{fill:currentColor;stroke:none}
+.theme button[data-theme="dark"] svg path{fill:currentColor;stroke:none}
 .lang button{font:700 13px/1 var(--font);background:transparent;color:var(--ink);border:0;min-width:38px;min-height:32px;cursor:pointer;transition:background-color .15s ease,color .15s ease}
 .lang button+button{border-left:1px solid var(--ink)}
 .lang button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
@@ -336,7 +340,7 @@ pre{background:var(--bg);border:1px solid var(--line);padding:14px;overflow-x:au
 }
 @media (max-width:1120px){
   .chapters{display:none}
-  .lang{margin-left:auto}
+  .folio-ctl{margin-left:auto}
 }
 @media (max-width:980px){
   .lead-grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
@@ -386,6 +390,9 @@ pre{background:var(--bg);border:1px solid var(--line);padding:14px;overflow-x:au
   .sec-block{font-size:13px;padding:6px 8px}
   .nameplate{font-size:15px;white-space:normal;line-height:1.1}
   .data-badge{display:none}
+  /* phones: the theme control shrinks to one button, the mode you would switch to */
+  .theme button[aria-pressed="true"]{display:none}
+  .theme button+button{border-left:0}
   .seg button{font-size:14px;padding:8px 6px}
 }
 @media (pointer:coarse){
