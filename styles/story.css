@@ -1,0 +1,33 @@
+/* The scroll story: pinned figure, steps, agreement table. */
+/* ---------- story ---------- */
+.story{position:relative;display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:0;max-width:1240px;margin:0 auto;padding:0 var(--gutter)}
+/* the pinned figure sits in its own column, ruled off like a page column */
+.story-graphic{grid-column:2;grid-row:1;position:sticky;top:var(--topbar);height:calc(100vh - var(--topbar));height:calc(100svh - var(--topbar));display:flex;align-items:center;padding-left:clamp(24px,3.5vw,48px)}
+.story-frame{width:calc(100% + clamp(24px,3.5vw,48px));height:min(660px,calc(100svh - var(--topbar) - 56px));display:flex;flex-direction:column;transition:opacity .15s ease;
+  /* column rule bound to the figure, so it never hangs in empty paper */
+  border-left:1px solid var(--rule);padding-left:clamp(24px,3.5vw,48px);margin-left:calc(-1 * clamp(24px,3.5vw,48px))}
+.story-frame.fading{opacity:.55}
+.story-chart{position:relative;flex:1;min-height:0}
+.story-chart svg{display:block;overflow:visible}
+.story-legend{display:flex;flex-wrap:wrap;gap:6px 16px;padding-top:10px;font-size:13px;color:var(--muted)}
+.story-legend span{display:inline-flex;align-items:center;gap:7px}
+.story-source{margin:6px 0 0;font-size:13px;line-height:1.45;color:var(--muted);max-width:72ch;border-top:1px solid var(--line);padding-top:6px}
+.story-steps{grid-column:1;grid-row:1;padding:12vh clamp(24px,3.5vw,48px) 30vh 0}
+.step{min-height:88vh;display:flex;align-items:center}
+.step-body{max-width:44ch;color:var(--muted);transition:color .3s ease}
+.step.is-active .step-body{color:var(--ink)}
+@media (prefers-reduced-motion:reduce){.step-body{transition:none}}
+.step h2{font:900 clamp(28px,2.6vw,36px)/1.1 var(--font);letter-spacing:-.015em;margin:0 0 16px;border-top:4px solid var(--ink);padding-top:12px;text-wrap:balance}
+.step p{font:400 18px/1.62 var(--font);margin:0 0 16px;text-align:justify;hyphens:auto}
+.step p b{font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+.step .lede-b{font-weight:700}
+
+.agree-wrap{margin:6px 0 18px;overflow-x:auto}
+.agree{border-collapse:collapse;font:500 14px/1.3 var(--font);font-variant-numeric:tabular-nums;width:100%;border-top:2px solid var(--rule)}
+.agree th,.agree td{padding:7px 6px;text-align:center;border-bottom:1px solid var(--line)}
+.agree thead th{font-weight:700;color:var(--muted);font-size:13px;vertical-align:bottom}
+.agree thead th:first-child{text-align:left;padding-left:0}
+.agree tbody th{text-align:left;font-weight:700;white-space:nowrap;padding-left:0}
+.agree td span{display:inline-block;min-width:58px;padding:3px 6px;font-weight:700}
+.agree .wet span{background:color-mix(in srgb,var(--wet) 15%,transparent);color:var(--wet)}
+.agree .dry span{background:color-mix(in srgb,var(--dry) 17%,transparent);color:var(--dry)}

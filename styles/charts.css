@@ -1,0 +1,17 @@
+/* Chart primitives shared by the story and the explorer. */
+/* chart primitives (story and explorer) */
+.axis text{fill:var(--muted);font:400 13px var(--font);font-variant-numeric:tabular-nums}
+.axis path,.axis line{stroke:var(--ctl-line)}
+.grid line{stroke:var(--grid)}
+.grid .domain{display:none}
+.unit{fill:var(--muted);font:700 13px var(--font)}
+.note{fill:var(--muted);font:500 12px var(--font)}
+.endlabel{font:700 13px var(--font);font-variant-numeric:tabular-nums}
+.endlabel.model{font-weight:500;fill:var(--muted)}
+.basebox{fill:var(--base)}
+.winbox{fill:var(--window)}
+.split{stroke:var(--ctl-line);stroke-dasharray:3 4}
+.zero{stroke:var(--muted)}
+.vline{stroke:var(--muted);stroke-dasharray:3 3}
+.watermark{fill:var(--red);font:700 13px var(--font)}
+.hatch-line{stroke:var(--ink);stroke-opacity:.52;stroke-width:1.25}

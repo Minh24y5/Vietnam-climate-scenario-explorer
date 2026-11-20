@@ -165,6 +165,8 @@ components:
 
 ## Overview
 
+Files: `styles/main.css` imports the style parts in cascade order (tokens, base, folio, lead, story, charts, maps, explorer, about, responsive); `scripts/` holds plain scripts that `index.html` loads in order, ending with `scripts/main.js`. All copy lives in `scripts/i18n.js` (static strings), `scripts/copy.js` (story) and `scripts/regions.js` (map chapter).
+
 **Creative North Star: "The Inside News Page"**
 
 The page is a Vietnamese daily's inside news page about Vietnam's climate future, set the way Lao Động sets its pages: grey newsprint, one ink, one nameplate red, Roboto in four weights, hairline column rules. It refuses both the online-dashboard and the online-article defaults; it reads as print that happens to move. The headline answers the question in its red second clause, the bold sa-pô states the story, a ruled three-part grid carries the lead, and the scroll story and explorer below keep the same paper, rules and type.

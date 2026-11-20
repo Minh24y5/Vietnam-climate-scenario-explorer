@@ -38,7 +38,7 @@ Classrooms, university lectures, research group presentations, and self-directed
 - Tone & Voice: Objective, educational, scientifically rigorous, and transparent about climate model uncertainty.
 
 ## Evidence on Hand
-- Working static web application implementation in `index.html`, `style.css`, and `main.js`.
+- Working static web application implementation in `index.html`, `styles/` (entry `styles/main.css`, which imports the part files in cascade order), and `scripts/` (plain scripts loaded in order by `index.html`, ending with the entry `scripts/main.js`).
 - Real CMIP6 results bundled in `data/vietnam_cmip6.json`: area-weighted annual means for Vietnam from 5 models (`CESM2`, `GFDL-ESM4`, `MPI-ESM1-2-LR`, `MIROC6`, `IPSL-CM6A-LR`), built from NOAA's public CMIP6 archive on Google Cloud. This is the default for the story and the explorer.
 - Built-in synthetic sample (4 models, deterministic Gaussian series) as a labelled fallback when the CMIP6 file can't load, and as an option in the explorer.
 - Absence: regional (sub-national) series and monthly data are not yet produced, so the planned climate-zone map and seasonal rainfall views are not implemented.

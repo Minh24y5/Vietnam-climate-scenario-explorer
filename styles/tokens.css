@@ -1,0 +1,43 @@
+/* Colour, type and spacing tokens, light and dark. */
+:root{
+  --font:"Roboto",-apple-system,"Segoe UI",Arial,sans-serif;
+  --font-mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+
+  --bg:#f1efe9;          /* newsprint */
+  --surface:#f8f7f3;     /* lighter stock for the explorer and cards */
+  --ink:#212529;
+  --muted:#4d4c49;       /* the paper's 70% black */
+  --line:#cfcbc1;
+  --rule:#212529;        /* column rules */
+  --ctl-line:#77746c;
+  --grid:#dedad1;
+  --red:#c8102e;         /* nameplate red: section blocks, nameplate, headline clause, pull rules */
+  --on-red:#ffffff;
+  --hist:#4b545c;
+  --s245:#b85c00;
+  --s585:#951b1e;
+  --wet:#1b7a6e;
+  --dry:#8c5a1e;
+  --base:rgba(33,37,41,.07);
+  --window:rgba(33,37,41,.05);
+  --shadow:0 1px 2px rgba(33,37,41,.08),0 8px 22px rgba(33,37,41,.10);
+
+  --ease-out:cubic-bezier(.23,1,.32,1);
+  --gutter:clamp(16px,4vw,40px);
+  --topbar:56px;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#141619;--surface:#1b1e22;--ink:#e8e6e1;--muted:#aaa9a4;--line:#34383d;--rule:#8b8f94;--ctl-line:#757b82;--grid:#24282d;
+    --red:#ff5a6a;--on-red:#141619;--hist:#b9c2ca;--s245:#f2a24b;--s585:#e5534b;--wet:#5cc2b2;--dry:#d9a45f;
+    --base:rgba(232,230,225,.07);--window:rgba(232,230,225,.05);--shadow:0 1px 2px rgba(0,0,0,.3),0 8px 22px rgba(0,0,0,.35);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#141619;--surface:#1b1e22;--ink:#e8e6e1;--muted:#aaa9a4;--line:#34383d;--rule:#8b8f94;--ctl-line:#757b82;--grid:#24282d;
+  --red:#ff5a6a;--on-red:#141619;--hist:#b9c2ca;--s245:#f2a24b;--s585:#e5534b;--wet:#5cc2b2;--dry:#d9a45f;
+  --base:rgba(232,230,225,.07);--window:rgba(232,230,225,.05);--shadow:0 1px 2px rgba(0,0,0,.3),0 8px 22px rgba(0,0,0,.35);
+  color-scheme:dark;
+}

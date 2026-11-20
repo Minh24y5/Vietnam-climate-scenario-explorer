@@ -1,0 +1,11 @@
+/* About, glossary and imprint. */
+/* ---------- about + imprint ---------- */
+.about{padding:clamp(48px,7vw,88px) 0;border-top:1px solid var(--rule)}
+.about-grid{display:grid;grid-template-columns:minmax(0,6fr) minmax(0,5fr);gap:0 clamp(28px,4vw,56px)}
+.about-col p{font-size:17px;line-height:1.6;max-width:62ch;margin:0 0 14px}
+.glossary{margin:0;border-left:1px solid var(--rule);padding-left:clamp(28px,4vw,56px)}
+.glossary dt{font-weight:900;font-size:15px;margin-top:16px;border-top:1px solid var(--line);padding-top:10px}
+.glossary dt:first-child{margin-top:0;border-top:0;padding-top:0}
+.glossary dd{margin:4px 0 0;color:var(--muted);font-size:15px;line-height:1.55}
+.imprint{border-top:3px double var(--rule);padding:18px 0 28px;font-size:13px;color:var(--muted)}
+.imprint p{margin:0}
