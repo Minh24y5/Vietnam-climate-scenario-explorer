@@ -35,14 +35,17 @@ const yTick = mode => v => mode === 'anom' ? (v === 0 ? '0' : fmt('+')(v)) : fmt
 const S = {
   vi: {
     skip: 'Bỏ qua, đến phần tự khám phá', section: 'Khí hậu', nameplate: 'Kịch bản khí hậu Việt Nam', navLabel: 'Các chương',
-    navModels: 'Mô hình', navChange: 'Thay đổi', navFutures: 'Hai tương lai', navRain: 'Lượng mưa', navExplore: 'Tự khám phá',
+    navModels: 'Mô hình', navChange: 'Thay đổi', navFutures: 'Hai tương lai', navRegions: 'Các vùng', navRain: 'Lượng mưa', navExplore: 'Tự khám phá',
+    ctlRegion: 'Vùng', allVn: 'Cả nước', noModelData: 'không có dữ liệu mô hình', regionOnlyReal: 'Số liệu từng vùng chỉ có với dữ liệu CMIP6.',
+    mapTitle: 'Thay đổi nhiệt độ 2071–2100 so với 1985–2014, trung bình các mô hình', mapTitleShort: 'Thay đổi nhiệt độ 2071–2100', gridKey: 'Ô lưới của', seaName: 'Biển Đông',
+    nbChina: 'TRUNG QUỐC', nbLaos: 'LÀO', nbCambodia: 'CAMPUCHIA',
     langLabel: 'Ngôn ngữ', storyLabel: 'Bài viết theo chương',
     medShort: 'trung bình', highShort: 'cao', medLong: 'phát thải trung bình', highLong: 'phát thải cao',
     sapo: 'Năm mô hình khí hậu CMIP6 cùng cho thấy Việt Nam tiếp tục nóng lên trong thế kỷ này. Mức tăng phụ thuộc vào con đường phát thải mà thế giới lựa chọn.',
     leadP2: 'CMIP6 là dự án so sánh mô hình khí hậu đứng sau báo cáo mới nhất của IPCC. Mỗi sọc trong hình là một năm: xanh là lạnh hơn, đỏ là nóng hơn trung bình 1985–2014. Từ năm 2015, dải sọc tách đôi theo hai con đường phát thải.',
     jumpStory: 'Xem tiếp: Năm mô hình, năm Việt Nam', jumpStoryPg: '(chương 1)', jumpExplore: 'Tự khám phá số liệu', jumpExplorePg: '(cuối trang)',
     exploreBlock: 'Tự khám phá', exploreTitle: 'Tự khám phá các dự tính',
-    exploreIntro: 'Chọn biến, kịch bản và mô hình. Biểu đồ và phần tóm tắt 2071–2100 cập nhật ngay khi bạn thay đổi.',
+    exploreIntro: 'Chọn vùng, biến, kịch bản và mô hình. Biểu đồ và phần tóm tắt 2071–2100 cập nhật ngay khi bạn thay đổi.',
     chartHelp: 'Rê chuột hoặc chạm vào biểu đồ để đọc từng năm. Khi biểu đồ đang được chọn, <kbd>←</kbd> <kbd>→</kbd> chuyển một năm, <kbd>Shift</kbd> + mũi tên chuyển mười năm, <kbd>Home</kbd> và <kbd>End</kbd> về hai đầu.',
     tableSummary: 'Các năm mốc dạng bảng', railLabel: 'Điều khiển biểu đồ',
     ctlVariable: 'Biến', varTas: 'Nhiệt độ', varPr: 'Lượng mưa', ctlValues: 'Cách hiển thị', modeAnom: 'Thay đổi', modeAbs: 'Tuyệt đối',
@@ -50,8 +53,8 @@ const S = {
     ctlScenarios: 'Kịch bản', ctlModels: 'Mô hình', allModels: 'Chọn tất cả mô hình', ctlDisplay: 'Hiển thị', showEach: 'Hiện từng mô hình', smooth10: 'Trung bình 10 năm',
     ctlData: 'Dữ liệu', srcReal: 'Dữ liệu CMIP6', srcSample: 'Mẫu tổng hợp', loadJson: 'Tải tệp JSON của bạn', dlExample: 'Tải tệp JSON mẫu',
     aboutBlock: 'Dữ liệu', aboutTitle: 'Về dữ liệu',
-    aboutData: 'Kết quả CMIP6 lấy từ <code>data/vietnam_cmip6.json</code>: mỗi năm, mỗi mô hình một giá trị trung bình năm có trọng số diện tích cho Việt Nam, xây dựng từ kho dữ liệu CMIP6 mà NOAA công bố trên Google Cloud.',
-    aboutRuns: 'Mỗi mô hình đóng góp một chuỗi số liệu. Các lần chạy lịch sử phủ giai đoạn 1950–2014 với khí nhà kính, sol khí, núi lửa và biến động Mặt Trời theo quan trắc; hai kịch bản tiếp nối từ 2015 đến 2100. Một giá trị trung bình cả nước che đi khác biệt lớn giữa miền Bắc, duyên hải miền Trung và đồng bằng sông Cửu Long.',
+    aboutData: 'Kết quả CMIP6 lấy từ <code>data/vietnam_cmip6.json</code> (cả nước) và <code>data/vietnam_regions.json</code> (bảy vùng khí hậu): mỗi năm, mỗi mô hình một giá trị trung bình năm, trong đó mỗi ô lưới được tính theo phần diện tích đất liền nó chung với Việt Nam hoặc với vùng. Cả hai tệp được dựng từ kho dữ liệu CMIP6 mà NOAA công bố trên Google Cloud bằng <code>pipeline/build_data.py</code>.',
+    aboutRuns: 'Mỗi mô hình đóng góp một lần chạy: r1i1p1f1, riêng CESM2 là r4i1p1f1, lần chạy đầu tiên có đủ cả ba thí nghiệm trong kho. Các lần chạy lịch sử phủ giai đoạn 1950–2014 với khí nhà kính, sol khí, núi lửa và biến động Mặt Trời theo quan trắc; hai kịch bản tiếp nối từ 2015 đến 2100. Ranh giới vùng ghép từ 63 tỉnh cũ (trước sáp nhập 2025) theo bản đồ Natural Earth.',
     ownTitle: 'Dùng kết quả CMIP6 của bạn',
     ownText: 'Xuất mỗi năm một giá trị cho từng mô hình rồi tải tệp lên ở phần tự khám phá. Nhiệt độ tính bằng °C, lượng mưa bằng mm mỗi tháng. <code>historical</code> cần 65 giá trị (1950–2014), mỗi kịch bản cần 86 giá trị (2015–2100). Mỗi mô hình phải có mặt ở cả <code>tas</code> và <code>pr</code>.',
     gCmip: 'Dự án So sánh Mô hình Khí hậu Kết hợp lần thứ sáu: bộ các lần chạy mô hình khí hậu đứng sau Báo cáo Đánh giá lần thứ Sáu của IPCC.',
@@ -73,14 +76,17 @@ const S = {
   },
   en: {
     skip: 'Skip to the explorer', section: 'Climate', nameplate: 'Vietnam Climate Scenario Explorer', navLabel: 'Chapters',
-    navModels: 'Models', navChange: 'Change', navFutures: 'Two futures', navRain: 'Rain', navExplore: 'Explorer',
+    navModels: 'Models', navChange: 'Change', navFutures: 'Two futures', navRegions: 'Regions', navRain: 'Rain', navExplore: 'Explorer',
+    ctlRegion: 'Region', allVn: 'All of Vietnam', noModelData: 'no model data', regionOnlyReal: 'Regional series exist only for the CMIP6 data.',
+    mapTitle: 'Temperature change by 2071–2100 from 1985–2014, model average', mapTitleShort: 'Warming by 2071–2100', gridKey: 'Grid cells of', seaName: 'East Sea',
+    nbChina: 'CHINA', nbLaos: 'LAOS', nbCambodia: 'CAMBODIA',
     langLabel: 'Language', storyLabel: 'Story in chapters',
     medShort: 'medium', highShort: 'high', medLong: 'medium emissions', highLong: 'high emissions',
     sapo: 'Five CMIP6 climate models agree that Vietnam will keep warming this century. How much depends on the emissions path the world takes.',
     leadP2: 'CMIP6 is the model comparison project behind the IPCC\'s latest assessment. Each stripe in the figure is one year: blue is cooler and red warmer than the 1985–2014 average. From 2015 the band splits along the two emissions paths.',
     jumpStory: 'Continued: five models, five Vietnams', jumpStoryPg: '(chapter 1)', jumpExplore: 'Explore the numbers yourself', jumpExplorePg: '(end of page)',
     exploreBlock: 'Explorer', exploreTitle: 'Your turn: explore the projections',
-    exploreIntro: 'Choose a variable, scenarios and models. The chart and the 2071–2100 summary update as you go.',
+    exploreIntro: 'Choose a region, a variable, scenarios and models. The chart and the 2071–2100 summary update as you go.',
     chartHelp: 'Hover or tap the chart to read a year. With the chart focused, <kbd>←</kbd> <kbd>→</kbd> move one year, <kbd>Shift</kbd> + arrow moves ten, <kbd>Home</kbd> and <kbd>End</kbd> jump to the ends.',
     tableSummary: 'Milestone years as a table', railLabel: 'Chart controls',
     ctlVariable: 'Variable', varTas: 'Temperature', varPr: 'Rainfall', ctlValues: 'Values', modeAnom: 'Change', modeAbs: 'Absolute',
@@ -88,8 +94,8 @@ const S = {
     ctlScenarios: 'Scenarios', ctlModels: 'Models', allModels: 'Select all models', ctlDisplay: 'Display', showEach: 'Show each model', smooth10: '10-year average',
     ctlData: 'Data', srcReal: 'CMIP6 data', srcSample: 'Synthetic sample', loadJson: 'Load your JSON', dlExample: 'Download example JSON',
     aboutBlock: 'Data', aboutTitle: 'About the data',
-    aboutData: 'The CMIP6 results come from <code>data/vietnam_cmip6.json</code>: one area-weighted annual mean for Vietnam per year, per model, built from the CMIP6 archive that NOAA publishes on Google Cloud.',
-    aboutRuns: 'Each model contributes one series. Historical runs cover 1950–2014 and are driven by observed greenhouse gases, aerosols, volcanic eruptions and solar changes; the two scenarios continue from 2015 to 2100. A national average hides large differences between the north, the central coast and the Mekong delta.',
+    aboutData: 'The CMIP6 results come from <code>data/vietnam_cmip6.json</code> (national) and <code>data/vietnam_regions.json</code> (seven climate zones): one annual mean per year and model, with each grid cell weighted by the land area it shares with Vietnam or the zone. <code>pipeline/build_data.py</code> builds both from the CMIP6 archive that NOAA publishes on Google Cloud.',
+    aboutRuns: 'Each model contributes one run: r1i1p1f1, except CESM2, which uses r4i1p1f1, the first run the archive holds for all three experiments. Historical runs cover 1950–2014 and are driven by observed greenhouse gases, aerosols, volcanic eruptions and solar changes; the two scenarios continue from 2015 to 2100. Zone boundaries merge the 63 provinces as they stood before the 2025 mergers, from Natural Earth.',
     ownTitle: 'Use your own CMIP6 results',
     ownText: 'Export one value per year for each model and load the file in the explorer. Temperature is in °C and rainfall in mm per month. <code>historical</code> needs 65 values (1950–2014) and each scenario 86 values (2015–2100). Every model must appear under both <code>tas</code> and <code>pr</code>.',
     gCmip: 'The sixth Coupled Model Intercomparison Project, the coordinated set of climate model runs behind the IPCC\'s Sixth Assessment Report.',
@@ -321,6 +327,165 @@ function sizeStripeAxis() {
   if (band && svg) $('.stripes-axis').style.setProperty('--labels-w', (band.clientWidth - svg.clientWidth) + 'px');
 }
 
+/* ---------- regions: 7 climate zones ---------- */
+const REG_URL = 'data/vietnam_regions.json', TOPO_URL = 'data/vietnam_zones.json';
+let REG = null, TOPO = null;
+const ZONE_EN = {tb: 'the Northwest', db: 'the Northeast', dbbb: 'the Red River Delta', btb: 'the North Central region',
+  ntb: 'the South Central Coast', tn: 'the Central Highlands', nb: 'the South'};
+const zoneIds = () => REG.meta.zones.map(z => z.id);
+const zoneName = id => { const z = REG.meta.zones.find(q => q.id === id); return LANG === 'vi' ? z.vi : z.en; };
+/* the zone as it sits mid-sentence: "Tây Bắc" / "the Northwest" */
+const zoneIn = id => LANG === 'vi' ? zoneName(id) : ZONE_EN[id];
+const placeOver = id => (!id || id === 'vn') ? t('over') : LANG === 'vi' ? `của vùng ${zoneName(id)}` : `over ${ZONE_EN[id]}`;
+const prColor = d3.scaleDiverging([-20, 0, 20], d3.interpolateBrBG).clamp(true);
+/* geography, not data: the three zones of the north and the three of the south (Bắc Trung Bộ lies between) */
+const NORTH = ['tb', 'db', 'dbbb'], SOUTH = ['ntb', 'tn', 'nb'];
+
+function checkRegions(r) {
+  if (!r || !r.meta || !Array.isArray(r.meta.zones) || !r.regions || !r.grid) throw new Error('regions file is missing meta, regions or grid');
+  for (const z of r.meta.zones) { if (!r.regions[z.id]) throw new Error(`zone ${z.id} has no series`); checkData(r.regions[z.id]); }
+}
+
+/* zone facts for the map chapter, all computed from the regional file */
+function zoneFacts(R, F) {
+  const zs = R.meta.zones.map(z => z.id), ms = modelsOf(R.regions[zs[0]]);
+  const ch = (z, s, m) => eoc(R.regions[z], 'tas', m, s, 1985).d;
+  const T = {}, order = {}, agree = {};
+  for (const s of Object.keys(SCEN)) {
+    T[s] = Object.fromEntries(zs.map(z => [z, mean(ms.map(m => ch(z, s, m)))]));
+    order[s] = zs.slice().sort((a, b) => T[s][b] - T[s][a]);
+    agree[s] = ms.filter(m => d3.greatest(zs, z => ch(z, s, m)) === order[s][0]).length;
+  }
+  const cellDeg = m => R.grid[m].cells.map(c => [c[3] - c[1], c[2] - c[0]]);
+  const cellArea = m => mean(cellDeg(m).map(([a, b]) => a * b));
+  const coarse = d3.greatest(ms, cellArea), fine = d3.least(ms, cellArea);
+  const small = d3.least(R.meta.zones, z => z.area_km2).id;
+  const dims = m => [d3.median(cellDeg(m), d => d[0]), d3.median(cellDeg(m), d => d[1])];
+  /* the north–south contrast: range of each group, and how many models put every northern zone above every southern one */
+  const grp = {}, ns = {};
+  for (const s of Object.keys(SCEN)) {
+    grp[s] = {north: d3.extent(NORTH, z => T[s][z]), south: d3.extent(SOUTH, z => T[s][z])};
+    ns[s] = ms.filter(m => d3.min(NORTH, z => ch(z, s, m)) > d3.max(SOUTH, z => ch(z, s, m))).length;
+  }
+  return {zs, ms, n: ms.length, T, order, agree, coarse, fine, small, dims, grp, ns,
+    cells: m => R.grid[m].cells.length, eq: (m, z) => R.grid[m].equivalent[z],
+    spread: s => T[s][order[s][0]] - T[s][order[s].at(-1)], gap: mean(F.t.ssp585) - mean(F.t.ssp245)};
+}
+
+function mapCopy(Z) {
+  const sdeg = x => `${sg(x)}&nbsp;°C`, deg = x => `${nf(x)}&nbsp;°C`;
+  const hi = s => Z.order[s][0];
+  const [dl, dn] = Z.dims(Z.coarse), eq = Z.eq(Z.coarse, Z.small), spread = Z.spread('ssp585');
+  /* "+4,0 đến +4,1 °C", or one figure when both ends round alike */
+  const span = ([a, b]) => sg(a) === sg(b) ? sdeg(a) : `${sg(a)} ${t('to')} ${sg(b)}&nbsp;°C`;
+  const G = Z.grp, both = Z.ns.ssp245 === Z.n && Z.ns.ssp585 === Z.n, need = agreeNeed(Z.n);
+  const names = ids => ids.map(zoneIn).join(', ').replace(/, ([^,]*)$/, LANG === 'vi' ? ' và $1' : ' and $1');
+  if (LANG === 'vi') return {
+    'map-zones': `<h2>Nơi nóng lên nhiều nhất</h2><p>Con số cả nước là trung bình của những vùng khác nhau. Chia Việt Nam thành bảy vùng khí hậu, theo SSP5-8.5 ba vùng phía Bắc (${names(NORTH)}) nóng lên <b>${span(G.ssp585.north)}</b> vào 2071–2100, còn ba vùng phía Nam (${names(SOUTH)}) nóng lên <b>${span(G.ssp585.south)}</b>. Theo SSP2-4.5 là <b>${span(G.ssp245.north)}</b> so với <b>${span(G.ssp245.south)}</b>.</p>` +
+      `<p>${both ? `Cả ${numWord(Z.n)} mô hình, theo cả hai kịch bản, đều cho mọi vùng phía Bắc nóng lên nhiều hơn mọi vùng phía Nam.` : `${cap(numWord(Z.ns.ssp585))} trong ${numWord(Z.n)} mô hình cho mọi vùng phía Bắc nóng lên nhiều hơn mọi vùng phía Nam theo SSP5-8.5.`} ` +
+      `${Z.agree.ssp585 < need ? 'Nhưng vùng nào nóng nhất thì các mô hình không thống nhất.' : `${zoneIn(hi('ssp585'))} đứng đầu trong ${Z.agree.ssp585}/${Z.n} mô hình.`}</p>` +
+      `<p>${spread < Z.gap ? `Chênh lệch giữa vùng nóng nhất và vùng ít nóng nhất (<b>${deg(spread)}</b>) nhỏ hơn chênh lệch giữa hai kịch bản (<b>${deg(Z.gap)}</b>). Con đường phát thải quyết định nhiều hơn nơi ta sống.` : `Chênh lệch giữa vùng nóng nhất và vùng ít nóng nhất (<b>${deg(spread)}</b>) lớn ngang chênh lệch giữa hai kịch bản (<b>${deg(Z.gap)}</b>).`}</p>`,
+    'map-grid': `<p>Cần đọc bản đồ này thận trọng. Các ô vuông là lưới của <b>${Z.coarse}</b>, mô hình thô nhất trong ${numWord(Z.n)} mô hình: mỗi ô khoảng ${nf(dl)}° × ${nf(dn)}°, chỉ <b>${Z.cells(Z.coarse)}</b> ô chạm đất liền Việt Nam, và cả ${zoneIn(Z.small)} chỉ bằng khoảng <b>${nf(eq)}</b> ô.</p>` +
+      `<p>Giá trị của một vùng nhỏ vì thế phần lớn đến từ những ô nó chung với vùng bên cạnh. Ngay cả mô hình chi tiết nhất, ${Z.fine}, cũng chỉ có ${Z.cells(Z.fine)} ô. Bản đồ cho thấy bức tranh chung giữa các vùng; muốn biết từng tỉnh cần mô hình chi tiết hơn (hạ quy mô).</p>`
+  };
+  return {
+    'map-zones': `<h2>Where it warms most</h2><p>The national figure averages over very different places. Split Vietnam into its seven climate zones and, under SSP5-8.5, the three northern zones (${names(NORTH)}) warm by <b>${span(G.ssp585.north)}</b> by 2071–2100, while the three southern zones (${names(SOUTH)}) warm by <b>${span(G.ssp585.south)}</b>. Under SSP2-4.5 it is <b>${span(G.ssp245.north)}</b> against <b>${span(G.ssp245.south)}</b>.</p>` +
+      `<p>${both ? `In all ${numWord(Z.n)} models, under both scenarios, every northern zone warms more than every southern one.` : `${cap(numWord(Z.ns.ssp585))} of ${numWord(Z.n)} models have every northern zone warming more than every southern one under SSP5-8.5.`} ` +
+      `${Z.agree.ssp585 < need ? 'Which zone warms most, though, the models do not agree.' : `${cap(zoneIn(hi('ssp585')))} comes first in ${Z.agree.ssp585} of ${Z.n} models.`}</p>` +
+      `<p>${spread < Z.gap ? `The gap between the warmest and the least-warming zone (<b>${deg(spread)}</b>) is smaller than the gap between the two scenarios (<b>${deg(Z.gap)}</b>). The emissions path matters more than where you live.` : `The gap between the warmest and the least-warming zone (<b>${deg(spread)}</b>) is as large as the gap between the two scenarios (<b>${deg(Z.gap)}</b>).`}</p>`,
+    'map-grid': `<p>Read this map with care. The squares are the grid of <b>${Z.coarse}</b>, the coarsest of the ${numWord(Z.n)} models: each cell is about ${nf(dl)}° × ${nf(dn)}°, only <b>${Z.cells(Z.coarse)}</b> of them touch Vietnam's land, and all of ${zoneIn(Z.small)} adds up to about <b>${nf(eq)}</b> of a cell.</p>` +
+      `<p>A small zone's value therefore comes mostly from cells it shares with its neighbours. Even the most detailed model, ${Z.fine}, has only ${Z.cells(Z.fine)} cells. The map shows broad differences between zones; for individual provinces you need finer, downscaled models.</p>`
+  };
+}
+
+/* a zone map: story (labels, neighbours, grid) or explorer (click to pick) */
+const ZONE_LABEL = {tb: {at: [102.95, 21.0]}, db: {at: [105.9, 22.35]}, dbbb: {at: [107.35, 19.75], to: [106.2, 20.5]},
+  btb: {at: [105.05, 19.15]}, ntb: {at: [109.75, 14.75], to: [108.95, 14.6]}, tn: {at: [107.55, 12.85]}, nb: {at: [105.75, 10.05]}};
+const ISLAND_LABEL = {hs: {at: [112.0, 17.35], a: 'middle'}, ts: {at: [115.85, 11.9], a: 'end'}};
+/* phones: short names under the dots, no neighbour names */
+const ISLAND_LABEL_NARROW = {hs: {at: [112.0, 17.45], a: 'middle'}, ts: {at: [115.9, 8.95], a: 'end'}};
+const shortIsle = n => n.replace(/^Quần đảo /, '').replace(/ \(.*\)| Islands$/g, '');
+const NEAR_LABEL = [['nbChina', [109.3, 22.75]], ['nbLaos', [103.0, 17.7]], ['nbCambodia', [104.75, 12.9]], ['seaName', [114.3, 19.4], true]];
+
+function ZoneMap(el, {story = false} = {}) {
+  const svg = d3.select(el).append('svg').attr('aria-hidden', 'true').attr('focusable', 'false');
+  const G = {};
+  for (const k of ['land', 'zones', 'borders', 'grid', 'pick', 'islands', 'labels']) G[k] = svg.append('g').attr('class', 'm-' + k);
+  let feats = null, prevGrid = false;
+  function setTopo(T) {
+    feats = {
+      zones: topojson.feature(T, T.objects.zones).features,
+      islands: topojson.feature(T, T.objects.islands).features,
+      land: topojson.feature(T, T.objects.land),
+      inner: topojson.mesh(T, T.objects.zones, (a, b) => a !== b),
+      outer: topojson.mesh(T, T.objects.zones, (a, b) => a === b)
+    };
+  }
+  /* o: {fill(id), label(id) -> value text, grid: cells|null, selected, onPick, maxH} */
+  function render(o) {
+    if (!feats) return;
+    const W = el.clientWidth || 300, H = Math.round(Math.min(o.maxH || Infinity, W * 1.08));
+    const narrow = W < 420;
+    svg.attr('width', W).attr('height', H).attr('viewBox', `0 0 ${W} ${H}`).classed('narrow', narrow);
+    const fit = {type: 'FeatureCollection', features: feats.zones.concat(feats.islands)};
+    const proj = d3.geoMercator().fitExtent([[4, story ? 8 : 4], [W - 4, H - (story ? 8 : 4)]], fit);
+    const path = d3.geoPath(proj);
+    G.land.selectAll('path').data([feats.land]).join('path').attr('class', 'nb-land').attr('d', path);
+    G.zones.selectAll('path').data(feats.zones, d => d.properties.id).join('path').attr('class', 'zone')
+      .attr('d', path).style('fill', d => o.fill(d.properties.id));
+    G.borders.selectAll('path').data([['inner', feats.inner], ['outer', feats.outer]]).join('path')
+      .attr('class', d => 'z-' + d[0]).attr('d', d => path(d[1]));
+    /* grid cells of one model, drawn as their real lon/lat boxes */
+    const cells = o.grid || [];
+    const gsel = G.grid.selectAll('rect').data(cells).join('rect').attr('class', 'cell')
+      .attr('x', c => proj([c[0], c[3]])[0]).attr('y', c => proj([c[0], c[3]])[1])
+      .attr('width', c => proj([c[2], c[1]])[0] - proj([c[0], c[1]])[0]).attr('height', c => proj([c[0], c[1]])[1] - proj([c[0], c[3]])[1]);
+    if (cells.length && !prevGrid && !reduceMotion.matches) gsel.style('opacity', 0).transition().duration(500).style('opacity', 1);
+    else gsel.style('opacity', 1);
+    prevGrid = !!cells.length;
+    /* selection outline and pointer targets (explorer only) */
+    const selF = o.selected && o.selected !== 'vn' ? feats.zones.filter(f => f.properties.id === o.selected) : [];
+    G.pick.selectAll('path.sel').data(o.selected === 'vn' ? [feats.outer] : selF).join('path').attr('class', 'sel').attr('d', path);
+    G.zones.selectAll('path').classed('pickable', !!o.onPick).on('click', o.onPick ? (e, d) => o.onPick(d.properties.id) : null)
+      .selectAll('title').data(d => o.title ? [d] : []).join('title').text(d => o.title(d.properties.id));
+    /* the archipelagos: dots at each island, named, flagged as having no model data */
+    const dots = feats.islands.flatMap(f => (f.geometry.type === 'MultiPolygon' ? f.geometry.coordinates : [f.geometry.coordinates])
+      .map(c => ({id: f.properties.id, p: proj(d3.geoCentroid({type: 'Polygon', coordinates: c}))})));
+    G.islands.selectAll('circle').data(dots).join('circle').attr('class', 'isle').attr('r', story ? 1.6 : 1.2).attr('cx', d => d.p[0]).attr('cy', d => d.p[1]);
+    const full = story && !narrow, IL = full || !story ? ISLAND_LABEL : ISLAND_LABEL_NARROW;
+    const il = feats.islands.map(f => ({id: f.properties.id, ...IL[f.properties.id], name: LANG === 'vi' ? f.properties.vi : f.properties.en}));
+    const isl = G.islands.selectAll('text').data(il, d => d.id).join('text').attr('class', 'isle-name')
+      .attr('text-anchor', d => d.a).attr('x', d => proj(d.at)[0]).attr('y', d => proj(d.at)[1]);
+    isl.selectAll('tspan').data(d => full ? [d.name, t('noModelData')] : [shortIsle(d.name)])
+      .join('tspan').attr('x', function () { return d3.select(this.parentNode).attr('x'); }).attr('dy', (_, i) => i ? '1.2em' : 0)
+      .attr('class', (_, i) => i ? 'nodata' : null).text(d => d);
+    /* value labels and neighbour names (story only) */
+    let lab = [];
+    if (story && o.label) lab = feats.zones.map(f => {
+      const id = f.properties.id, L = ZONE_LABEL[id];
+      return {id, at: proj(L.at), to: L.to ? proj(L.to) : null, name: zoneName(id), v: o.label(id)};
+    });
+    G.labels.selectAll('line.leader').data(lab.filter(d => d.to), d => d.id).join('line').attr('class', 'leader')
+      .attr('x1', d => d.at[0] - 3).attr('y1', d => d.at[1] - 4).attr('x2', d => d.to[0]).attr('y2', d => d.to[1]);
+    const zl = G.labels.selectAll('text.zl').data(lab, d => d.id).join('text').attr('class', 'zl')
+      .attr('text-anchor', d => d.to ? 'start' : 'middle').attr('x', d => d.at[0]).attr('y', d => d.at[1]);
+    zl.selectAll('tspan').data(d => [{k: 'zn', s: d.name}, {k: 'zv', s: d.v}]).join('tspan')
+      .attr('class', d => d.k).attr('x', function () { return d3.select(this.parentNode).attr('x'); })
+      .attr('dy', (_, i) => i ? (narrow ? '1.1em' : '1.15em') : 0).text(d => d.s);
+    const near = full ? NEAR_LABEL.map(([k, at, sea]) => ({k, p: proj(at), sea})) : [];
+    G.labels.selectAll('text.near').data(near, d => d.k).join('text').attr('class', d => 'near' + (d.sea ? ' sea' : ''))
+      .attr('text-anchor', 'middle').attr('x', d => d.p[0]).attr('y', d => d.p[1]).text(d => t(d.k));
+  }
+  return {setTopo, render};
+}
+
+/* a compact colour key, like the stripes key */
+function rampKey(el, scale, ticks, fmtTick, label) {
+  const [a, b] = [ticks[0], ticks[ticks.length - 1]];
+  const sw = d3.range(24).map(i => `<i style="background:${scale(a + (b - a) * (i + .5) / 24)}"></i>`).join('');
+  el.innerHTML = (label ? `<span>${label}</span>` : '') + `<div class="key-row">${sw}</div><div class="key-ticks">${ticks.map(v => `<span>${fmtTick(v)}</span>`).join('')}</div>`;
+}
+
 /* ---------- story chart ---------- */
 const STEPS = {
   'tas-abs':  {v: 'tas', mode: 'abs',  end: 2014, models: true, mlabels: true, scen: []},
@@ -545,7 +710,7 @@ function StoryChart(el) {
 }
 
 /* ---------- explorer ---------- */
-const ex = {v: 'tas', mode: 'anom', scen: new Set(['ssp245', 'ssp585']), models: new Set(), off: new Set(), bs: 1985, ind: false, smooth: true, yr: 2050};
+const ex = {region: 'vn', v: 'tas', mode: 'anom', scen: new Set(['ssp245', 'ssp585']), models: new Set(), off: new Set(), bs: 1985, ind: false, smooth: true, yr: 2050};
 const SAMPLE = synth();
 let REAL = null, DATA = SAMPLE, source = 'sample', SITE = SAMPLE;
 let activeShow = null;
@@ -697,11 +862,11 @@ $('#chart').addEventListener('blur', () => { if (activeShow) activeShow.hide(); 
 
 function labels() {
   const V = VARS[ex.v], anom = ex.mode === 'anom', n = sel().length, bp = period(ex.bs, ex.bs + 29);
-  const vi = LANG === 'vi';
+  const vi = LANG === 'vi', over = placeOver(curRegion());
   $('#blabel').textContent = bp;
   $('#statsHeading').textContent = vi ? `2071–2100 so với ${bp}` : `2071–2100 compared with ${bp}`;
-  $('#ctitle').textContent = `${V.long()} ${t('over')}${anom ? `, ${t('changeFrom')} ${bp}` : ''}`;
-  $('#chart').setAttribute('aria-label', `${V.long()} ${t('over')}, 1950–2100${anom ? `, ${t('changeFrom')} ${bp}` : ''}`);
+  $('#ctitle').textContent = `${V.long()} ${over}${anom ? `, ${t('changeFrom')} ${bp}` : ''}`;
+  $('#chart').setAttribute('aria-label', `${V.long()} ${over}, 1950–2100${anom ? `, ${t('changeFrom')} ${bp}` : ''}`);
   const warn = source === 'sample' ? `<span class="warn">${t('synthetic')}.</span> ` : '';
   const lines = n > 1
     ? (vi ? `Đường là trung bình của ${n} mô hình; vùng tô là biên độ giữa chúng.` : `Lines show the average of ${n} models; shading shows their range.`)
@@ -763,7 +928,51 @@ function buildTable() {
     `<thead><tr><th scope="col">${t('year')}</th><th scope="col">${t('historical')}</th><th scope="col">SSP2-4.5</th><th scope="col">SSP5-8.5</th></tr></thead><tbody>${rows}</tbody></table>`;
 }
 
-function render() { labels(); draw(); stats(); buildTable(); }
+function render() { labels(); draw(); stats(); buildTable(); drawExMap(); }
+
+/* ---------- explorer region map ---------- */
+const exMap = ZoneMap($('#exMap'));
+const curRegion = () => source === 'real' && REG ? ex.region : 'vn';
+function buildRegionSelect() {
+  if (!REG) return;
+  $('#region').innerHTML = `<option value="vn">${t('allVn')}</option>` + zoneIds().map(z => `<option value="${z}">${zoneName(z)}</option>`).join('');
+  $('#region').value = curRegion();
+}
+function setRegion(id) {
+  if (source !== 'real' || !REG || id === ex.region) return;
+  ex.region = id;
+  $('#region').value = id;
+  DATA = id === 'vn' ? REAL : REG.regions[id];
+  render();
+}
+$('#region').addEventListener('change', e => setRegion(e.target.value));
+function drawExMap() {
+  if (!REG || !TOPO) { $('#regionCtl').hidden = true; return; }
+  const real = source === 'real', vi = LANG === 'vi', ms = sel();
+  const s = ex.scen.has('ssp585') ? 'ssp585' : ex.scen.has('ssp245') ? 'ssp245' : null;
+  $('#region').disabled = !real;
+  const val = id => mean(ms.map(m => { const c = eoc(id === 'vn' ? REAL : REG.regions[id], ex.v, m, s, ex.bs); return ex.v === 'tas' ? c.d : c.p; }));
+  const scale = ex.v === 'tas' ? stripeColor : prColor;
+  const fv = v => ex.v === 'tas' ? `${sg(v)} °C` : `${sg(v)}%`;
+  const colour = real && s && ms.length;
+  exMap.render({
+    fill: id => colour ? scale(val(id)) : 'var(--nodata)',
+    selected: real ? ex.region : null,
+    onPick: real ? setRegion : null,
+    title: id => colour ? `${zoneName(id)}: ${fv(val(id))}` : zoneName(id)
+  });
+  const key = $('#exMapKey');
+  key.hidden = !colour;
+  if (colour) {
+    if (ex.v === 'tas') rampKey(key, stripeColor, [0, 1, 2, 3, 4], v => v === 0 ? '0' : v === 4 ? `${fmt('+')(v)}&nbsp;°C` : fmt('+')(v));
+    else rampKey(key, prColor, [-20, -10, 0, 10, 20], v => v === 0 ? '0' : `${fmt('+')(v)}%`);
+  }
+  const bp = period(ex.bs, ex.bs + 29), what = ex.v === 'tas' ? (vi ? 'nhiệt độ' : 'temperature') : (vi ? 'lượng mưa' : 'rainfall');
+  $('#regionNote').textContent = !real ? t('regionOnlyReal')
+    : !s ? (vi ? 'Chọn một kịch bản để tô màu bản đồ.' : 'Tick a scenario to colour the map.')
+    : vi ? `Màu: thay đổi ${what} 2071–2100 so với ${bp}, ${SCEN[s].name}, trung bình ${ms.length} mô hình. Bấm vào một vùng để xem biểu đồ của vùng đó.`
+    : `Colour: ${what} change by 2071–2100 from ${bp}, ${SCEN[s].name}, ${ms.length}-model average. Click a zone to chart it.`;
+}
 
 /* ---------- explorer controls ---------- */
 function buildModels() {
@@ -820,6 +1029,7 @@ function showDataMsg() {
   m.classList.toggle('error', dataMsg.error);
 }
 function useData(src, d) {
+  if (src === 'real' && REG && ex.region !== 'vn') d = REG.regions[ex.region];
   source = src; DATA = d;
   /* keep the models the user switched off; anything new to this dataset starts selected */
   const keep = modelsOf(d).filter(m => !ex.off.has(m));
@@ -831,6 +1041,7 @@ function useData(src, d) {
   reset.hidden = src !== 'custom';
   reset.textContent = REAL ? t('backReal') : t('backSample');
   buildModels();
+  if (REG) $('#region').value = curRegion();
   render();
 }
 $('#srcSeg').addEventListener('click', e => {
@@ -861,15 +1072,66 @@ $('#file').addEventListener('change', e => {
 
 /* ---------- story wiring ---------- */
 const story = StoryChart($('#storyChart'));
-const STEP_CHAPTER = {'tas-abs': 'ch-models', 'tas-anom': 'ch-change', 'tas-245': 'ch-futures', 'tas-585': 'ch-futures', 'pr-abs': 'ch-rain', 'pr-agree': 'ch-rain', 'pr-hatch': 'ch-rain'};
+const STEP_CHAPTER = {'tas-abs': 'ch-models', 'tas-anom': 'ch-change', 'tas-245': 'ch-futures', 'tas-585': 'ch-futures',
+  'map-zones': 'ch-regions', 'map-grid': 'ch-regions', 'pr-abs': 'ch-rain', 'pr-agree': 'ch-rain', 'pr-hatch': 'ch-rain'};
 let activeStep = null, stepObserver = null;
 function markChapter(id) { $$('.chapters a').forEach(a => a.setAttribute('aria-current', a.getAttribute('href') === '#' + id ? 'true' : 'false')); }
+
+/* the pinned figure holds either the line chart or the zone map */
+const storyMap = ZoneMap($('#storyMap'), {story: true});
+let figMode = 'chart', mapScen = 'ssp585', ZF = null;
+/* show step k, fading the frame when it switches between chart and map; a swap under way
+   always finishes on the latest step, however fast the reader scrolls */
+let swapT = null, pendingKey = null;
+const modeOf = k => k.startsWith('map-') ? 'map' : 'chart';
+function drawStep(k) { if (modeOf(k) === 'map') renderStoryMap(k); else { storySourceText(); story.render(k, true); } }
+function showStep(k) {
+  pendingKey = k;
+  if (swapT) return;
+  if (modeOf(k) === figMode) { drawStep(k); return; }
+  const fr = $('.story-frame');
+  const finish = () => {
+    swapT = null;
+    figMode = modeOf(pendingKey);
+    $('#storyChart').hidden = figMode !== 'chart';
+    $('#storyMapWrap').hidden = figMode !== 'map';
+    drawStep(pendingKey);
+  };
+  if (reduceMotion.matches) { finish(); fr.classList.add('fading'); setTimeout(() => fr.classList.remove('fading'), 160); return; }
+  fr.classList.add('swapping');
+  swapT = setTimeout(() => { finish(); fr.classList.remove('swapping'); }, 170);
+}
+function renderStoryMap(k) {
+  if (!REG || !TOPO) return;
+  const T = ZF.T[mapScen], grid = k === 'map-grid' ? REG.grid[ZF.coarse].cells : null;
+  $('#storyMapTitle').innerHTML = `<span class="t-long">${t('mapTitle')}</span><span class="t-short">${t('mapTitleShort')}</span>`;
+  $$('#mapScen button').forEach(b => b.setAttribute('aria-pressed', b.dataset.s === mapScen ? 'true' : 'false'));
+  const wrap = $('#storyMapWrap'), maxH = Math.max(220, wrap.clientHeight - $('.map-head').offsetHeight - 4);
+  storyMap.render({fill: id => stripeColor(T[id]), label: id => `${sg(T[id])} °C`, grid, maxH});
+  $('#storyMap').classList.toggle('show-grid', !!grid);
+  const [dl, dn] = ZF.dims(ZF.coarse);
+  let lg = `<span class="ramp-key" id="storyMapKey"></span><span><i class="isw"></i>${t('noModelData')}</span>`;
+  if (grid) lg += `<span><i class="cellsw"></i>${t('gridKey')} ${ZF.coarse}, ~${nf(dl)}° × ${nf(dn)}°</span>`;
+  $('#storyLegend').innerHTML = lg;
+  rampKey($('#storyMapKey'), stripeColor, [0, 1, 2, 3, 4], v => v === 0 ? '0' : v === 4 ? `${fmt('+')(v)}&nbsp;°C` : fmt('+')(v), '');
+  $('#storyMap').setAttribute('aria-label', `${t('mapTitle')}, ${SCEN[mapScen].name}: ` + ZF.order[mapScen].map(z => `${zoneName(z)} ${sg(T[z])} °C`).join('; ') + '.');
+  $('#storySource').textContent = LANG === 'vi'
+    ? `Nguồn: CMIP6, ${ZF.n} mô hình, trung bình theo diện tích đất liền từng vùng; ranh giới tỉnh Natural Earth (trước sáp nhập 2025). Hai quần đảo nhỏ hơn một ô lưới nên không có số liệu.`
+    : `Source: CMIP6, ${ZF.n} models, land-area-weighted zone means; province boundaries from Natural Earth (before the 2025 mergers). Both archipelagos are smaller than a model cell, so they have no values.`;
+}
+$('#mapScen').addEventListener('click', e => {
+  const b = e.target.closest('button');
+  if (!b || b.dataset.s === mapScen) return;
+  mapScen = b.dataset.s;
+  if (activeStep && activeStep.startsWith('map-')) renderStoryMap(activeStep);
+});
+function storySourceText() { const C = copy(facts(SITE)); $('#storySource').textContent = REAL ? C.source : `${t('synthetic')}.`; }
 function activate(step) {
   const k = step.dataset.step;
   if (k === activeStep) return;
   activeStep = k;
   $$('.step').forEach(s => s.classList.toggle('is-active', s === step));
-  story.render(k, true);
+  showStep(k);
   markChapter(STEP_CHAPTER[k]);
 }
 function observeSteps() {
@@ -886,7 +1148,10 @@ new IntersectionObserver(entries => entries.forEach(en => { if (en.isIntersectin
 let resizeT = null;
 window.addEventListener('resize', () => {
   clearTimeout(resizeT);
-  resizeT = setTimeout(() => { draw(); story.redraw(); sizeStripeAxis(); observeSteps(); }, 150);
+  resizeT = setTimeout(() => {
+    render(); sizeStripeAxis(); observeSteps();
+    if (figMode === 'map') renderStoryMap(activeStep); else story.redraw();
+  }, 150);
 });
 
 /* ---------- page text from data, in the current language ---------- */
@@ -903,7 +1168,9 @@ function writePage() {
   $('#stripesCap').innerHTML = pr(REAL ? C.cap : `${t('synthetic')}. ${C.cap}`);
   $('#stripesFig').setAttribute('aria-label', C.stripesAria);
   stripesKey(C);
-  $$('.step-body').forEach(b => { b.innerHTML = pr(C.steps[b.dataset.text]); });
+  const MC = ZF ? mapCopy(ZF) : {};
+  $$('.step-body').forEach(b => { b.innerHTML = pr(C.steps[b.dataset.text] ?? MC[b.dataset.text] ?? ''); });
+  buildRegionSelect();
   $('#storySource').textContent = REAL ? C.source : `${t('synthetic')}.`;
   const badge = $('#dataBadge');
   badge.className = 'data-badge ' + (REAL ? 'real' : 'synthetic');
@@ -921,24 +1188,45 @@ function setLang(l) {
   try { localStorage.setItem('lang', l); } catch (_) { /* per-viewer convenience only */ }
   writePage();
   $('#modelHint').textContent = '';
-  story.redraw();
+  if (figMode === 'map') renderStoryMap(activeStep); else story.redraw();
   render();
   sizeStripeAxis();
 }
 $('#langSeg').addEventListener('click', e => { const b = e.target.closest('button'); if (b) setLang(b.dataset.lang); });
 
 /* ---------- init ---------- */
+async function getJson(url) {
+  const r = await fetch(url);
+  if (!r.ok) throw new Error(`${url}: HTTP ${r.status}`);
+  return r.json();
+}
 async function init() {
   applyStatic();
+  const [nat, reg, topo] = await Promise.allSettled([getJson(REAL_URL), getJson(REG_URL), getJson(TOPO_URL)]);
   try {
-    const r = await fetch(REAL_URL);
-    if (!r.ok) throw new Error('HTTP ' + r.status);
-    const d = await r.json();
-    checkData(d);
-    REAL = d;
+    if (nat.status === 'rejected') throw nat.reason;
+    checkData(nat.value);
+    REAL = nat.value;
   } catch (err) {
     console.warn('CMIP6 data not loaded:', err);
     $('#realBtn').disabled = true;
+  }
+  try {
+    if (!REAL) throw new Error('no national data');
+    if (reg.status === 'rejected') throw reg.reason;
+    if (topo.status === 'rejected') throw topo.reason;
+    if (typeof topojson === 'undefined') throw new Error('topojson-client did not load');
+    checkRegions(reg.value);
+    REG = reg.value; TOPO = topo.value;
+    storyMap.setTopo(TOPO); exMap.setTopo(TOPO);
+    ZF = zoneFacts(REG, facts(REAL));
+  } catch (err) {
+    /* no regional data: the map chapter and the region control leave the page */
+    console.warn('Regional data not loaded:', err);
+    REG = null; TOPO = null;
+    $$('.step[data-step^="map-"]').forEach(s => s.remove());
+    const nav = $('.chapters a[href="#ch-regions"]'); if (nav) nav.parentElement.remove();
+    $('#regionCtl').hidden = true;
   }
   SITE = REAL || SAMPLE;
   drawStripes(SITE);

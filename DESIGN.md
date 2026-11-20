@@ -201,6 +201,8 @@ A newsprint palette: warm grey stock, near-black ink, one red, and a separate se
 - **SSP2-4.5 Orange** (`ssp245-orange`; dark `dark-ssp245`) and **SSP5-8.5 Maroon** (`ssp585-maroon`; dark `dark-ssp585`): the scenario pair, always with direct labels.
 - **Wet Teal** (`wet-teal`) and **Dry Brown** (`dry-brown`): model agreement on wetter or drier, as tinted chips (15% and 17% mixes) with the ink in full.
 - **Warming Stripes**: D3's RdBu interpolator reversed on a diverging scale with domain −1, 0, +4 °C (clamped), so the white point sits at zero change and red carries most of the range. The key below the figure shows 26 swatches with ticks at −1, 0, +1 … +4 °C.
+- **Zone maps** reuse the stripes scale for temperature change, so a colour means the same °C in the hero and on every map (zones above +4 °C saturate, as the stripes do; the value labels carry the difference). Rainfall change on the explorer map uses D3's BrBG on −20, 0, +20% (clamped): brown drier, teal wetter, in step with the wet/dry inks.
+- **Map neutrals**: neighbouring land is ink mixed 8% into newsprint (`--nb-land`); a zone with nothing to show (no scenario ticked, or non-CMIP6 data) is ink at 14% (`--nodata`). The sea is the page itself.
 
 ### Named Rules
 **The Rationed Red Rule.** Nameplate red appears only in its named slots: section block, nameplate, headline's red clause, pull-figure rule, folio rule, synthetic-data warning, and as a hover/focus state. It never fills a chart series, a button or a background area beyond the section block.
@@ -235,7 +237,7 @@ A newsprint palette: warm grey stock, near-black ink, one red, and a separate se
 
 ## Layout
 
-Content sits in a 1240px measure with a fluid gutter (16–40px). The sticky folio is 56px tall on newsprint with a 2px red rule beneath: section block, nameplate, chapter links (hidden under 1120px), the VI | EN control, and the date/data line (shortened under 1300px, hidden under 520px).
+Content sits in a 1240px measure with a fluid gutter (16–40px). The sticky folio is 56px tall on newsprint with a 2px red rule beneath: section block, nameplate, six chapter links (Mô hình, Thay đổi, Hai tương lai, Các vùng, Lượng mưa, Tự khám phá; hidden under 1120px), the VI | EN control, and the date/data line (shortened under 1300px, hidden under 520px).
 
 **The lead** is a ruled grid in 2:1:1 under a 1px ink rule: the stripes figure takes two parts, then the byline column, then a second column ending in the pull figure and jump lines. Columns are separated by 1px column rules with 22px padding. Under 980px the figure spans full width above two columns; under 620px everything stacks, with rules between columns.
 
@@ -292,6 +294,12 @@ One stripe per year from 1950, forking at 2015 into SSP2-4.5 (upper) and SSP5-8.
 ### Story steps
 Heads with a 4px ink rule, justified body at 44ch; inactive steps fade to seventy black and the active step turns ink. Figures in the text are bold, tabular and unbreakable. On phones each step is a lighter-stock card with a column-rule border and the float shadow.
 
+### Zone map (story chapter "Nơi nóng lên nhiều nhất" / "Where it warms most")
+Two steps between "Two futures" and "Rain". The pinned frame swaps the line chart for the map with a 170ms fade out and in (an opacity dip under reduced motion); a swap under way always lands on the latest step. A Mercator map of the seven climate zones (Natural Earth admin-1, 63 pre-2025 provinces merged), Hoàng Sa and Trường Sa drawn as ink dots at their true positions, named in italic and marked "no model data". Zone borders are 1.25px newsprint lines, the coastline and land border a 0.75px ink line, neighbours a flat `--nb-land` with letter-spaced medium 11px names (TRUNG QUỐC, LÀO, CAMPUCHIA) and the sea named in italic ("Biển Đông" / "East Sea"). Each zone carries a direct label: medium 12px name over a Black 15px tabular value, ink with a 3.5px newsprint halo; small or coastal zones (Đồng bằng Bắc Bộ, Nam Trung Bộ) sit offshore on a 0.75px ink leader. A small SSP2-4.5 | SSP5-8.5 segmented control (32px) sits in the map head beside a bold 13px seventy-black title. The second step lays the coarsest model's grid cells over the map as 1px ink boxes (fills drop to 60%), so the reader sees how few cells a zone holds. Under 420px wide the map drops neighbour and sea names, shortens island names, and sets labels at 10.5/13px. The legend shows a 0–+4 °C ramp key, the island-dot key and, on the grid step, a cell key.
+
+### Region control (explorer)
+The rail opens with "Vùng / Region": a full-width native select in the segmented-control box (1px ink, square, CSS chevron, 40px; 44px on coarse pointers) as the keyboard and screen-reader path, and a 300px zone map under it for pointers. Zones are coloured by the 2071–2100 change for the current variable, baseline, models and scenario (SSP5-8.5 when ticked, else SSP2-4.5); the selected zone, or the whole outline for "Cả nước", takes a 2.25px ink outline; hover draws a 1.25px ink edge and a native title with the value. A ramp key and a seventy-black note say what the colour means. With synthetic or uploaded data the select is disabled, the map turns `--nodata`, and the note says regional series exist only for CMIP6.
+
 ### Chart primitives
 Axes in control line with 13px tabular labels; gridlines in chart grid; baseline and 2071–2100 windows as washes; the 2015 split dashed; model-disagreement hatching as 45° ink strokes at 52% opacity on a 7px pattern; 2071–2100 margin bars per scenario (model range plus mean tick); bold end labels in each series ink, model labels medium in seventy black; a red watermark in synthetic mode.
 
@@ -323,6 +331,8 @@ Story transitions run 750ms with cubic in-out easing (lines collapse to the base
 - **Don't** introduce a second typeface; the monospace stack is for code only.
 - **Don't** type a number into narration by hand, or show a period decimal in Vietnamese.
 - **Don't** reproduce a real newspaper's masthead, logo or name; the genre is conventions only.
+- **Don't** draw Vietnam without Hoàng Sa and Trường Sa, and don't give them values: at CMIP6 resolution they hold no land cells.
+- **Don't** narrate a single "warmest zone" unless at least 4 of 5 models agree on it; the robust finding is the north–south contrast, and the copy checks which one holds.
 
 ### Detector exemptions (intentional)
 - `overused-font=roboto` is ignored: Roboto was pinned by the user ("Use the same font as Lao Dong newspaper").
