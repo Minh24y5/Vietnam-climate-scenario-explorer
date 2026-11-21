@@ -12,7 +12,8 @@ const DASHES = ['', '6 3', '2 3', '8 3 2 3', '4 4 1 4', '1 3', '10 4'];
 /* the chapter strip (under 1120px) scrolls sideways: keep the current chapter's link in view.
    Scrolls the strip only, never the page; a no-op on the vertical rail, which doesn't overflow */
 function revealChapter() {
-  const nav = $('.chapters'), a = nav && nav.querySelector('a[aria-current="true"]');
+  /* the chapter list scrolls inside the strip; the link to the other page stays put beside it */
+  const nav = $('.chapters ul'), a = nav && nav.querySelector('a[aria-current="true"]');
   if (!a || nav.scrollWidth <= nav.clientWidth) return;
   const l = a.getBoundingClientRect().left - nav.getBoundingClientRect().left + nav.scrollLeft, r = l + a.offsetWidth, pad = 24;
   if (l < nav.scrollLeft + pad || r > nav.scrollLeft + nav.clientWidth - pad)

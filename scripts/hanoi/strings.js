@@ -6,8 +6,8 @@ const HN_URL = 'data/hanoi/hanoi.json';
 
 Object.assign(S.vi, {
   skip: 'Bỏ qua, đến phần tự khám phá', section: 'Hà\u00a0Nội', nameplate: 'Kịch bản khí hậu Việt Nam', navLabel: 'Các chương',
-  navPast: 'Đã trải qua', navLevels: 'Mức ấm lên', navHeat: 'Nắng nóng', navRain: 'Mưa', navEarly: 'Đến sớm', navClose: 'Chuẩn bị cho +2 °C', navExplore: 'Tự khám phá',
-  actAnd: 'Điều ta biết', actBut: 'Nhưng', actThen: 'Vì vậy', kickerBut: 'Nhưng', kickerThen: 'Vì vậy',
+  navPast: 'Đã trải qua', navLevels: 'Mức ấm lên', navHeat: 'Nắng nóng', navRain: 'Mưa', navEarly: 'Đến sớm', navClose: 'Chuẩn bị cho +2\u00a0°C', navExplore: 'Tự khám phá',
+  actAnd: 'Điều ta biết', actBut: 'Nhưng', actThen: 'Vì vậy',
   navNationalKicker: 'Trang chính', navNational: 'Cả nước',
   storyLabel: 'Bài viết theo chương',
   jumpStory: 'Xem tiếp: Những gì Hà\u00a0Nội đã trải qua', jumpStoryPg: '(chương 1)',
@@ -43,8 +43,8 @@ Object.assign(S.vi, {
 
 Object.assign(S.en, {
   skip: 'Skip to the explorer', section: 'Hanoi', nameplate: 'Vietnam Climate Scenario Explorer', navLabel: 'Chapters',
-  navPast: 'So far', navLevels: 'Warming levels', navHeat: 'Heat', navRain: 'Rain', navEarly: 'Arriving early', navClose: 'Plan for +2 °C', navExplore: 'Explorer',
-  actAnd: 'What we know', actBut: 'But', actThen: 'Therefore', kickerBut: 'But', kickerThen: 'Therefore',
+  navPast: 'So far', navLevels: 'Warming levels', navHeat: 'Heat', navRain: 'Rain', navEarly: 'Arriving early', navClose: 'Plan for +2\u00a0°C', navExplore: 'Explorer',
+  actAnd: 'What we know', actBut: 'But', actThen: 'Therefore',
   navNationalKicker: 'Main page', navNational: 'All of Vietnam',
   storyLabel: 'Story in chapters',
   jumpStory: 'Continued: what Hanoi has lived through', jumpStoryPg: '(chapter 1)',

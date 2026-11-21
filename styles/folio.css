@@ -28,14 +28,15 @@ main,.imprint{margin-left:var(--rail-w)}
 .rail-kicker{display:block;margin:0 16px 4px 18px;font:500 12px/1 var(--font);text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
 .rail-other a{font-weight:700}
 .folio-ctl{display:flex;align-items:center;gap:8px;margin-left:auto}
-.lang{display:flex;border:1px solid var(--line)}
+.lang{display:flex;align-items:center}
 .theme svg{width:16px;height:16px;display:block;margin:auto;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:square}
 .theme svg circle{fill:currentColor;stroke:none}
 .theme button[data-theme="dark"] svg path{fill:currentColor;stroke:none}
-.lang button{font:500 13px/1 var(--font);background:transparent;color:var(--ink);border:0;min-width:38px;min-height:32px;cursor:pointer;transition:background-color .15s ease,color .15s ease}
-.lang button+button{border-left:1px solid var(--line)}
-.lang button[aria-pressed="true"]{background:var(--base);color:var(--ink);font-weight:700;box-shadow:inset 0 -2px 0 var(--ink)}
-.lang button:hover:not([aria-pressed="true"]){background:var(--base)}
+.lang button{position:relative;font:500 13px/1 var(--font);background:transparent;color:var(--muted);border:0;min-width:34px;min-height:40px;padding:0 8px;cursor:pointer;transition:color .15s ease}
+/* a 12px hairline between the two words, so the pair reads as text: VI | EN */
+.lang button+button::before{content:"";position:absolute;left:0;top:50%;height:12px;margin-top:-6px;border-left:1px solid var(--line)}
+.lang button[aria-pressed="true"]{color:var(--ink);font-weight:700}
+.lang button:hover:not([aria-pressed="true"]){color:var(--ink)}
 .lang button:focus-visible{outline-offset:-4px}
 .data-badge{font:500 12px/1 var(--font);color:var(--muted);text-decoration:none;white-space:nowrap;font-variant-numeric:tabular-nums;border-left:1px solid var(--line);padding-left:12px}
 .data-badge .d{color:var(--ink);font-weight:500}

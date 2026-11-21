@@ -11,17 +11,18 @@
   .folio{padding-left:0}
   main,.imprint{margin-left:0}
   .chapters{position:sticky;top:calc(var(--topbar) + 2px);bottom:auto;width:auto;height:calc(var(--strip) - 2px);flex-direction:row;align-items:stretch;
-    padding:0 var(--gutter);border-right:0;border-bottom:1px solid var(--rule);overflow-x:auto;overflow-y:hidden;
-    overscroll-behavior-x:contain;scrollbar-width:none}
-  .chapters::-webkit-scrollbar{display:none}
+    padding:0 var(--gutter);border-right:0;border-bottom:1px solid var(--rule);overflow:hidden}
   .rail-head,.chapters .rail-act{display:none}
-  .chapters ul{display:flex}
+  /* only the chapter list scrolls; a fade at its right edge says it runs on */
+  .chapters ul{display:flex;flex:1 1 auto;min-width:0;overflow-x:auto;overflow-y:hidden;overscroll-behavior-x:contain;scrollbar-width:none;
+    -webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 28px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 28px),transparent)}
+  .chapters ul::-webkit-scrollbar{display:none}
   .chapters li{display:flex}
   .chapters a{min-height:0;padding:0 12px;border-left:0;border-bottom:3px solid transparent;border-top:3px solid transparent;white-space:nowrap;font-size:14px}
   .chapters li:first-child a{padding-left:0}
   .chapters a[aria-current="true"]{border-bottom-color:var(--ink)}
   /* the other page closes the strip, after a column rule, as it closes the rail */
-  .rail-other{display:flex;align-items:center;gap:6px;margin:0 0 0 auto;padding:0 0 0 14px;border-top:0;border-left:1px solid var(--line);white-space:nowrap}
+  .rail-other{flex-shrink:0;display:flex;align-items:center;gap:6px;margin:0 0 0 auto;padding:0 0 0 14px;border-top:0;border-left:1px solid var(--line);white-space:nowrap}
   .rail-other .rail-kicker{margin:0}
   .rail-other a{padding:0}
 }
@@ -66,6 +67,9 @@
      pinned story figure gets the height a third sticky bar would take */
   :root{--strip:0px}
   .chapters{position:static;height:44px}
+  /* the cross-page link drops its kicker and the links tighten, so a third chapter shows cut by the fade */
+  .rail-other .rail-kicker{display:none}
+  .chapters a{padding:0 10px}
   .lead-grid{grid-template-columns:minmax(0,1fr)}
   .lead-grid>*{padding:0!important;border-left:0!important}
   .lead-grid>.lead-col+.lead-col{border-top:1px solid var(--rule)!important;padding-top:14px!important;margin-top:4px}
