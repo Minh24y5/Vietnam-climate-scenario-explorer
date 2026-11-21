@@ -25,11 +25,14 @@ const full = (D, v, m, s) => D[v][m].historical.concat(D[v][m][s]);
 const baseOf = (D, v, m, bs) => mean(D[v][m].historical.slice(bs - 1950, bs - 1950 + 30));
 /* centred 10-year mean; null where the window would run off either end */
 const smoothC = a => a.map((_, i) => (i < 5 || i + 5 > a.length) ? null : mean(a.slice(i - 5, i + 5)));
+/* the ensemble's central value is the median: with five models, one or two fast-warming ones
+   would pull a mean up */
+const mid = a => d3.median(a);
 function ens(list) {
   return d3.range(N_YEARS).map(i => {
     const v = list.map(a => a[i]);
-    if (!v.length || v.some(q => q == null)) return {y: 1950 + i, mean: null, min: null, max: null};
-    return {y: 1950 + i, mean: mean(v), min: d3.min(v), max: d3.max(v)};
+    if (!v.length || v.some(q => q == null)) return {y: 1950 + i, mid: null, min: null, max: null};
+    return {y: 1950 + i, mid: mid(v), min: d3.min(v), max: d3.max(v)};
   });
 }
 const agreeNeed = n => Math.max(1, Math.ceil(n * 0.8));

@@ -53,7 +53,7 @@ function draw() {
   const rows = hist.concat(...vis.map(fut)).filter(d => d.min != null);
   let lo = d3.min(rows, d => d.min), hi = d3.max(rows, d => d.max);
   if (ex.ind) ms.forEach(m => ['ssp245', ...vis].forEach(s => B[s].S[m].forEach((v, i) => { if (v == null || (i > 64 && !vis.includes(s))) return; lo = Math.min(lo, v); hi = Math.max(hi, v); })));
-  const bars = vis.map(s => { const a = ms.map(m => exEoc(m, s)); return {s, lo: d3.min(a), hi: d3.max(a), m: mean(a)}; });
+  const bars = vis.map(s => { const a = ms.map(m => exEoc(m, s)); return {s, lo: d3.min(a), hi: d3.max(a), m: mid(a)}; });
   bars.forEach(b => { lo = Math.min(lo, b.lo); hi = Math.max(hi, b.hi); });
   if (ex.mode === 'anom') { lo = Math.min(lo, 0); hi = Math.max(hi, 0); }
   const x = d3.scaleLinear([1950, 2100], [mg.l, W - mg.r]), y = d3.scaleLinear([lo, hi], [H - mg.b, mg.t]).nice();
@@ -77,7 +77,7 @@ function draw() {
 
   const area = d3.area().defined(d => d.min != null).x(d => x(d.y)).y0(d => y(d.min)).y1(d => y(d.max));
   const harea = d3.area().defined(d => d.min != null && d.h).x(d => x(d.y)).y0(d => y(d.min)).y1(d => y(d.max));
-  const line = d3.line().defined(d => d.mean != null).x(d => x(d.y)).y(d => y(d.mean));
+  const line = d3.line().defined(d => d.mid != null).x(d => x(d.y)).y(d => y(d.mid));
   const tline = d3.line().defined(d => d.v != null).x(d => x(d.y)).y(d => y(d.v));
   const parts = [{key: 'hist', c: 'var(--hist)', pts: hist, s: 'ssp245', a: 0, b: 65}].concat(vis.map(s => ({key: s, c: SCEN[s].c, pts: fut(s), s, a: 64, b: 151})));
   const showHatch = ex.v === 'pr' && ex.mode === 'anom' && ms.length > 1;
@@ -114,21 +114,21 @@ function draw() {
     yr = Math.max(minY, Math.min(vis.length ? maxY : 2014, yr));
     const i = yr - 1950;
     const list = yr <= 2014 ? [{n: t('historical'), c: 'var(--hist)', d: B.ssp245.e[i]}] : vis.map(s => ({n: SCEN[s].name, c: SCEN[s].c, d: B[s].e[i]}));
-    if (!list.length || list.some(l => l.d.mean == null)) return;
+    if (!list.length || list.some(l => l.d.mid == null)) return;
     ex.yr = yr;
     fg.style('display', null);
     vl.attr('x1', x(yr)).attr('x2', x(yr));
-    fg.selectAll('circle').data(list).join('circle').attr('cx', x(yr)).attr('cy', d => y(d.d.mean)).attr('r', 4.5).style('fill', d => d.c).style('stroke', 'var(--surface)').style('stroke-width', 1.5);
+    fg.selectAll('circle').data(list).join('circle').attr('cx', x(yr)).attr('cy', d => y(d.d.mid)).attr('r', 4.5).style('fill', d => d.c).style('stroke', 'var(--surface)').style('stroke-width', 1.5);
     const range = l => ms.length > 1 ? ` <span class="muted">(${fmtV(l.d.min)} ${t('to')} ${fmtV(l.d.max)})</span>` : '';
     const note = ms.length > 1 ? (LANG === 'vi' ? `Trung bình ${ms.length} mô hình, biên độ trong ngoặc` : `Average of ${ms.length} models, range in brackets`) : ms[0];
-    tip.innerHTML = `<div class="tip-y">${yr}</div>` + list.map(l => `<div class="tip-r"><span class="sw" style="--c:${l.c}"></span>${l.n}: <b>${withUnit(l.d.mean)}</b>${range(l)}</div>`).join('') +
+    tip.innerHTML = `<div class="tip-y">${yr}</div>` + list.map(l => `<div class="tip-r"><span class="sw" style="--c:${l.c}"></span>${l.n}: <b>${withUnit(l.d.mid)}</b>${range(l)}</div>`).join('') +
       `<div class="tip-n">${note}${ex.smooth ? ' · ' + t('smooth10').toLowerCase() : ''}</div>`;
     tip.style.display = 'block';
     tip.setAttribute('aria-hidden', 'false');
     const w = tip.offsetWidth, h = tip.offsetHeight, px = x(yr), top = d3.min(list, l => y(l.d.max));
     tip.style.left = (px + 14 + w > W ? Math.max(0, px - w - 14) : px + 14) + 'px';
     tip.style.top = Math.max(mg.t, Math.min(H - mg.b - h, top - h - 10)) + 'px';
-    if (aria) announce(`${yr}: ` + list.map(l => `${l.n} ${withUnit(l.d.mean)}` + (ms.length > 1 ? `, ${fmtV(l.d.min)} ${t('to')} ${fmtV(l.d.max)}` : '')).join('; '));
+    if (aria) announce(`${yr}: ` + list.map(l => `${l.n} ${withUnit(l.d.mid)}` + (ms.length > 1 ? `, ${fmtV(l.d.min)} ${t('to')} ${fmtV(l.d.max)}` : '')).join('; '));
   }
   const hide = () => { fg.style('display', 'none'); tip.style.display = 'none'; tip.setAttribute('aria-hidden', 'true'); };
   activeShow = show;
@@ -161,7 +161,7 @@ function labels() {
   $('#chart').setAttribute('aria-label', `${V.long()} ${over}, 1950–2100${anom ? `, ${t('changeFrom')} ${bp}` : ''}`);
   const warn = source === 'sample' ? `<span class="warn">${t('synthetic')}.</span> ` : '';
   const lines = n > 1
-    ? (vi ? `Đường là trung bình của ${n} mô hình; vùng tô là biên độ giữa chúng.` : `Lines show the average of ${n} models; shading shows their range.`)
+    ? (vi ? `Đường là trung vị của ${n} mô hình; vùng tô là biên độ giữa chúng.` : `Lines show the median of ${n} models; shading shows their range.`)
     : (vi ? `Chỉ hiển thị một mô hình, ${sel()[0]}.` : `Showing one model, ${sel()[0]}.`);
   const sm = ex.smooth ? (vi ? ' Làm trơn bằng trung bình 10 năm.' : ' Smoothed with a 10-year average.') : (vi ? ' Giá trị từng năm, không làm trơn.' : ' Annual values, not smoothed.');
   $('#csub').innerHTML = warn + lines + sm;
@@ -186,7 +186,7 @@ function stats() {
   }
   box.innerHTML = vis.map(s => {
     const ch = ms.map(m => eoc(DATA, ex.v, m, s, ex.bs));
-    const md = mean(ch.map(c => c.d)), mp = mean(ch.map(c => c.p));
+    const md = mid(ch.map(c => c.d)), mp = mid(ch.map(c => c.p));
     const key = ex.v === 'tas' ? 'd' : 'p', u = ex.v === 'tas' ? ' °C' : '%';
     const lo = d3.min(ch, c => c[key]), hi = d3.max(ch, c => c[key]);
     const up = ch.filter(c => c.d > 0).length;
@@ -209,7 +209,7 @@ function stats() {
 function buildTable() {
   const ms = sel(), V = VARS[ex.v];
   const B = {ssp245: exBand('ssp245'), ssp585: exBand('ssp585')};
-  const cell = d => d.mean == null ? '<td>—</td>' : `<td>${fmtV(d.mean)}${ms.length > 1 ? ` <span class="range">(${fmtV(d.min)} ${t('to')} ${fmtV(d.max)})</span>` : ''}</td>`;
+  const cell = d => d.mid == null ? '<td>—</td>' : `<td>${fmtV(d.mid)}${ms.length > 1 ? ` <span class="range">(${fmtV(d.min)} ${t('to')} ${fmtV(d.max)})</span>` : ''}</td>`;
   const rows = [1960, 1980, 2000, 2014, 2030, 2050, 2070, 2090].map(yr => {
     const i = yr - 1950, h = yr <= 2014;
     return `<tr><th scope="row">${yr}</th>${h ? cell(B.ssp245.e[i]) : '<td>—</td>'}` +
@@ -243,7 +243,7 @@ function drawExMap() {
   const real = source === 'real', vi = LANG === 'vi', ms = sel();
   const s = ex.scen.has('ssp585') ? 'ssp585' : ex.scen.has('ssp245') ? 'ssp245' : null;
   $('#region').disabled = !real;
-  const val = id => mean(ms.map(m => { const c = eoc(id === 'vn' ? REAL : REG.regions[id], ex.v, m, s, ex.bs); return ex.v === 'tas' ? c.d : c.p; }));
+  const val = id => mid(ms.map(m => { const c = eoc(id === 'vn' ? REAL : REG.regions[id], ex.v, m, s, ex.bs); return ex.v === 'tas' ? c.d : c.p; }));
   const scale = ex.v === 'tas' ? stripeColor : prColor;
   const fv = v => ex.v === 'tas' ? `${sg(v)} °C` : `${sg(v)}%`;
   const colour = real && s && ms.length;
@@ -262,6 +262,6 @@ function drawExMap() {
   const bp = period(ex.bs, ex.bs + 29), what = ex.v === 'tas' ? (vi ? 'nhiệt độ' : 'temperature') : (vi ? 'lượng mưa' : 'rainfall');
   $('#regionNote').textContent = !real ? t('regionOnlyReal')
     : !s ? (vi ? 'Chọn một kịch bản để tô màu bản đồ.' : 'Tick a scenario to colour the map.')
-    : vi ? `Màu: thay đổi ${what} 2071–2100 so với ${bp}, ${SCEN[s].name}, trung bình ${ms.length} mô hình. Bấm vào một vùng để xem biểu đồ của vùng đó.`
-    : `Colour: ${what} change by 2071–2100 from ${bp}, ${SCEN[s].name}, ${ms.length}-model average. Click a zone to chart it.`;
+    : vi ? `Màu: thay đổi ${what} 2071–2100 so với ${bp}, ${SCEN[s].name}, trung vị ${ms.length} mô hình. Bấm vào một vùng để xem biểu đồ của vùng đó.`
+    : `Colour: ${what} change by 2071–2100 from ${bp}, ${SCEN[s].name}, median of ${ms.length} models. Click a zone to chart it.`;
 }

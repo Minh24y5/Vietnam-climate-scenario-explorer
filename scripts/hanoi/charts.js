@@ -27,9 +27,10 @@ function dodge(items, along, r = DOT_R, maxOff = Infinity) {
 }
 const yFmt = d => v => fmt(`,.${d}f`)(v);
 
-/* ---------- observed hot days per year, 1980–2014 ---------- */
+/* ---------- observed hot days per year: gridded 1980–2014, calibrated reanalysis after ---------- */
 function chartPast(el) {
-  const O = HN.obs, W = clear(el).clientWidth || 600, H = Math.max(160, el.clientHeight || 400);
+  const O = HN.record || HN.obs, cut = HN.record ? HN.record.gridded_to : Infinity;
+  const W = clear(el).clientWidth || 600, H = Math.max(160, el.clientHeight || 400);
   const m = {t: 24, r: 8, b: 26, l: 34};
   const svg = svgIn(el, W, H);
   const x = d3.scaleBand(O.years, [m.l, W - m.r]).padding(0.18);
@@ -43,7 +44,7 @@ function chartPast(el) {
     .call(d3.axisBottom(x).tickValues(O.years.filter(v => v % 5 === 0)).tickFormat(d3.format('d')));
   svg.append('text').attr('class', 'unit').attr('x', 0).attr('y', 14).text(t('daysYr'));
   svg.append('g').selectAll('rect').data(O.years.map((yr, i) => ({yr, v: O.tx35[i]}))).join('rect')
-    .attr('class', 'hn-bar').attr('x', d => x(d.yr)).attr('width', x.bandwidth()).attr('y', d => y(d.v)).attr('height', d => y(0) - y(d.v));
+    .attr('class', d => 'hn-bar' + (d.yr > cut ? ' is-rean' : '')).attr('x', d => x(d.yr)).attr('width', x.bandwidth()).attr('y', d => y(d.v)).attr('height', d => y(0) - y(d.v));
   /* linear trend */
   const xs = O.years, ys = O.tx35, xm = mean(xs), ym = mean(ys);
   const s = d3.sum(xs.map((v, i) => (v - xm) * (ys[i] - ym))) / d3.sum(xs.map(v => (v - xm) ** 2));
@@ -51,8 +52,61 @@ function chartPast(el) {
   svg.append('line').attr('class', 'hn-trend')
     .attr('x1', x(xs[0]) + x.bandwidth() / 2).attr('x2', x(xs[xs.length - 1]) + x.bandwidth() / 2).attr('y1', y(ty(xs[0]))).attr('y2', y(ty(xs[xs.length - 1])));
   const top = d3.max(ys), yr = xs[ys.indexOf(top)];
-  svg.append('text').attr('class', 'endlabel').attr('x', x(yr) + x.bandwidth() / 2).attr('y', y(top) - 6).attr('text-anchor', 'middle').text(`${yr}: ${top}`);
-  return `<span><i class="hn-barsw"></i>${t('perYear')}</span><span><i class="hn-trendsw"></i>${t('trendLine')}</span><span><i class="basesw"></i>${t('baseWin')}</span>`;
+  svg.append('text').attr('class', 'endlabel').attr('x', x(yr) + x.bandwidth() / 2).attr('y', y(top) - 6).attr('text-anchor', 'middle').text(`${yr}: ${nf(top, 0)}`);
+  const rean = O.years.some(v => v > cut);
+  return `<span><i class="hn-barsw"></i>${rean ? t('gridYears') : t('perYear')}</span>` +
+    (rean ? `<span><i class="hn-barsw is-rean"></i>${t('reanYears')}</span>` : '') +
+    `<span><i class="hn-trendsw"></i>${rean ? t('trendLineRec') : t('trendLine')}</span><span><i class="basesw"></i>${t('baseWin')}</span>`;
+}
+
+/* ---------- the out-of-sample test: each model at the warming of 2006–2025, against what happened ---------- */
+/* rows: each model's value over its own 20 years at the observed warming of 2006–2025, against the
+   observed 2006–2025 (the band runs from the plain to the drift-carrying calibration) and, for scale,
+   the observed 1995–2014. Values, not changes: the models had warmed by different amounts by
+   1995–2014, so a change from each model's own 1995–2014 would not be matched. */
+const TEST_ROWS = ['tx35', 'tx37', 'tn28', 'pr'];
+function testPoints(k) {
+  const T = HN.test, C = HN.calibration;
+  const pts = Object.entries(T.models).filter(([, v]) => v[k] != null).map(([m, v]) => ({m, v: v[k]}));
+  const yrs = T.observed_years.join('-'), low = C && C.without_drift && C.without_drift[yrs] ? C.without_drift[yrs][k] : T.obs[k];
+  return {pts, obs: T.obs[k], low: Math.min(low, T.obs[k]), high: Math.max(low, T.obs[k]), base: HN.obs.base[k]};
+}
+function chartTest(el) {
+  const W = clear(el).clientWidth || 600, H = Math.max(200, el.clientHeight || 400);
+  const m = {t: 8, r: 14, b: 4, l: 14};
+  const svg = svgIn(el, W, H);
+  /* a short frame (phones) keeps three strips; 37 °C days stay in the text */
+  const rows = H < 320 ? TEST_ROWS.filter(k => k !== 'tx37') : TEST_ROWS;
+  const rh = (H - m.t - m.b) / rows.length;
+  rows.forEach((k, i) => {
+    const {pts, obs, low, high, base} = testPoints(k), d = IND[k].d === 0 ? 0 : 1;
+    const ext = d3.extent(pts.map(p => p.v).concat([low, high, base, IND[k].unit === 'mm' ? base : 0]));
+    const pad = (ext[1] - ext[0]) * 0.1 || 1;
+    const x = d3.scaleLinear([IND[k].unit === 'mm' ? ext[0] - pad : Math.max(0, ext[0] - pad), ext[1] + pad], [m.l, W - m.r]).nice();
+    const y0 = m.t + i * rh, axisY = y0 + rh - 22, top = y0 + 20, yc = top + (axisY - top) / 2;
+    const f = v => IND[k].unit === 'mm' ? fmt(',.0f')(v) : nf(v, d);
+    svg.append('text').attr('class', 'hn-rowlab').attr('x', 0).attr('y', y0 + 12).text(`${indName(k)}, ${indUnit(k)}`);
+    svg.append('g').attr('class', 'grid').attr('transform', `translate(0,${axisY})`).call(d3.axisBottom(x).ticks(5).tickSize(-(axisY - top)).tickFormat(''));
+    svg.append('g').attr('class', 'axis').attr('transform', `translate(0,${axisY})`).call(d3.axisBottom(x).ticks(5).tickFormat(v => fmt(',')(v)));
+    /* observed 1995–2014 for scale: a thin rule, unlabelled in the strip (the legend names it) */
+    svg.append('line').attr('class', 'zero').attr('x1', x(base)).attr('x2', x(base)).attr('y1', top).attr('y2', axisY);
+    if (x(high) - x(low) > 1) svg.append('rect').attr('class', 'basebox').attr('x', x(low)).attr('width', x(high) - x(low)).attr('y', top - 4).attr('height', axisY - top + 4);
+    svg.append('line').attr('class', 'hn-obs v').attr('x1', x(obs)).attr('x2', x(obs)).attr('y1', top - 4).attr('y2', axisY);
+    const ol = svg.append('text').attr('class', 'note hn-obslab').attr('y', top + 6).text(`${t('obsShort')}: ${f(obs)}`);
+    const ow = ol.node().getComputedTextLength();
+    ol.attr('x', x(obs) + 5 + ow > W - m.r ? x(obs) - 5 : x(obs) + 5).attr('text-anchor', x(obs) + 5 + ow > W - m.r ? 'end' : 'start');
+    dodge(pts, p => x(p.v), DOT_R, (axisY - top) / 2 - DOT_R);
+    svg.append('g').selectAll('circle').data(pts).join('circle').attr('class', 'hn-dot').attr('cx', p => x(p.v)).attr('cy', p => yc + 4 + p.off).attr('r', DOT_R);
+    if (pts.length) {
+      const md = d3.median(pts, p => p.v), right = obs <= md;
+      svg.append('line').attr('class', 'hn-med').attr('x1', x(md)).attr('x2', x(md)).attr('y1', yc - 6).attr('y2', yc + 14);
+      svg.append('text').attr('class', 'endlabel').attr('y', yc + 10)
+        .attr('x', right ? Math.max(x(md), x(obs)) + 6 : Math.min(x(md), x(obs)) - 6).attr('text-anchor', right ? 'start' : 'end')
+        .text(`${t('medShort')}: ${f(md)}`);
+    }
+  });
+  return `<span><i class="hn-dotsw"></i>${t('modelDotTest')}</span><span><i class="hn-medsw v"></i>${t('median')}</span>` +
+    `<span><i class="hn-obssw v"></i>${t('obsTest')}</span><span><i class="basesw"></i>${t('obsTestBand')}</span><span><i class="hn-zerosw"></i>${t('obsLong')}</span>`;
 }
 
 /* ---------- the year each model reaches +2 °C, by scenario ---------- */
@@ -70,6 +124,14 @@ function chartWhen(el, lv = '2.0') {
   const ticks = d3.range(Math.ceil(x0 / 10) * 10, 2091, narrow ? 20 : 10);
   svg.append('g').attr('class', 'grid').attr('transform', `translate(0,${H - m.b})`).call(d3.axisBottom(x).tickValues(ticks).tickSize(-(H - m.b - m.t)).tickFormat(''));
   svg.append('g').attr('class', 'axis').attr('transform', `translate(0,${H - m.b})`).call(d3.axisBottom(x).tickValues(ticks).tickFormat(d3.format('d')));
+  /* the real world as a reference: 2025, and the year +lv °C arrives if warming keeps today's pace */
+  const yT = atTodaysRate(lv), vi = LANG === 'vi';
+  const refs = [{y: GW_NOW.year, lab: `${GW_NOW.year}: ${sg(GW_NOW.gw)} °C`}, {y: yT, lab: vi ? `tốc độ hiện nay: ${yT}` : `today's pace: ${yT}`}]
+    .filter(d => d.y >= x0 && d.y <= 2090);
+  for (const d of refs) {
+    svg.append('line').attr('class', 'hn-ref').attr('x1', x(d.y)).attr('x2', x(d.y)).attr('y1', m.t - 4).attr('y2', H - m.b);
+    svg.append('text').attr('class', 'note hn-halo').attr('x', x(d.y) + 4).attr('y', m.t - 8).text(d.lab);
+  }
   for (const r of rows) {
     const w = HN.when[r.s], pts = (w[lv] || []).map(d => ({...d})), y0 = yb(r.s), bh = yb.bandwidth(), yc = y0 + bh / 2;
     svg.append('line').attr('class', 'hn-row').attr('x1', m.l).attr('x2', W - m.r).attr('y1', y0 + bh).attr('y2', y0 + bh);
@@ -93,7 +155,7 @@ function chartWhen(el, lv = '2.0') {
       if (xs.some(px => px > W - m.r - nw - 10)) note.attr('y', y0 + bh - 6);
     }
   }
-  return `<span><i class="hn-dotsw"></i>${t('modelDot')}</span><span><i class="hn-medsw v"></i>${t('median')}</span>`;
+  return `<span><i class="hn-dotsw"></i>${t('modelDot')}</span><span><i class="hn-medsw v"></i>${t('median')}</span><span><i class="hn-refsw"></i>${LANG === 'vi' ? 'Thế giới thực' : 'The real world'}</span>`;
 }
 
 /* ---------- each model at 1995–2014 and each warming level ---------- */

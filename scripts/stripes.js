@@ -9,8 +9,8 @@ function drawStripes(D) {
   const a245 = an('ssp245'), a585 = an('ssp585');
   const rects = [];
   for (let i = 0; i < N_YEARS; i++) {
-    if (i < 65) rects.push({x: i, y: 0, h: 2, v: a245[i].mean});
-    else { rects.push({x: i, y: 0, h: .993, v: a245[i].mean}); rects.push({x: i, y: 1.007, h: .993, v: a585[i].mean}); }
+    if (i < 65) rects.push({x: i, y: 0, h: 2, v: a245[i].mid});
+    else { rects.push({x: i, y: 0, h: .993, v: a245[i].mid}); rects.push({x: i, y: 1.007, h: .993, v: a585[i].mid}); }
   }
   d3.select('#stripes').selectAll('rect').data(rects).join('rect')
     .attr('x', d => d.x).attr('y', d => d.y).attr('width', 1.04).attr('height', d => d.h).attr('fill', d => stripeColor(d.v));

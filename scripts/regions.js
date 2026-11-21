@@ -26,7 +26,7 @@ function zoneFacts(R, F) {
   const ch = (z, s, m) => eoc(R.regions[z], 'tas', m, s, 1985).d;
   const T = {}, order = {}, agree = {};
   for (const s of Object.keys(SCEN)) {
-    T[s] = Object.fromEntries(zs.map(z => [z, mean(ms.map(m => ch(z, s, m)))]));
+    T[s] = Object.fromEntries(zs.map(z => [z, mid(ms.map(m => ch(z, s, m)))]));
     order[s] = zs.slice().sort((a, b) => T[s][b] - T[s][a]);
     agree[s] = ms.filter(m => d3.greatest(zs, z => ch(z, s, m)) === order[s][0]).length;
   }
@@ -43,7 +43,7 @@ function zoneFacts(R, F) {
   }
   return {zs, ms, n: ms.length, T, order, agree, coarse, fine, small, dims, grp, ns,
     cells: m => R.grid[m].cells.length, eq: (m, z) => R.grid[m].equivalent[z],
-    spread: s => T[s][order[s][0]] - T[s][order[s].at(-1)], gap: mean(F.t.ssp585) - mean(F.t.ssp245)};
+    spread: s => T[s][order[s][0]] - T[s][order[s].at(-1)], gap: mid(F.t.ssp585) - mid(F.t.ssp245)};
 }
 
 function mapCopy(Z) {

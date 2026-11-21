@@ -35,6 +35,8 @@
 
 /* ---------- chart marks ---------- */
 .hn-bar{fill:var(--hist)}
+/* years from the calibrated reanalysis (2015 on): the same ink, lighter, so the join is visible */
+.hn-bar.is-rean{fill-opacity:.45}
 .hn-trend{stroke:var(--ink);stroke-width:2;stroke-dasharray:6 4}
 .hn-dot{fill:var(--muted);fill-opacity:.62;stroke:var(--bg);stroke-width:.8}
 /* warming-level dots in the calendar's ramp (charts.js levelInk) read near-solid, as the calendar's cells do */
@@ -43,6 +45,8 @@
 .hn-dot.is-hl{fill:var(--ink);fill-opacity:1}
 .hn-hl-line{fill:none;stroke:var(--ink);stroke-width:1.25}
 .hn-med{stroke:var(--ink);stroke-width:3;stroke-linecap:butt}
+.hn-ref{stroke:var(--ink);stroke-width:1;stroke-dasharray:2 3}
+.hn-refsw{display:inline-block;width:0;height:14px;border-left:1px dashed var(--ink);flex-shrink:0}
 /* a second, rarer threshold's median (bands chart: 39 °C): a thin dashed ink bar with its value */
 .hn-med2{stroke:var(--ink);stroke-width:1.5;stroke-dasharray:4 2}
 .hn .hn-med2lab{font-weight:400}
@@ -63,6 +67,8 @@
 
 /* legend swatches */
 .hn-barsw{display:inline-block;width:10px;height:12px;background:var(--hist);flex-shrink:0}
+.hn-barsw.is-rean{opacity:.45}
+.hn-zerosw{display:inline-block;width:0;height:14px;border-left:1px solid var(--muted);flex-shrink:0}
 .hn-trendsw{display:inline-block;width:20px;height:0;border-top:2px dashed var(--ink);flex-shrink:0}
 .hn-dotsw{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--muted);opacity:.7;flex-shrink:0}
 .hn-medsw{display:inline-block;width:18px;height:3px;background:var(--ink);flex-shrink:0}

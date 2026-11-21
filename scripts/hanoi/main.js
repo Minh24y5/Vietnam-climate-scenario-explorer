@@ -21,6 +21,7 @@ function writeHn() {
   $('#calFig').setAttribute('aria-label', C.calAria);
   calText(); calKey(C);
   $$('.step-body').forEach(b => { b.innerHTML = pr(C.steps[b.dataset.text] || ''); });
+  $$('.step').forEach(s => { s.hidden = !C.steps[s.dataset.step]; });   /* no reanalysis record: no test step */
   $('#aboutRuns').innerHTML = pr(C.runs);
   $('#aboutMethods').innerHTML = C.methods;
   const partial = HN_F.nR < HN_F.total ? t('partial').replace('{n}', HN_F.nR).replace('{total}', HN_F.total) : '';

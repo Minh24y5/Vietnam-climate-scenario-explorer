@@ -161,7 +161,7 @@ function StoryChart(el) {
 
     /* ensemble: history and scenarios */
     const area = d3.area().defined(d => d.min != null).x(d => x(d.y)).y0(d => y(d.min)).y1(d => y(d.max));
-    const eline = d3.line().defined(d => d.mean != null).x(d => x(d.y)).y(d => y(d.mean));
+    const eline = d3.line().defined(d => d.mid != null).x(d => x(d.y)).y(d => y(d.mid));
     const harea = d3.area().defined(d => d.min != null && d.h).x(d => x(d.y)).y0(d => y(d.min)).y1(d => y(d.max));
     const seg = p => p === 'hist'
       ? data.E.ssp245.e.slice(0, 65).map((d, i) => ({...d, h: data.E.ssp245.dis[i]}))
@@ -192,7 +192,7 @@ function StoryChart(el) {
 
     /* 2071–2100 bars in the right margin: model range plus the mean, labelled at the mean */
     const bx = s => W - mg.r + 12 + Object.keys(SCEN).indexOf(s) * 13;
-    const bars = st.scen.map(s => { const a = eocOf(s); return {k: s, c: SCEN[s].c, x: bx(s), lo: d3.min(a), hi: d3.max(a), m: mean(a)}; });
+    const bars = st.scen.map(s => { const a = eocOf(s); return {k: s, c: SCEN[s].c, x: bx(s), lo: d3.min(a), hi: d3.max(a), m: mid(a)}; });
     const bsel = G.labels.selectAll('g.eoc').data(bars, d => d.k).join(
       enter => { const g = enter.append('g').attr('class', 'eoc').style('opacity', 0);
         g.append('rect').attr('width', 6); g.append('line').style('stroke-width', 2.5); return g; },

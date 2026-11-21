@@ -9,9 +9,10 @@ const HN_STEPS = {
   bands:  el => chartLevels(el, 'tx37', 'abs', {also: 'tx39'}),
   nights: el => chartLevels(el, 'tn28'),
   rain:   el => chartLevels(el, 'r50'),
-  check:  el => chartTrend(el)
+  check:  el => chartTrend(el),
+  test:   el => chartTest(el)
 };
-const HN_CHAPTER = {past: 'ch-past', when: 'ch-levels', hot: 'ch-heat', bands: 'ch-heat', nights: 'ch-heat', rain: 'ch-rain', check: 'ch-check'};
+const HN_CHAPTER = {past: 'ch-past', when: 'ch-levels', hot: 'ch-heat', bands: 'ch-heat', nights: 'ch-heat', rain: 'ch-rain', check: 'ch-check', test: 'ch-check'};
 let hnStep = null, hnObserver = null, hnSwapT = null, hnPending = null;
 function markChapter(id) { $$('.chapters a').forEach(a => a.setAttribute('aria-current', a.getAttribute('href') === '#' + id ? 'true' : 'false')); revealChapter(); }
 

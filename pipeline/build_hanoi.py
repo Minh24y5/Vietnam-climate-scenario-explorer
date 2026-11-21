@@ -28,9 +28,25 @@ sets aside variables whose day-to-day spread or mean-vs-max/min position has jum
 files, see docs/hanoi-data-audit.md). What was set aside is in each model's 'qc' and each window's
 'set_aside'.
 
+Observed record to 2025 ('record', 'calibration', 'humid'): the gridded observations end in 2014.
+ERA5-Land (temperature, 0.1 deg) and ERA5 (rain, 0.25 deg) from pipeline/fetch_era5land.py carry it
+on, but never raw: each daily variable is quantile-mapped to OBS's city mean per calendar month over
+1980-2014 (empirical, by rank; past the calibration range the end correction is carried on, added
+for temperature, as a ratio for rain). The record is OBS for 1980-2014 and calibrated reanalysis for
+2015-2025. 'calibration' says how well that works out of sample: mapped on 1980-2004 only, then
+checked against OBS for 2005-2014. 'humid' is observed only (raw ERA5-Land heat index; CMIP6-VN has
+no humidity).
+
+Matched-warming-level test ('test'): 2006-2025, the last 20 observed years, were a world about
++1.1 degC above 1850-1900 (data/hanoi/warming_levels.json 'observed_level', from HadCRUT5). For each
+model the indicators over its own 20 years at that level (averaged over its scenarios, as for the
+other levels) are set against the observed 2006-2025, as values and as change from 1995-2014.
+
 Usage
-  python pipeline/build_hanoi.py [--series D:/cmip6vn/hanoi/series] [--gwl data/hanoi/warming_levels.json] [--out data/hanoi/hanoi.json]
-Rerun after more models finish downloading; it uses whatever series exist.
+  python pipeline/build_hanoi.py [--series D:/cmip6vn/hanoi/series] [--era5land D:/era5land/hanoi/ERA5L.csv.gz]
+                                 [--gwl data/hanoi/warming_levels.json] [--out data/hanoi/hanoi.json]
+Rerun after more models finish downloading; it uses whatever series exist. Without the ERA5-Land
+series the record, calibration and test are left out.
 """
 import argparse
 import glob
@@ -49,6 +65,12 @@ OBS_YEARS = (1980, 2014)
 LEVELS = ('1.5', '2.0', '3.0')
 TEMP = ('tas', 'tx35', 'tx37', 'tx39', 'tn28')
 RAIN = ('pr', 'r50', 'r100', 'rx1')
+REC_YEARS = (1980, 2025)
+CAL_YEARS = (1980, 2014)        # calibration of the reanalysis to OBS
+FIT_YEARS = (1980, 2004)        # held-out check: map on these years ...
+CHECK_YEARS = (2005, 2014)      # ... and compare with OBS on these
+TEST_YEARS = (2006, 2025)       # observed window for the matched-warming-level test
+HI_LEVELS = (41, 46)            # heat index, degC: NOAA 'danger' from 103 degF (39.4); 41 = 106 degF, 46 = 115 degF
 
 
 def wide(df):
@@ -147,9 +169,126 @@ def window(series, exp, a, b):
     return w if len(years) == b - a + 1 else None
 
 
+# ---------------------------------------------------------------- observed record to 2025
+def qmap(x_fit, y_fit, x, kind):
+    """Empirical quantile mapping: each x gets the y_fit quantile at x's rank in x_fit. Past the ends
+    of x_fit the end correction is carried on (added for temperature 't', as a ratio for rain)."""
+    xs, ys = np.sort(x_fit), np.sort(y_fit)
+    n = xs.size
+    p = (np.searchsorted(xs, x, 'left') + np.searchsorted(xs, x, 'right')) / 2 / n
+    out = np.quantile(ys, np.clip(p, 0.5 / n, 1 - 0.5 / n))
+    hi, lo = x > xs[-1], x < xs[0]
+    if kind == 't':
+        out[hi] = ys[-1] + (x[hi] - xs[-1])
+        out[lo] = ys[0] + (x[lo] - xs[0])
+    else:
+        if xs[-1] > 0:
+            out[hi] = ys[-1] * x[hi] / xs[-1]
+        out = np.clip(out, 0, None)
+    return out
+
+
+def span(df, a, b):
+    return df[(df.index.year >= a) & (df.index.year <= b)]
+
+
+def drift(era, obs, years, cols=('tasmax', 'tasmin', 'tas')):
+    """Linear trend (degC a year) of the yearly mean OBS-minus-reanalysis difference over `years`.
+    OBS warms faster than ERA5-Land over Hà Nội (stations see the city grow; ERA5-Land has no urban
+    growth), so a mapping fitted on past years undercounts hot days later."""
+    out = {}
+    for c in cols:
+        d = span((obs[c] - era[c]).dropna(), *years)
+        y = d.groupby(d.index.year).mean()
+        out[c] = float(np.polyfit(y.index.values, y.values, 1)[0])
+    return out
+
+
+def calibrate(era, obs, years, cols=('tasmax', 'tasmin', 'tas', 'pr'), carry_drift=True):
+    """Reanalysis daily city means mapped to OBS per calendar month, fitted on `years`. With
+    carry_drift, temperatures first get the fit years' drift (see drift()) carried on in a straight
+    line: each year is shifted by rate x (year - last fit year), then mapped."""
+    era = era.copy()
+    if carry_drift:
+        for c, k in drift(era, obs, years).items():
+            era[c] = era[c] + k * (era.index.year - years[1])
+    out = era.copy()
+    ef, of = span(era, *years), span(obs, *years)
+    for c in cols:
+        for m in range(1, 13):
+            e = ef[c][ef.index.month == m].dropna().values
+            o = of[c][of.index.month == m].dropna().values
+            sel = era.index.month == m
+            out.loc[sel, c] = qmap(e, o, era.loc[sel, c].values, 'r' if c == 'pr' else 't')
+    return out
+
+
+def scores(obs_y, raw_y, cal_y, keys):
+    """Each yearly indicator averaged over the same years: OBS, raw reanalysis, calibrated; and the
+    correlation of the calibrated yearly values with OBS."""
+    out = {}
+    for k in keys:
+        r = np.corrcoef(obs_y[k], cal_y[k])[0, 1] if obs_y[k].std() > 0 and cal_y[k].std() > 0 else np.nan
+        out[k] = {'obs': round(float(obs_y[k].mean()), 2), 'raw': round(float(raw_y[k].mean()), 2),
+                  'calibrated': round(float(cal_y[k].mean()), 2), 'r_yearly': None if np.isnan(r) else round(float(r), 2)}
+    return out
+
+
+def daily_r(obs, cal, years):
+    out = {}
+    for c in ('tasmax', 'tasmin', 'pr'):
+        d = span(pd.concat([obs[c], cal[c]], axis=1, keys=['o', 'c']).dropna(), *years)
+        out[c] = round(float(np.corrcoef(d.o, d.c)[0, 1]), 3)
+    return out
+
+
+def observed_record(obs, era_path):
+    """OBS 1980-2014 continued by calibrated reanalysis to 2025; the held-out check; humid heat.
+    Returns (daily record, calibration report, humid heat, calibrated-only indicators over TEST_YEARS)."""
+    if not era_path or not os.path.exists(era_path):
+        print(f'no ERA5-Land series at {era_path}: the observed record stops in {OBS_YEARS[1]}')
+        return None, None, None, None
+    era = wide(pd.read_csv(era_path))
+    keys = list(TEMP) + list(RAIN)
+    held = calibrate(era, obs, FIT_YEARS)
+    held_plain = calibrate(era, obs, FIT_YEARS, carry_drift=False)
+    full = calibrate(era, obs, CAL_YEARS)
+    plain = calibrate(era, obs, CAL_YEARS, carry_drift=False)
+    chk = lambda d: yearly(span(d, *CHECK_YEARS))
+    cal = {
+        'method': 'empirical quantile mapping, per calendar month, of daily city means (tasmax, tasmin, tas, pr) '
+                  'onto the gridded observations\' city means; temperatures first carry on the fit years\' linear drift '
+                  'between the two (OBS warming faster than ERA5-Land)',
+        'fit_years': list(CAL_YEARS),
+        'drift_per_decade': {c: round(k * 10, 3) for c, k in drift(era, obs, CAL_YEARS).items()},
+        'held_out': {'fit_years': list(FIT_YEARS), 'check_years': list(CHECK_YEARS),
+                     'drift_per_decade': {c: round(k * 10, 3) for c, k in drift(era, obs, FIT_YEARS).items()},
+                     'check': scores(chk(obs), chk(era), chk(held), keys),
+                     'check_without_drift': scores(chk(obs), chk(era), chk(held_plain), keys),
+                     'daily_r': daily_r(obs, held, CHECK_YEARS)},
+        'in_sample': scores(*(yearly(span(d, *CAL_YEARS)) for d in (obs, era, full)), keys),
+    }
+    cols = ['tas', 'tasmax', 'tasmin', 'pr']
+    rec = pd.concat([span(obs, *OBS_YEARS)[cols], span(full, OBS_YEARS[1] + 1, REC_YEARS[1])[cols]]).sort_index()
+    rec_plain = pd.concat([span(obs, *OBS_YEARS)[cols], span(plain, OBS_YEARS[1] + 1, REC_YEARS[1])[cols]]).sort_index()
+    py = yearly(rec_plain)
+    cal['without_drift'] = {'note': 'the same record with the plain mapping (no drift carried on): a low end, since it '
+                                    'undercounted hot days in the held-out check',
+                            **{f'{a0}-{b0}': rnd(py.loc[a0:b0].mean().to_dict()) for a0, b0 in ((OBS_YEARS[1] + 1, REC_YEARS[1]), TEST_YEARS)}}
+    hi = span(era, *REC_YEARS).hi.dropna()
+    g = hi.groupby(hi.index.year)
+    summer = hi[hi.index.month.isin([6, 7, 8])]
+    humid = {'years': [int(y) for y in g.groups],
+             **{f'hi{t}': [int((s >= t).sum()) for _, s in g] for t in HI_LEVELS},
+             'hi_jja': [round(float(v), 1) for v in summer.groupby(summer.index.year).mean()],
+             'thresholds': list(HI_LEVELS)}
+    return rec, cal, humid, yearly(span(full, *TEST_YEARS)).mean()
+
+
 def main():
     p = argparse.ArgumentParser(description=__doc__.split('\n')[0])
     p.add_argument('--series', default='D:/cmip6vn/hanoi/series')
+    p.add_argument('--era5land', default='D:/era5land/hanoi/ERA5L.csv.gz', help='daily reanalysis city series (pipeline/fetch_era5land.py)')
     p.add_argument('--gwl', default=GWL, help='warming levels JSON (default data/hanoi/warming_levels.json)')
     p.add_argument('--out', default=OUT, help='output JSON (default data/hanoi/hanoi.json)')
     a = p.parse_args()
@@ -158,6 +297,9 @@ def main():
     obs = wide(pd.read_csv(os.path.join(a.series, 'OBS.csv.gz')))
     oy = yearly(obs).loc[OBS_YEARS[0]:OBS_YEARS[1]]
     ob = obs[(obs.index.year >= BASE[0]) & (obs.index.year <= BASE[1])]
+    rec_d, cal, humid, era_only = observed_record(obs, a.era5land)
+    ry = yearly(rec_d) if rec_d is not None else None
+    test_lv = str(gwl['observed_level']['level']) if gwl.get('observed_level') else None
 
     out_models, cal_sum = {}, {lv: [] for lv in LEVELS}
     for path in sorted(glob.glob(os.path.join(a.series, '*.csv.gz'))):
@@ -175,7 +317,7 @@ def main():
                'base': rnd(hy.loc[BASE[0]:BASE[1]].mean().to_dict()),
                'trend': rnd({'tas': trend(hy.tas) if has_t else None, 'tx35': trend(hy.tx35) if has_t else None}, 3),
                'levels': {}, 'qc': Q}
-        for lv in LEVELS:
+        for lv in LEVELS + ((test_lv,) if test_lv else ()):
             vals, used, cals = [], [], []
             for exp, e in G['scenarios'].items():
                 v = e.get(lv)
@@ -193,13 +335,16 @@ def main():
                 c = calendar(w)
                 if c is not None:
                     cals.append(c)
-            if vals:
+            if vals and lv == test_lv:      # the matched-warming-level test, not a page level
+                rec['test'] = {'windows': used, **rnd(pd.concat(vals, axis=1).mean(axis=1).to_dict())}
+            elif vals:
                 m = pd.concat(vals, axis=1).mean(axis=1).to_dict()
                 rec['levels'][lv] = {'windows': used, **rnd(m)}
                 if cals:
                     cal_sum[lv].append(np.mean(cals, axis=0))
         out_models[name] = rec
-        print(f"{name:18s} {'T+R' if has_t else 'R  '}  levels: {', '.join(rec['levels'])}")
+        tw = sorted({f"{w['start']}-{w['end']}" for w in rec.get('test', {}).get('windows', [])})
+        print(f"{name:18s} {'T+R' if has_t else 'R  '}  levels: {', '.join(rec['levels'])}  test: {', '.join(tw) or '-'}")
 
     # global windows for the "when" chart: every CMIP6-VN model, the four main scenarios
     when = {}
@@ -243,6 +388,37 @@ def main():
         'when': when,
         'models': out_models,
     }
+    if ry is not None:
+        out['meta']['sources']['reanalysis'] = (
+            'ERA5-Land 2 m temperature and dewpoint (Muñoz-Sabater et al. 2021, ESSD 13:4349) and ERA5 precipitation '
+            '(Hersbach et al. 2020, QJRMS 146:1999), Copernicus Climate Change Service, via the Open-Meteo archive API '
+            '(CC BY 4.0); pipeline/fetch_era5land.py')
+        out['meta']['record_years'] = list(REC_YEARS)
+        out['record'] = {
+            'years': [int(y) for y in ry.index], 'gridded_to': OBS_YEARS[1],
+            'source': 'gridded observations 1980-2014, then ERA5-Land (temperature) and ERA5 (rain) quantile-mapped to them',
+            **{k: [round(float(v), 2) for v in ry[k]] for k in ry.columns},
+            'trend': rnd({'tas': trend(ry.tas), 'tx35': trend(ry.tx35)}, 3),
+            'periods': {f'{a0}-{b0}': rnd(ry.loc[a0:b0].mean().to_dict())
+                        for a0, b0 in ((1980, 1994), BASE, (OBS_YEARS[1] + 1, REC_YEARS[1]), TEST_YEARS)},
+            'record_tx': round(float(rec_d.tasmax.max()), 1), 'record_tx_date': rec_d.tasmax.idxmax().strftime('%Y-%m-%d')}
+        out['calibration'] = cal
+        out['humid'] = {**humid, 'observed_only': True,
+                        'source': 'ERA5-Land hourly 2 m temperature and dewpoint, not calibrated (the gridded observations '
+                                  'and CMIP6-VN have no humidity); NOAA heat index, daily maximum per cell, city mean',
+                        'trend': {f'hi{t}': round(trend(pd.Series(humid[f'hi{t}'], index=humid['years'])), 2) for t in HI_LEVELS}}
+        t_obs = ry.loc[TEST_YEARS[0]:TEST_YEARS[1]]
+        if test_lv and len(t_obs) == TEST_YEARS[1] - TEST_YEARS[0] + 1:
+            t_mean, b_obs = t_obs.mean(), yearly(ob).mean()
+            out['test'] = {
+                'level': gwl['observed_level']['level'], 'key': test_lv, 'observed_years': list(TEST_YEARS),
+                'level_source': {k: v for k, v in gwl['observed_level'].items() if k != 'sources'},
+                'obs': rnd(t_mean.to_dict()), 'obs_change': rnd((t_mean - b_obs).to_dict()),
+                'obs_calibrated_only': rnd(era_only.to_dict()),
+                'reanalysis_years': int((t_obs.index > OBS_YEARS[1]).sum()),
+                'models': {m: r.pop('test') for m, r in out_models.items() if r.get('test')}}
+    for r in out_models.values():
+        r.pop('test', None)
     os.makedirs(os.path.dirname(os.path.abspath(a.out)), exist_ok=True)
     with open(a.out, 'w', encoding='utf-8') as f:
         json.dump(out, f, ensure_ascii=False, separators=(',', ':'), allow_nan=False)   # browsers reject NaN

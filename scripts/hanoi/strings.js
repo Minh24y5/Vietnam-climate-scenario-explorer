@@ -18,7 +18,7 @@ Object.assign(S.vi, {
   ctlIndicator: 'Chỉ số', ctlValues: 'Cách hiển thị', modeAbs: 'Giá trị', modeAnom: 'Thay đổi',
   modeNote: 'Thay đổi tính so với 1995–2014 của chính mỗi mô hình.', ctlHighlight: 'Làm nổi một mô hình', hlNone: 'Không chọn',
   aboutTitle: 'Về dữ liệu và phương pháp',
-  aboutData: 'Mọi con số trên trang này là trung bình toàn thành phố Hà\u00a0Nội, lấy từ <a href="https://doi.org/10.1038/s41597-023-02159-2">CMIP6-VN</a> (Tran-Anh và cộng sự, 2023): 35 mô hình CMIP6 được hiệu chỉnh sai số theo 147 trạm đo nhiệt độ và 481 trạm đo mưa của Việt Nam, chi tiết tới ô lưới 0,1° (khoảng 11&nbsp;km). Phần quan trắc là bộ số liệu dạng lưới mà CMIP6-VN dùng để hiệu chỉnh, giai đoạn 1980–2014. Mỗi ô lưới được tính theo phần diện tích nằm trong ranh giới Hà\u00a0Nội (Natural Earth; ranh giới thành phố không đổi sau sắp xếp năm 2025).',
+  aboutData: 'Mọi con số trên trang này là trung bình toàn thành phố Hà Nội, lấy từ <a href="https://doi.org/10.1038/s41597-023-02159-2">CMIP6-VN</a> (Tran-Anh và cộng sự, 2023): 35 mô hình CMIP6 được hiệu chỉnh sai số theo 147 trạm đo nhiệt độ và 481 trạm đo mưa của Việt Nam, chi tiết tới ô lưới 0,1° (khoảng 11&nbsp;km). Phần quan trắc 1980–2014 là bộ số liệu dạng lưới mà CMIP6-VN dùng để hiệu chỉnh; từ 2015 là tái phân tích <a href="https://doi.org/10.5194/essd-13-4349-2021">ERA5-Land</a> (nhiệt độ) và ERA5 (mưa) của Copernicus, lấy qua <a href="https://open-meteo.com/">Open-Meteo</a> và hiệu chỉnh theo số liệu lưới bằng ánh xạ phân vị từng tháng. Mỗi ô lưới được tính theo phần diện tích nằm trong ranh giới Hà Nội (Natural Earth; ranh giới thành phố không đổi sau sắp xếp năm 2025).',
   aboutLevels: 'Mức ấm lên toàn cầu của mỗi mô hình được tính từ nhiệt độ trung bình toàn cầu của chính nó trong kho CMIP6 trên Google Cloud, theo cách của IPCC AR6: trung bình trượt 20 năm so với 1850–1900, lấy năm đầu tiên vượt ngưỡng. Kết quả khớp với bảng của <a href="https://doi.org/10.5281/zenodo.3591806">Hauser và cộng sự</a> và bảng của Atlas IPCC AR6. Một cửa sổ 20 năm chỉ được dùng nếu nằm trọn trong 1980–2099, những năm CMIP6-VN có số liệu.',
   unknownTitle: 'Những gì trang này chưa biết',
   gGwlT: 'Mức ấm lên toàn cầu', gGwl: 'Nhiệt độ trung bình toàn cầu cao hơn thời kỳ 1850–1900 bao nhiêu độ. "Hà\u00a0Nội ở +2 °C" là 20 năm quanh lúc một mô hình đạt mức đó, dù là năm nào và theo kịch bản nào.',
@@ -28,9 +28,11 @@ Object.assign(S.vi, {
   gNightT: 'Đêm nóng', gNight: 'Đêm có nhiệt độ thấp nhất từ 28 °C trở lên. Đây là mốc trang này chọn cho Hà\u00a0Nội: hiếm trong 1995–2014, và là những đêm người ta khó ngủ nếu không có quạt hay điều hòa.',
   gRainT: 'Mưa to, mưa rất to', gRain: 'Ngày có lượng mưa từ 50 mm (mưa to) và từ 100 mm (mưa rất to) trong 24 giờ, theo Quyết định 18/2021/QĐ-TTg.',
   gSspT: 'Kịch bản SSP', gSsp: 'Các con đường phát thải của CMIP6: SSP1-2.6 (giảm mạnh), SSP2-4.5 (trung gian), SSP3-7.0 (cao, thế giới chia rẽ) và SSP5-8.5 (rất cao). Ở trang này, kịch bản chỉ quyết định khi nào một mức ấm lên đến.',
-  imprint: 'Kịch bản khí hậu Việt Nam · Hà\u00a0Nội. Dự tính CMIP6-VN và quan trắc dạng lưới (CC0); mức ấm lên toàn cầu từ CMIP6. Kết quả mô tả mô hình khí hậu và số liệu dạng lưới, không phải số đo tại một trạm.',
+  imprint: 'Kịch bản khí hậu Việt Nam · Hà Nội. Dự tính CMIP6-VN và quan trắc dạng lưới (CC0); mức ấm lên toàn cầu từ CMIP6 và HadCRUT5. Có sử dụng thông tin của Dịch vụ Biến đổi khí hậu Copernicus (ERA5, ERA5-Land), qua Open-Meteo (CC BY 4.0); Ủy ban châu Âu và ECMWF không chịu trách nhiệm về cách dùng số liệu này. Kết quả mô tả mô hình khí hậu và số liệu dạng lưới, không phải số đo tại một trạm.',
   obsShort: 'Quan trắc', obsLong: 'Quan trắc 1995–2014', modelDot: 'Một mô hình', median: 'Trung vị các mô hình', ownBase: 'Mô hình, 1995–2014',
-  perYear: 'Mỗi cột là một năm', trendLine: 'Xu hướng 1980–2014', baseWin: '1995–2014', never: 'không tới trước 2090',
+  perYear: 'Mỗi cột là một năm', trendLine: 'Xu hướng 1980–2014', trendLineRec: 'Xu hướng 1980–2025',
+  gridYears: 'Quan trắc dạng lưới', reanYears: 'ERA5-Land đã hiệu chỉnh', medShort: 'Trung vị', obsTest: 'Quan trắc 2006–2025',
+  obsTestBand: 'Tùy cách hiệu chỉnh ERA5-Land', modelDotTest: 'Một mô hình, ở mức ấm lên của 2006–2025', baseWin: '1995–2014', never: 'không tới trước 2090',
   daysYr: 'ngày/năm', nightsYr: 'đêm/năm', perDecade: 'mỗi thập kỷ',
   loading: 'Đang tải số liệu Hà\u00a0Nội…', loadFail: 'Chưa tải được số liệu Hà\u00a0Nội',
   loadFailFile: 'Trang đang được mở trực tiếp từ ổ đĩa, nên trình duyệt không cho đọc tệp số liệu. Hãy mở trang qua một máy chủ web (http hoặc https).',
@@ -52,7 +54,7 @@ Object.assign(S.en, {
   ctlIndicator: 'Indicator', ctlValues: 'Values', modeAbs: 'Value', modeAnom: 'Change',
   modeNote: 'Change is from each model\'s own 1995–2014.', ctlHighlight: 'Highlight a model', hlNone: 'None',
   aboutTitle: 'About the data and method',
-  aboutData: 'Every number on this page is a Hanoi city-wide average from <a href="https://doi.org/10.1038/s41597-023-02159-2">CMIP6-VN</a> (Tran-Anh et al., 2023): 35 CMIP6 models bias-corrected against 147 temperature stations and 481 rain gauges in Vietnam, on a 0.1° grid (about 11&nbsp;km). The observations are the gridded dataset CMIP6-VN was corrected to, 1980–2014. Each grid cell counts by the share of its area inside Hanoi (Natural Earth; the city boundary is unchanged by the 2025 reorganisation).',
+  aboutData: 'Every number on this page is a Hanoi city-wide average from <a href="https://doi.org/10.1038/s41597-023-02159-2">CMIP6-VN</a> (Tran-Anh et al., 2023): 35 CMIP6 models bias-corrected against 147 temperature stations and 481 rain gauges in Vietnam, on a 0.1° grid (about 11&nbsp;km). The observations for 1980–2014 are the gridded dataset CMIP6-VN was corrected to; from 2015 they are Copernicus\'s <a href="https://doi.org/10.5194/essd-13-4349-2021">ERA5-Land</a> (temperature) and ERA5 (rain) reanalyses, taken from <a href="https://open-meteo.com/">Open-Meteo</a> and calibrated to the gridded data by quantile mapping, month by month. Each grid cell counts by the share of its area inside Hanoi (Natural Earth; the city boundary is unchanged by the 2025 reorganisation).',
   aboutLevels: 'Each model\'s global warming level comes from its own global mean temperature in the CMIP6 archive on Google Cloud, the IPCC AR6 way: a 20-year running mean against 1850–1900, taking the first year above the level. The results match the tables of <a href="https://doi.org/10.5281/zenodo.3591806">Hauser et al.</a> and the IPCC AR6 Atlas. A 20-year window is used only if it lies inside 1980–2099, the years CMIP6-VN covers.',
   unknownTitle: 'What this page doesn\'t know yet',
   gGwlT: 'Global warming level', gGwl: 'How much warmer the global average is than in 1850–1900. "Hanoi at +2 °C" means the 20 years around when a model reaches that level, whatever the year and scenario.',
@@ -62,9 +64,11 @@ Object.assign(S.en, {
   gNightT: 'Hot nights', gNight: 'Nights whose low stays at 28 °C or more. This page picked the threshold for Hanoi: rare in 1995–2014, and the nights people struggle to sleep without a fan or air conditioning.',
   gRainT: 'Heavy and very heavy rain', gRain: 'Days with 50 mm or more (heavy) and 100 mm or more (very heavy) in 24 hours, as defined in Decision 18/2021/QĐ-TTg.',
   gSspT: 'SSP scenarios', gSsp: 'CMIP6 emissions paths: SSP1-2.6 (deep cuts), SSP2-4.5 (middle), SSP3-7.0 (high, a divided world) and SSP5-8.5 (very high). On this page a scenario only decides when a warming level arrives.',
-  imprint: 'Vietnam Climate Scenario Explorer · Hanoi. CMIP6-VN projections and gridded observations (CC0); global warming levels from CMIP6. Results describe climate models and gridded data, not readings at a single station.',
+  imprint: 'Vietnam Climate Scenario Explorer · Hanoi. CMIP6-VN projections and gridded observations (CC0); global warming levels from CMIP6 and HadCRUT5. Contains modified Copernicus Climate Change Service information (ERA5, ERA5-Land), via Open-Meteo (CC BY 4.0); neither the European Commission nor ECMWF is responsible for any use of it. Results describe climate models and gridded data, not readings at a single station.',
   obsShort: 'Observed', obsLong: 'Observed 1995–2014', modelDot: 'One model', median: 'Model median', ownBase: 'Models, 1995–2014',
-  perYear: 'One bar per year', trendLine: '1980–2014 trend', baseWin: '1995–2014', never: 'not reached before 2090',
+  perYear: 'One bar per year', trendLine: '1980–2014 trend', trendLineRec: '1980–2025 trend',
+  gridYears: 'Gridded observations', reanYears: 'ERA5-Land, calibrated', medShort: 'Median', obsTest: 'Observed 2006–2025',
+  obsTestBand: 'Range across ERA5-Land calibrations', modelDotTest: 'One model, at the warming of 2006–2025', baseWin: '1995–2014', never: 'not reached before 2090',
   daysYr: 'days a year', nightsYr: 'nights a year', perDecade: 'per decade',
   loading: 'Loading the Hanoi data…', loadFail: 'The Hanoi data didn\'t load',
   loadFailFile: 'The page was opened straight from disk, so the browser won\'t let it read the data file. Open it through a web server (http or https).',
@@ -87,6 +91,11 @@ const IND = {
 const indName = k => IND[k][LANG] || IND[k].en;
 const indUnit = k => IND[k].unit === 'mm' ? 'mm' : t(IND[k].unit);
 const LEVELS = ['1.5', '2.0', '3.0'];
+/* where the real world is: human-induced warming in 2025 and its rate (Forster et al. 2026,
+   Indicators of Global Climate Change 2025, ESSD 18:3889). The "today's rate" year is a plain
+   extrapolation of that rate, not a projection */
+const GW_NOW = {year: 2025, gw: 1.37, rate: 0.27};
+const atTodaysRate = lv => Math.round(GW_NOW.year + (+lv - GW_NOW.gw) / GW_NOW.rate * 10);
 /* "+1,5 °C" / "+2 °C" in the reader's locale */
 const lvName = lv => `${fmt('+')(+lv)} °C`;
 const SSP_ROWS = [

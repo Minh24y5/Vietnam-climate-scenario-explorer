@@ -9,17 +9,40 @@
    "gmst": "https://storage.googleapis.com/cmip6/cmip6-zarr-consolidated-stores.csv",
    "hauser": "Hauser, Engelbrecht & Fischer, cmip_warming_levels, doi:10.5281/zenodo.3591806, CC BY-SA 4.0",
    "ipcc_atlas": "IPCC AR6 WGI Atlas, https://raw.githubusercontent.com/IPCC-WG1/Atlas/main/warming-levels/CMIP6_Atlas_WarmingLevels.csv",
-   "cmip6vn_table1": "Tran-Anh et al. 2023, Sci Data 10:257, Table 1"
+   "cmip6vn_table1": "Tran-Anh et al. 2023, Sci Data 10:257, Table 1",
+   "observed_gmst": "HadCRUT5 5.1.0.0 (Morice et al. 2021), Berkeley Earth as a check"
   },
   "built": "2026-11-20"
  },
  "levels": [
   1.0,
+  1.12,
   1.5,
   2.0,
   3.0,
   4.0
  ],
+ "observed_level": {
+  "level": 1.12,
+  "period": [
+   2006,
+   2025
+  ],
+  "baseline": "1850-1900",
+  "hadcrut5": 1.12,
+  "hadcrut5_version": "5.1.0.0",
+  "hadcrut5_1995_2014": 0.865,
+  "berkeley_earth": 1.18,
+  "berkeley_earth_years": [
+   2006,
+   2024
+  ],
+  "sources": {
+   "hadcrut5": "https://www.metoffice.gov.uk/hadobs/hadcrut5/data/HadCRUT.5.1.0.0/analysis/diagnostics/HadCRUT.5.1.0.0.analysis.summary_series.global.annual.csv",
+   "berkeley_earth": "https://berkeley-earth-temperature.s3.us-west-1.amazonaws.com/Global/Land_and_Ocean_summary.txt"
+  },
+  "note": "blended surface temperature (GMST); models use near-surface air temperature (GSAT), which AR6 assesses as within about 10% of it over this period"
+ },
  "summary": {
   "ssp119": {
    "1.0": {
@@ -30,6 +53,15 @@
     "central_median": 2014,
     "central_min": 2003,
     "central_max": 2026
+   },
+   "1.12": {
+    "models": 4,
+    "reached": 4,
+    "usable_with_cmip6vn": 4,
+    "usable_with_temperature": 4,
+    "central_median": 2017,
+    "central_min": 2007,
+    "central_max": 2033
    },
    "1.5": {
     "models": 4,
@@ -78,6 +110,15 @@
     "central_min": 2003,
     "central_max": 2026
    },
+   "1.12": {
+    "models": 5,
+    "reached": 5,
+    "usable_with_cmip6vn": 5,
+    "usable_with_temperature": 5,
+    "central_median": 2016,
+    "central_min": 2008,
+    "central_max": 2029
+   },
    "1.5": {
     "models": 5,
     "reached": 5,
@@ -124,6 +165,15 @@
     "central_median": 2014,
     "central_min": 2003,
     "central_max": 2026
+   },
+   "1.12": {
+    "models": 5,
+    "reached": 5,
+    "usable_with_cmip6vn": 5,
+    "usable_with_temperature": 5,
+    "central_median": 2017,
+    "central_min": 2008,
+    "central_max": 2029
    },
    "1.5": {
     "models": 5,
@@ -172,6 +222,15 @@
     "central_min": 2003,
     "central_max": 2027
    },
+   "1.12": {
+    "models": 5,
+    "reached": 5,
+    "usable_with_cmip6vn": 5,
+    "usable_with_temperature": 5,
+    "central_median": 2017,
+    "central_min": 2008,
+    "central_max": 2030
+   },
    "1.5": {
     "models": 5,
     "reached": 5,
@@ -218,6 +277,15 @@
     "central_median": 2014,
     "central_min": 2003,
     "central_max": 2026
+   },
+   "1.12": {
+    "models": 3,
+    "reached": 3,
+    "usable_with_cmip6vn": 3,
+    "usable_with_temperature": 3,
+    "central_median": 2018,
+    "central_min": 2007,
+    "central_max": 2030
    },
    "1.5": {
     "models": 3,
@@ -266,6 +334,15 @@
     "central_min": 2003,
     "central_max": 2027
    },
+   "1.12": {
+    "models": 3,
+    "reached": 3,
+    "usable_with_cmip6vn": 3,
+    "usable_with_temperature": 3,
+    "central_median": 2018,
+    "central_min": 2007,
+    "central_max": 2031
+   },
    "1.5": {
     "models": 3,
     "reached": 3,
@@ -312,6 +389,15 @@
     "central_median": 2014,
     "central_min": 2003,
     "central_max": 2023
+   },
+   "1.12": {
+    "models": 5,
+    "reached": 5,
+    "usable_with_cmip6vn": 5,
+    "usable_with_temperature": 5,
+    "central_median": 2017,
+    "central_min": 2007,
+    "central_max": 2028
    },
    "1.5": {
     "models": 5,
@@ -456,6 +542,12 @@
       "end": 2012,
       "fits_cmip6vn": true
      },
+     "1.12": {
+      "central": 2007,
+      "start": 1997,
+      "end": 2016,
+      "fits_cmip6vn": true
+     },
      "1.5": {
       "central": 2019,
       "start": 2009,
@@ -481,6 +573,12 @@
       "end": 2012,
       "fits_cmip6vn": true
      },
+     "1.12": {
+      "central": 2008,
+      "start": 1998,
+      "end": 2017,
+      "fits_cmip6vn": true
+     },
      "1.5": {
       "central": 2020,
       "start": 2010,
@@ -504,6 +602,12 @@
       "central": 2003,
       "start": 1993,
       "end": 2012,
+      "fits_cmip6vn": true
+     },
+     "1.12": {
+      "central": 2008,
+      "start": 1998,
+      "end": 2017,
       "fits_cmip6vn": true
      },
      "1.5": {
@@ -534,6 +638,12 @@
       "central": 2003,
       "start": 1993,
       "end": 2012,
+      "fits_cmip6vn": true
+     },
+     "1.12": {
+      "central": 2008,
+      "start": 1998,
+      "end": 2017,
       "fits_cmip6vn": true
      },
      "1.5": {
@@ -571,6 +681,12 @@
       "end": 2012,
       "fits_cmip6vn": true
      },
+     "1.12": {
+      "central": 2007,
+      "start": 1997,
+      "end": 2016,
+      "fits_cmip6vn": true
+     },
      "1.5": {
       "central": 2019,
       "start": 2009,
@@ -594,6 +710,12 @@
       "central": 2003,
       "start": 1993,
       "end": 2012,
+      "fits_cmip6vn": true
+     },
+     "1.12": {
+      "central": 2007,
+      "start": 1997,
+      "end": 2016,
       "fits_cmip6vn": true
      },
      "1.5": {
@@ -629,6 +751,12 @@
       "central": 2003,
       "start": 1993,
       "end": 2012,
+      "fits_cmip6vn": true
+     },
+     "1.12": {
+      "central": 2007,
+      "start": 1997,
+      "end": 2016,
       "fits_cmip6vn": true
      },
      "1.5": {
@@ -680,6 +808,12 @@
       "end": 2035,
       "fits_cmip6vn": true
      },
+     "1.12": {
+      "central": 2033,
+      "start": 2023,
+      "end": 2042,
+      "fits_cmip6vn": true
+     },
      "1.5": null,
      "2.0": null,
      "3.0": null,
@@ -693,6 +827,12 @@
       "central": 2026,
       "start": 2016,
       "end": 2035,
+      "fits_cmip6vn": true
+     },
+     "1.12": {
+      "central": 2029,
+      "start": 2019,
+      "end": 2038,
       "fits_cmip6vn": true
      },
      "1.5": {
@@ -713,6 +853,12 @@
       "central": 2026,
       "start": 2016,
       "end": 2035,
+      "fits_cmip6vn": true
+     },
+     "1.12": {
+      "central": 2029,
+      "start": 2019,
+      "end": 2038,
       "fits_cmip6vn": true
      },
      "1.5": {
@@ -740,6 +886,12 @@
       "end": 2036,
       "fits_cmip6vn": true
      },
+     "1.12": {
+      "central": 2030,
+      "start": 2020,
+      "end": 2039,
+      "fits_cmip6vn": true
+     },
      "1.5": {
       "central": 2044,
       "start": 2034,
@@ -765,6 +917,12 @@
       "end": 2035,
       "fits_cmip6vn": true
      },
+     "1.12": {
+      "central": 2030,
+      "start": 2020,
+      "end": 2039,
+      "fits_cmip6vn": true
+     },
      "1.5": {
       "central": 2057,
       "start": 2047,
@@ -783,6 +941,12 @@
       "central": 2027,
       "start": 2017,
       "end": 2036,
+      "fits_cmip6vn": true
+     },
+     "1.12": {
+      "central": 2031,
+      "start": 2021,
+      "end": 2040,
       "fits_cmip6vn": true
      },
      "1.5": {
@@ -808,6 +972,12 @@
       "central": 2023,
       "start": 2013,
       "end": 2032,
+      "fits_cmip6vn": true
+     },
+     "1.12": {
+      "central": 2028,
+      "start": 2018,
+      "end": 2037,
       "fits_cmip6vn": true
      },
      "1.5": {
@@ -854,6 +1024,12 @@
       "end": 2021,
       "fits_cmip6vn": true
      },
+     "1.12": {
+      "central": 2016,
+      "start": 2006,
+      "end": 2025,
+      "fits_cmip6vn": true
+     },
      "1.5": {
       "central": 2042,
       "start": 2032,
@@ -872,6 +1048,12 @@
       "central": 2012,
       "start": 2002,
       "end": 2021,
+      "fits_cmip6vn": true
+     },
+     "1.12": {
+      "central": 2017,
+      "start": 2007,
+      "end": 2026,
       "fits_cmip6vn": true
      },
      "1.5": {
@@ -897,6 +1079,12 @@
       "central": 2011,
       "start": 2001,
       "end": 2020,
+      "fits_cmip6vn": true
+     },
+     "1.12": {
+      "central": 2017,
+      "start": 2007,
+      "end": 2026,
       "fits_cmip6vn": true
      },
      "1.5": {
@@ -927,6 +1115,12 @@
       "central": 2012,
       "start": 2002,
       "end": 2021,
+      "fits_cmip6vn": true
+     },
+     "1.12": {
+      "central": 2017,
+      "start": 2007,
+      "end": 2026,
       "fits_cmip6vn": true
      },
      "1.5": {
@@ -973,6 +1167,12 @@
       "end": 2024,
       "fits_cmip6vn": true
      },
+     "1.12": {
+      "central": 2019,
+      "start": 2009,
+      "end": 2028,
+      "fits_cmip6vn": true
+     },
      "1.5": {
       "central": 2031,
       "start": 2021,
@@ -993,6 +1193,12 @@
       "end": 2024,
       "fits_cmip6vn": true
      },
+     "1.12": {
+      "central": 2019,
+      "start": 2009,
+      "end": 2028,
+      "fits_cmip6vn": true
+     },
      "1.5": {
       "central": 2030,
       "start": 2020,
@@ -1011,6 +1217,12 @@
       "central": 2015,
       "start": 2005,
       "end": 2024,
+      "fits_cmip6vn": true
+     },
+     "1.12": {
+      "central": 2019,
+      "start": 2009,
+      "end": 2028,
       "fits_cmip6vn": true
      },
      "1.5": {
@@ -1036,6 +1248,12 @@
       "central": 2015,
       "start": 2005,
       "end": 2024,
+      "fits_cmip6vn": true
+     },
+     "1.12": {
+      "central": 2019,
+      "start": 2009,
+      "end": 2028,
       "fits_cmip6vn": true
      },
      "1.5": {
@@ -1068,6 +1286,12 @@
       "end": 2023,
       "fits_cmip6vn": true
      },
+     "1.12": {
+      "central": 2018,
+      "start": 2008,
+      "end": 2027,
+      "fits_cmip6vn": true
+     },
      "1.5": {
       "central": 2031,
       "start": 2021,
@@ -1091,6 +1315,12 @@
       "central": 2014,
       "start": 2004,
       "end": 2023,
+      "fits_cmip6vn": true
+     },
+     "1.12": {
+      "central": 2018,
+      "start": 2008,
+      "end": 2027,
       "fits_cmip6vn": true
      },
      "1.5": {
@@ -1121,6 +1351,12 @@
       "central": 2014,
       "start": 2004,
       "end": 2023,
+      "fits_cmip6vn": true
+     },
+     "1.12": {
+      "central": 2018,
+      "start": 2008,
+      "end": 2027,
       "fits_cmip6vn": true
      },
      "1.5": {
@@ -1172,6 +1408,12 @@
       "end": 2023,
       "fits_cmip6vn": true
      },
+     "1.12": {
+      "central": 2016,
+      "start": 2006,
+      "end": 2025,
+      "fits_cmip6vn": true
+     },
      "1.5": {
       "central": 2025,
       "start": 2015,
@@ -1197,6 +1439,12 @@
       "end": 2022,
       "fits_cmip6vn": true
      },
+     "1.12": {
+      "central": 2016,
+      "start": 2006,
+      "end": 2025,
+      "fits_cmip6vn": true
+     },
      "1.5": {
       "central": 2024,
       "start": 2014,
@@ -1220,6 +1468,12 @@
       "central": 2014,
       "start": 2004,
       "end": 2023,
+      "fits_cmip6vn": true
+     },
+     "1.12": {
+      "central": 2017,
+      "start": 2007,
+      "end": 2026,
       "fits_cmip6vn": true
      },
      "1.5": {
@@ -1257,6 +1511,12 @@
       "end": 2023,
       "fits_cmip6vn": true
      },
+     "1.12": {
+      "central": 2016,
+      "start": 2006,
+      "end": 2025,
+      "fits_cmip6vn": true
+     },
      "1.5": {
       "central": 2023,
       "start": 2013,
@@ -1290,6 +1550,12 @@
       "central": 2014,
       "start": 2004,
       "end": 2023,
+      "fits_cmip6vn": true
+     },
+     "1.12": {
+      "central": 2016,
+      "start": 2006,
+      "end": 2025,
       "fits_cmip6vn": true
      },
      "1.5": {

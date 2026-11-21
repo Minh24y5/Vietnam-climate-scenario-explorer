@@ -13,6 +13,13 @@ Method (the one used for IPCC AR6, as published by Hauser et al., doi:10.5281/ze
      and the window is [n-10, n+9]
 A window is usable with CMIP6-VN only if it lies inside 1980-2099 (CMIP6-VN's years); 'fits' says so.
 
+Observed level: besides the fixed levels, the script adds the level the real world was at over
+2006-2025 (the 20 years the Hà Nội page tests the models against), from HadCRUT5's annual global
+mean against its own 1850-1900 mean, rounded to 0.01 degC. Berkeley Earth is computed as a check.
+Each model's window at that level is its own 20 years at the warming the world actually had, so a
+fast-warming model is not penalised for reaching it early. Stored in 'observed_level'; the level's
+key in each scenario is str(level), e.g. '1.12'.
+
 Sources
   * Global tas: Google's public CMIP6 zarr archive (the same catalogue as build_data.py).
   * Where Google lacks a run (ACCESS-ESM1-5 r1i1p1f1 SSP2-4.5/3-7.0, GISS-E2-1-G r1i1p1f2 futures),
@@ -48,6 +55,11 @@ CATALOG = 'https://storage.googleapis.com/cmip6/cmip6-zarr-consolidated-stores.c
 HAUSER = ('https://raw.githubusercontent.com/mathause/cmip_warming_levels/main/warming_levels/'
           'cmip6_all_ens/csv/cmip6_warming_levels_all_ens_1850_1900.csv')
 ATLAS = 'https://raw.githubusercontent.com/IPCC-WG1/Atlas/main/warming-levels/CMIP6_Atlas_WarmingLevels.csv'
+HADCRUT_V = '5.1.0.0'
+HADCRUT = (f'https://www.metoffice.gov.uk/hadobs/hadcrut5/data/HadCRUT.{HADCRUT_V}/analysis/diagnostics/'
+           f'HadCRUT.{HADCRUT_V}.analysis.summary_series.global.annual.csv')
+BERKELEY = 'https://berkeley-earth-temperature.s3.us-west-1.amazonaws.com/Global/Land_and_Ocean_summary.txt'
+OBS_PERIOD = (2006, 2025)       # the observed 20 years the Hà Nội page tests the models against
 LEVELS = (1.0, 1.5, 2.0, 3.0, 4.0)
 WINDOW = 20
 CMIP6VN_YEARS = (1980, 2099)
@@ -185,11 +197,34 @@ def gmst(cat, model, member, exp):
     return s, s.name
 
 
-def crossings(anom):
+def observed_level():
+    """Global warming over OBS_PERIOD against 1850-1900, from HadCRUT5 (used) and Berkeley Earth (check).
+    Each dataset's own 1850-1900 mean is its baseline. HadCRUT5's file can hold a partial current year;
+    only complete years inside OBS_PERIOD are used."""
+    a, b = OBS_PERIOD
+    had = pd.read_csv(cached_get(HADCRUT, f'hadcrut{HADCRUT_V}_global_annual.csv'), index_col=0).iloc[:, 0]
+    had = had - had.loc[1850:1900].mean()
+    ber = pd.read_csv(cached_get(BERKELEY, 'berkeley_land_ocean_summary.txt'), comment='%', sep=r'\s+',
+                      header=None, index_col=0).iloc[:, 0]
+    ber = ber - ber.loc[1850:1900].mean()
+    if had.loc[a:b].size < b - a + 1:
+        raise SystemExit(f'HadCRUT5 {HADCRUT_V} does not cover {a}-{b} yet')
+    level = round(float(had.loc[a:b].mean()), 2)
+    by = ber.loc[a:b]
+    return {'level': level, 'period': [a, b], 'baseline': '1850-1900',
+            'hadcrut5': level, 'hadcrut5_version': HADCRUT_V,
+            'hadcrut5_1995_2014': round(float(had.loc[1995:2014].mean()), 3),
+            'berkeley_earth': round(float(by.mean()), 2), 'berkeley_earth_years': [int(by.index.min()), int(by.index.max())],
+            'sources': {'hadcrut5': HADCRUT, 'berkeley_earth': BERKELEY},
+            'note': 'blended surface temperature (GMST); models use near-surface air temperature (GSAT), which AR6 '
+                    'assesses as within about 10% of it over this period'}
+
+
+def crossings(anom, levels=LEVELS):
     """First central year where the 20-yr centred mean exceeds each level."""
     roll = anom.rolling(WINDOW, center=True).mean().dropna()   # label i covers [i-10, i+9]
     out = {}
-    for lv in LEVELS:
+    for lv in levels:
         hit = roll[roll > lv]
         if len(hit):
             n = int(hit.index[0])
@@ -207,7 +242,7 @@ def add_fits(levels):
 
 
 # ---------------------------------------------------------------- per model
-def one_model(row, cat, hauser):
+def one_model(row, cat, hauser, levels=LEVELS):
     model, run = row['model'], row['run']
     exps = [e for e in SSPS if row[e] != '-']
     res = {'run': run, 'run_paper': row['run_paper'], 'run_note': row['run_note'],
@@ -224,7 +259,7 @@ def one_model(row, cat, hauser):
         if fut is not None and hist is not None:
             s = pd.concat([hist.loc[:2014], fut.loc[2015:2100]])
             anom = s - hist.loc[1850:1900].mean()
-            entry = {'source': 'computed', **add_fits(crossings(anom)),
+            entry = {'source': 'computed', **add_fits(crossings(anom, levels)),
                      'warming_2081_2100': round(float(anom.loc[2081:2100].mean()), 3)}
         else:
             h = hauser[(hauser.model == model) & (hauser.ensemble == run) & (hauser.exp == exp)]
@@ -232,7 +267,7 @@ def one_model(row, cat, hauser):
                 entry = {'source': 'missing'}
             else:
                 entry = {'source': 'hauser'}
-                for lv in LEVELS:
+                for lv in levels:           # Hauser has no row for the observed level: None there
                     r = h[np.isclose(h.warming_level, lv)]
                     entry[str(lv)] = ({'central': int(r.start_year.iloc[0]) + WINDOW // 2,
                                        'start': int(r.start_year.iloc[0]), 'end': int(r.end_year.iloc[0])}
@@ -280,11 +315,11 @@ def checks(models, hauser, atlas):
     return {'start_year_vs_hauser': compare('hauser'), 'start_year_vs_ipcc_atlas': compare('atlas')}
 
 
-def summary(models):
+def summary(models, levels=LEVELS):
     out = {}
     for exp in SSPS:
         out[exp] = {}
-        for lv in LEVELS:
+        for lv in levels:
             cen, n, fits, temp = [], 0, 0, 0
             for r in models.values():
                 e = r['scenarios'].get(exp)
@@ -317,13 +352,17 @@ def main():
                          comment='#', skipinitialspace=True)
     hauser.columns = [c.strip() for c in hauser.columns]
     atlas = pd.read_csv(cached_get(ATLAS, 'ipcc_atlas_cmip6_warming_levels.csv'), dtype=str)
+    obs = observed_level()
+    levels = tuple(sorted(set(LEVELS) | {obs['level']}))
+    log(f"observed {obs['period'][0]}-{obs['period'][1]}: +{obs['level']} degC (HadCRUT5), "
+        f"+{obs['berkeley_earth']} (Berkeley Earth {obs['berkeley_earth_years'][0]}-{obs['berkeley_earth_years'][1]})")
     t = table1()
     if a.models:
         t = t[t.model.isin(a.models)]
 
     models = {}
     with cf.ThreadPoolExecutor(max_workers=a.workers) as ex:
-        for fut in cf.as_completed([ex.submit(one_model, r, cat, hauser) for _, r in t.iterrows()]):
+        for fut in cf.as_completed([ex.submit(one_model, r, cat, hauser, levels) for _, r in t.iterrows()]):
             m, r = fut.result()
             models[m] = r
     models = dict(sorted(models.items()))
@@ -337,10 +376,12 @@ def main():
             'sources': {'gmst': CATALOG,
                         'hauser': 'Hauser, Engelbrecht & Fischer, cmip_warming_levels, doi:10.5281/zenodo.3591806, CC BY-SA 4.0',
                         'ipcc_atlas': 'IPCC AR6 WGI Atlas, ' + ATLAS,
-                        'cmip6vn_table1': 'Tran-Anh et al. 2023, Sci Data 10:257, Table 1'},
+                        'cmip6vn_table1': 'Tran-Anh et al. 2023, Sci Data 10:257, Table 1',
+                        'observed_gmst': f'HadCRUT5 {HADCRUT_V} (Morice et al. 2021), Berkeley Earth as a check'},
             'built': time.strftime('%Y-%m-%d')},
-        'levels': list(LEVELS),
-        'summary': summary(models),
+        'levels': list(levels),
+        'observed_level': obs,
+        'summary': summary(models, levels),
         'checks': checks(models, hauser, atlas),
         'models': models,
     }

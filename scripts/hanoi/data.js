@@ -68,6 +68,34 @@ function hnFacts() {
     obsTrend: O.trend,
     trend: {tas: trends('tas'), tx35: trends('tx35')},
     cal: {obs: season(HN.calendar.obs), ...Object.fromEntries(LEVELS.map(lv => [lv, season(HN.calendar[lv])]))},
-    gw0: HN.meta.baseline_global_warming
+    gw0: HN.meta.baseline_global_warming,
+    rec: recFacts(), test: testFacts(), humid: HN.humid || null, calib: HN.calibration || null
   };
+}
+/* the observed record to 2025 (gridded, then calibrated reanalysis), if the build had it */
+function recFacts() {
+  const R = HN.record;
+  if (!R) return null;
+  const hotMax = d3.max(R.tx35), i = R.tx35.indexOf(hotMax);
+  const top = R.years.map((y, j) => ({y, v: R.tx35[j]})).sort((a, b) => b.v - a.v);
+  return {R, to: d3.max(R.years), cut: R.gridded_to, hotMax, hotYear: R.years[i], top, P: R.periods, trend: R.trend,
+    recent: top.filter(d => d.y > R.gridded_to).length, nRecent: R.years.filter(y => y > R.gridded_to).length};
+}
+/* the matched-warming-level test: per indicator, the models' change from their own 1995–2014 and the observed change */
+function testFacts() {
+  if (!HN.test) return null;
+  const out = {T: HN.test, n: Object.keys(HN.test.models).length};
+  for (const k of TEST_ROWS) {
+    const {pts, obs, low, high, base} = testPoints(k), v = pts.map(p => p.v);
+    out[k] = {obs, low, high, base, med: median(v), min: d3.min(v), max: d3.max(v), n: v.length,
+      below: v.filter(x => x < low).length, above: v.filter(x => x > high).length,
+      reach: pts.filter(p => p.v >= low).map(p => p.m).sort()};
+  }
+  /* each model's 20 years at that level; its scenarios differ by a year or a few, so the mean window */
+  const win = Object.entries(HN.test.models).map(([m, r]) => {
+    const a = Math.round(mean(r.windows.map(w => w.start)));
+    return {m, a, b: a + 19};
+  });
+  out.win = win.sort((p, q) => p.a - q.a);
+  return out;
 }
