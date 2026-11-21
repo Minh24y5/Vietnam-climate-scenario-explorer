@@ -16,8 +16,8 @@ colors:
   ssp585-maroon: "#951b1e"
   wet-teal: "#1b7a6e"
   dry-brown: "#8c5a1e"
-  baseline-wash: "rgba(33,37,41,.07)"
-  window-wash: "rgba(33,37,41,.05)"
+  baseline-wash: "rgba(28,28,26,.07)"
+  window-wash: "rgba(28,28,26,.05)"
   dark-newsprint: "#1e1e1c"
   dark-stock: "#262624"
   dark-ink: "#ece9e2"
@@ -276,7 +276,7 @@ Breakpoints: 1300, 1240, 1120, 980, 820, 620, 520px; coarse pointers raise contr
 The page is flat paper. Structure is built with rules: 1px hairlines and column rules, the 1px folio rule, 2px ink rules over step heads and on section and table tops, a 3px ink rule over the pull figure, a 3px double rule over the imprint. One soft shadow exists for things that float over other content.
 
 ### Shadow Vocabulary
-- **Float** (`box-shadow: 0 1px 2px rgba(33,37,41,.08), 0 8px 22px rgba(33,37,41,.10)`; dark uses black at .30/.35): the chart tooltip and the phone story cards that scroll over the pinned figure. Nothing else.
+- **Float** (`box-shadow: 0 1px 2px rgba(28,28,26,.08), 0 8px 22px rgba(28,28,26,.10)`; dark uses black at .30/.35): the chart tooltip and the phone story cards that scroll over the pinned figure. Nothing else.
 
 ### Named Rules
 **The Rules Not Boxes Rule.** Group with a rule, not a container. A shadow appears only on something that floats over other content.

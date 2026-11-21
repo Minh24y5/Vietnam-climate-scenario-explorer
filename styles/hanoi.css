@@ -2,7 +2,7 @@
    every token, the folio, lead grid, story, explorer and about styles as they are. */
 
 /* ---------- lead measure ---------- */
-/* the sa-po reads as one bold paragraph: hold it to a book measure, not the full 900px */
+/* the sa-pô is a long serif paragraph: hold it to a book measure, not the full 900px */
 .hn .sapo{max-width:68ch}
 /* the shared lead justifies its columns. In the three-column lead, once the grid is under ~1120px
    (text columns under ~240px) that opens rivers in Vietnamese too, so both columns set ragged

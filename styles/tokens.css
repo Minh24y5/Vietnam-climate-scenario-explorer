@@ -20,9 +20,9 @@
   --s585:#951b1e;
   --wet:#1b7a6e;
   --dry:#8c5a1e;
-  --base:rgba(33,37,41,.07);
-  --window:rgba(33,37,41,.05);
-  --shadow:0 1px 2px rgba(33,37,41,.08),0 8px 22px rgba(33,37,41,.10);
+  --base:rgba(28,28,26,.07);
+  --window:rgba(28,28,26,.05);
+  --shadow:0 1px 2px rgba(28,28,26,.08),0 8px 22px rgba(28,28,26,.10);
 
   --ease-out:cubic-bezier(.23,1,.32,1);
   --gutter:clamp(16px,4vw,40px);
