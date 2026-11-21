@@ -26,7 +26,7 @@
 .ex-map .isle-name{font-size:10.5px;fill:var(--muted)}
 .zl{paint-order:stroke;stroke:var(--bg);stroke-width:3.5px;stroke-linejoin:round;fill:var(--ink)}
 .zl .zn{font:500 12px var(--font)}
-.zl .zv{font:900 15px var(--font);font-variant-numeric:tabular-nums}
+.zl .zv{font:700 15px var(--font);font-variant-numeric:tabular-nums}
 .narrow .zl .zn{font-size:10.5px}
 .narrow .zl .zv{font-size:13px}
 .leader{stroke:var(--ink);stroke-width:.75}

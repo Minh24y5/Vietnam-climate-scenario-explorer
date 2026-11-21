@@ -6,7 +6,7 @@ body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.6 var(--font
 ::selection{background:var(--ink);color:var(--bg)}
 *{scrollbar-width:thin;scrollbar-color:var(--ctl-line) transparent}
 a{color:inherit;text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px}
-a:hover{color:var(--red)}
+a:hover{text-decoration-thickness:2px}
 :focus-visible{outline:2px solid var(--ink);outline-offset:3px}
 b,strong{font-weight:700}
 code{font-family:var(--font-mono);font-size:.86em}

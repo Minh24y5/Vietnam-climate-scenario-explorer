@@ -18,9 +18,9 @@
 .step.is-active .step-body{color:var(--ink)}
 @media (prefers-reduced-motion:reduce){.step-body{transition:none}}
 /* the turn's kicker ("Nhưng" / "But", "Vì vậy" / "Therefore"): a named nameplate-red slot, one per act */
-.step-kicker{margin:0 0 6px;font:900 13px/1 var(--font);text-transform:uppercase;letter-spacing:.04em;color:var(--red)}
-.step h2{font:900 clamp(28px,2.6vw,36px)/1.1 var(--font);letter-spacing:-.015em;margin:0 0 16px;border-top:4px solid var(--ink);padding-top:12px;text-wrap:balance}
-.step p{font:400 18px/1.62 var(--font);margin:0 0 16px;text-align:justify;hyphens:auto}
+.step-kicker{margin:0 0 6px;font:700 12px/1 var(--font);text-transform:uppercase;letter-spacing:.08em;color:var(--red)}
+.step h2{font:700 clamp(26px,2.4vw,32px)/1.18 var(--font);letter-spacing:-.01em;margin:0 0 16px;border-top:2px solid var(--ink);padding-top:12px;text-wrap:balance}
+.step p{font:400 17.5px/1.66 var(--font-read);margin:0 0 16px;text-align:justify;hyphens:auto}
 .step p b{font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
 .step .lede-b{font-weight:700}
 
