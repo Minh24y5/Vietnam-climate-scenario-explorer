@@ -36,7 +36,7 @@ const S = {
     langLabel: 'Ngôn ngữ', themeLabel: 'Giao diện', themeLight: 'Giao diện sáng', themeDark: 'Giao diện tối', storyLabel: 'Bài viết theo chương',
     medShort: 'trung bình', highShort: 'cao', medLong: 'phát thải trung bình', highLong: 'phát thải cao',
     sapo: 'Năm mô hình khí hậu CMIP6 cùng cho thấy Việt Nam tiếp tục nóng lên trong thế kỷ này. Mức tăng vào cuối thế kỷ phụ thuộc vào con đường phát thải mà thế giới lựa chọn.',
-    leadP2: 'CMIP6 là dự án so sánh mô hình khí hậu đứng sau báo cáo mới nhất của IPCC. Mỗi sọc trong hình là một năm: xanh là lạnh hơn, đỏ là nóng hơn trung bình 1985–2014. Từ năm 2015, dải sọc tách đôi theo hai con đường phát thải.',
+    leadP2: 'CMIP6 là mô hình so sánh dự báo khí hậu đằng sau báo cáo mới nhất của IPCC. Mỗi sọc trong hình là một năm: xanh là lạnh hơn, đỏ là nóng hơn trung bình 1985–2014. Từ năm 2015, dải sọc tách đôi theo hai dự đoán khí thải.',
     jumpStory: 'Xem tiếp: Năm mô hình, năm Việt Nam', jumpStoryPg: '(chương 1)', jumpExplore: 'Tự khám phá số liệu', jumpExplorePg: '(cuối trang)',
     jumpHanoi: 'Hà\u00a0Nội: bao nhiêu ngày nắng nóng khi Trái Đất nóng thêm 2 °C?', jumpHanoiPg: '(bài riêng)',
     exploreBlock: 'Tự khám phá', exploreTitle: 'Tự khám phá các dự tính',
