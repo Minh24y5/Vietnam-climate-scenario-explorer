@@ -96,6 +96,7 @@
                     <div class="lead-col">
                         <p data-i18n="leadP2"></p>
                         <div class="pull" id="pull"></div>
+                        <p class="pull-note" id="pullNote"></p>
                         <p class="jump"><a href="#ch-models" data-i18n="jumpStory"></a> <span class="pg" data-i18n="jumpStoryPg"></span></p>
                         <p class="jump"><a href="#explore" data-i18n="jumpExplore"></a> <span class="pg" data-i18n="jumpExplorePg"></span></p>
                         <p class="jump"><a href="hanoi.html" data-i18n="jumpHanoi"></a> <span class="pg" data-i18n="jumpHanoiPg"></span></p>
@@ -148,37 +149,21 @@
 
                 <div class="explore-grid">
                     <div class="explore-main">
-                        <div class="chart-head">
-                            <h3 id="ctitle"></h3>
-                            <p id="csub"></p>
+                        <div class="chart-block">
+                            <div class="chart-head">
+                                <h3 id="ctitle"></h3>
+                                <p id="csub"></p>
+                            </div>
+                            <div id="chart" tabindex="0" role="group" aria-roledescription="chart" aria-describedby="chartHelp">
+                                <div id="tip" role="tooltip" aria-hidden="true"></div>
+                            </div>
+                            <div id="legend" class="legend"></div>
+                            <p class="chart-help" id="chartHelp" data-i18n-html="chartHelp"></p>
+                            <div id="chartLiveAnnounce" class="sr-only" aria-live="polite" aria-atomic="true"></div>
                         </div>
-                        <div id="chart" tabindex="0" role="group" aria-roledescription="chart" aria-describedby="chartHelp">
-                            <div id="tip" role="tooltip" aria-hidden="true"></div>
-                        </div>
-                        <div id="legend" class="legend"></div>
-                        <p class="chart-help" id="chartHelp" data-i18n-html="chartHelp"></p>
-                        <div id="chartLiveAnnounce" class="sr-only" aria-live="polite" aria-atomic="true"></div>
-
-                        <section class="results" aria-labelledby="statsHeading">
-                            <h3 id="statsHeading"></h3>
-                            <div id="stats" aria-live="polite"></div>
-                        </section>
-
-                        <details class="disclosure" id="tableDetails">
-                            <summary data-i18n="tableSummary"></summary>
-                            <div id="accessibleTable" class="data-table-wrap"></div>
-                        </details>
                     </div>
 
                     <aside class="rail" data-i18n-attr="aria-label:railLabel">
-                        <fieldset class="ctl" id="regionCtl">
-                            <legend><label for="region" data-i18n="ctlRegion"></label></legend>
-                            <select id="region" class="select"></select>
-                            <div id="exMap" class="ex-map" aria-hidden="true"></div>
-                            <div class="key ex-key" id="exMapKey" aria-hidden="true"></div>
-                            <p class="ctl-note" id="regionNote"></p>
-                        </fieldset>
-
                         <fieldset class="ctl">
                             <legend data-i18n="ctlVariable"></legend>
                             <div class="seg" id="varSeg" role="group" data-i18n-attr="aria-label:ctlVariable">
@@ -186,7 +171,19 @@
                                 <button type="button" data-v="pr" aria-pressed="false" data-i18n="varPr"></button>
                             </div>
                         </fieldset>
-
+                        <fieldset class="ctl">
+                            <legend data-i18n="ctlScenarios"></legend>
+                            <div class="checks" id="scens">
+                                <label class="check"><input type="checkbox" value="ssp245" checked><span class="sw" style="--c:var(--s245)" aria-hidden="true"></span><span>SSP2-4.5 <span class="muted" data-i18n="medShort"></span></span></label>
+                                <label class="check"><input type="checkbox" value="ssp585" checked><span class="sw" style="--c:var(--s585)" aria-hidden="true"></span><span>SSP5-8.5 <span class="muted" data-i18n="highShort"></span></span></label>
+                            </div>
+                        </fieldset>
+                        <fieldset class="ctl">
+                            <legend><span data-i18n="ctlModels"></span> <span class="muted" id="modelCount"></span></legend>
+                            <div class="checks" id="models"></div>
+                            <p class="ctl-note" id="modelHint" aria-live="polite"></p>
+                            <button type="button" class="link-btn" id="allModels" data-i18n="allModels"></button>
+                        </fieldset>
                         <fieldset class="ctl">
                             <legend data-i18n="ctlValues"></legend>
                             <div class="seg" id="modeSeg" role="group" data-i18n-attr="aria-label:ctlValues">
@@ -197,22 +194,6 @@
                             <input type="range" id="base" min="1950" max="1985" step="1" value="1985">
                             <p class="ctl-note" data-i18n="baselineNote"></p>
                         </fieldset>
-
-                        <fieldset class="ctl">
-                            <legend data-i18n="ctlScenarios"></legend>
-                            <div class="checks" id="scens">
-                                <label class="check"><input type="checkbox" value="ssp245" checked><span class="sw" style="--c:var(--s245)" aria-hidden="true"></span><span>SSP2-4.5 <span class="muted" data-i18n="medShort"></span></span></label>
-                                <label class="check"><input type="checkbox" value="ssp585" checked><span class="sw" style="--c:var(--s585)" aria-hidden="true"></span><span>SSP5-8.5 <span class="muted" data-i18n="highShort"></span></span></label>
-                            </div>
-                        </fieldset>
-
-                        <fieldset class="ctl">
-                            <legend><span data-i18n="ctlModels"></span> <span class="muted" id="modelCount"></span></legend>
-                            <div class="checks" id="models"></div>
-                            <p class="ctl-note" id="modelHint" aria-live="polite"></p>
-                            <button type="button" class="link-btn" id="allModels" data-i18n="allModels"></button>
-                        </fieldset>
-
                         <fieldset class="ctl">
                             <legend data-i18n="ctlDisplay"></legend>
                             <div class="checks">
@@ -220,21 +201,41 @@
                                 <label class="check"><input type="checkbox" id="smooth" checked><span data-i18n="smooth10"></span></label>
                             </div>
                         </fieldset>
-
-                        <fieldset class="ctl">
-                            <legend data-i18n="ctlData"></legend>
-                            <div class="seg" id="srcSeg" role="group" data-i18n-attr="aria-label:ctlData">
-                                <button type="button" data-s="real" id="realBtn" aria-pressed="false" data-i18n="srcReal"></button>
-                                <button type="button" data-s="sample" aria-pressed="false" data-i18n="srcSample"></button>
-                            </div>
-                            <p class="ctl-note" id="dataMsg" role="status"></p>
-                            <div class="ctl-links">
-                                <label class="link-btn file"><span data-i18n="loadJson"></span><input type="file" id="file" accept=".json,application/json"></label>
-                                <button type="button" class="link-btn" id="dlSample" data-i18n="dlExample"></button>
-                                <button type="button" class="link-btn" id="resetBtn" hidden></button>
-                            </div>
+                        <fieldset class="ctl" id="regionCtl">
+                            <legend><label for="region" data-i18n="ctlRegion"></label></legend>
+                            <select id="region" class="select"></select>
+                            <div id="exMap" class="ex-map" aria-hidden="true"></div>
+                            <div class="key ex-key" id="exMapKey" aria-hidden="true"></div>
+                            <p class="ctl-note" id="regionNote"></p>
                         </fieldset>
+
+                        <details class="disclosure ctl-more" id="moreData">
+                            <summary data-i18n="ctlAdvanced"></summary>
+                            <fieldset class="ctl">
+                                <legend data-i18n="ctlData"></legend>
+                                <div class="seg" id="srcSeg" role="group" data-i18n-attr="aria-label:ctlData">
+                                    <button type="button" data-s="real" id="realBtn" aria-pressed="false" data-i18n="srcReal"></button>
+                                    <button type="button" data-s="sample" aria-pressed="false" data-i18n="srcSample"></button>
+                                </div>
+                                <p class="ctl-note" id="dataMsg" role="status"></p>
+                                <div class="ctl-links">
+                                    <label class="link-btn file"><span data-i18n="loadJson"></span><input type="file" id="file" accept=".json,application/json"></label>
+                                    <button type="button" class="link-btn" id="dlSample" data-i18n="dlExample"></button>
+                                    <button type="button" class="link-btn" id="resetBtn" hidden></button>
+                                </div>
+                            </fieldset>
+                        </details>
                     </aside>
+
+                    <section class="results" aria-labelledby="statsHeading">
+                        <h3 id="statsHeading"></h3>
+                        <div id="stats" aria-live="polite"></div>
+                    </section>
+
+                    <details class="disclosure" id="tableDetails">
+                        <summary data-i18n="tableSummary"></summary>
+                        <div id="accessibleTable" class="data-table-wrap"></div>
+                    </details>
                 </div>
             </div>
         </section>

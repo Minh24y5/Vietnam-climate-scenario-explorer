@@ -58,6 +58,8 @@ function showDataMsg() {
 function useData(src, d) {
   if (src === 'real' && REG && ex.region !== 'vn') d = REG.regions[ex.region];
   source = src; DATA = d;
+  /* sample or uploaded data is never hidden: the advanced section opens whenever it is in use */
+  if (src !== 'real') $('#moreData').open = true;
   /* keep the models the user switched off; anything new to this dataset starts selected */
   const keep = modelsOf(d).filter(m => !ex.off.has(m));
   ex.models = new Set(keep.length ? keep : modelsOf(d));

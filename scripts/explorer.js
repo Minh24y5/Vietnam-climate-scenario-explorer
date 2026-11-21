@@ -37,7 +37,8 @@ function announce(text) {
 function draw() {
   const el = $('#chart'), tip = $('#tip');
   const W = el.clientWidth || 640, narrow = W < 560;
-  const H = Math.round(Math.max(300, Math.min(500, W * .52)));
+  /* phones keep the chart compact: it stays pinned above the controls under 980px */
+  const H = Math.round(Math.max(W < 560 ? 220 : 300, Math.min(500, W * .52)));
   const mg = {t: 30, r: narrow ? 98 : 172, b: 32, l: narrow ? 44 : 54};
   const V = VARS[ex.v], ms = sel();
   const svg = d3.select(el).selectAll('svg').data([0]).join('svg').attr('width', W).attr('height', H).attr('aria-hidden', 'true');

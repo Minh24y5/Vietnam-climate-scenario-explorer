@@ -13,6 +13,7 @@ function writePage() {
   $('#byline').innerHTML = C.byline;
   $('#leadP1').innerHTML = pr(C.leadP1);
   $('#pull').innerHTML = pr(C.pull);
+  $('#pullNote').innerHTML = REAL && C.pullNote ? pr(C.pullNote) : '';
   $('#stripesCap').innerHTML = pr(REAL ? C.cap : `${t('synthetic')}. ${C.cap}`);
   $('#stripesFig').setAttribute('aria-label', C.stripesAria);
   stripesKey(C);

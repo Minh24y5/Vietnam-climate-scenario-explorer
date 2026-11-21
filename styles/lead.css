@@ -16,6 +16,9 @@ h1 em{font-style:normal;display:block}
 .byline span{display:block;font-weight:400;text-transform:none;letter-spacing:0;color:var(--muted);margin-top:3px}
 .pull{border-top:3px solid var(--ink);border-bottom:1px solid var(--rule);padding:10px 0 12px;margin:6px 0 14px;font:700 clamp(30px,3vw,40px)/1.05 var(--font);font-variant-numeric:tabular-nums}
 .pull small{display:block;font:400 14px/1.4 var(--font);color:var(--muted);margin-top:6px}
+/* the global-vs-national note under the pull figure: a quiet serif aside, not part of the lead's argument */
+.pull-note{margin:0 0 14px!important;font:400 14px/1.55 var(--font-read)!important;color:var(--muted);text-align:left!important}
+.pull-note:empty{display:none}
 .jump{margin:0 0 4px!important;font:700 14px/1.4 var(--font)!important;text-align:left!important}
 .jump a{text-decoration:none;border-bottom:1px solid currentColor}
 .jump .pg{font-weight:400;color:var(--muted)}
@@ -35,7 +38,7 @@ h1 em{font-style:normal;display:block}
 .stripes-axis .t1{left:calc(65 / 151 * 100%);transform:translateX(-50%)}
 .stripes-axis .t1::before{content:"";position:absolute;left:50%;top:-6px;height:5px;border-left:1px solid var(--ctl-line)}
 .stripes-axis .t2{right:0}
-.cap{font:400 14px/1.45 var(--font);color:var(--muted);margin:6px 0 10px}
+.cap{font:400 14px/1.45 var(--font);color:var(--muted);margin:6px 0 10px;text-wrap:pretty}
 .key{display:flex;flex-direction:column;gap:5px;font-size:12px;color:var(--muted)}
 .key-row{display:flex;height:9px;max-width:300px}
 .key-row i{flex:1}
