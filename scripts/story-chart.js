@@ -7,6 +7,9 @@ const STEPS = {
   'tas-anom': {v: 'tas', mode: 'anom', end: 2014, models: true, mlabels: false, scen: [], base: true, span: true},
   'tas-245':  {v: 'tas', mode: 'anom', end: 2100, hist: true, scen: ['ssp245'], base: true},
   'tas-585':  {v: 'tas', mode: 'anom', end: 2100, hist: true, scen: ['ssp245', 'ssp585'], base: true, win: true},
+  /* the turn: the two paths before they part (2015 to the fork year) shaded as already set */
+  'tas-fork': {v: 'tas', mode: 'anom', end: 2100, hist: true, scen: ['ssp245', 'ssp585'], lock: true},
+  'close':    {v: 'tas', mode: 'anom', end: 2100, hist: true, scen: ['ssp245', 'ssp585'], lock: true, win: true},
   'pr-abs':   {v: 'pr',  mode: 'abs',  end: 2014, models: true, mlabels: true, scen: []},
   'pr-agree': {v: 'pr',  mode: 'anom', end: 2100, hist: true, scen: ['ssp245', 'ssp585'], base: true, win: true, hatch: true},
   'pr-hatch': {v: 'pr',  mode: 'anom', end: 2100, hist: true, scen: ['ssp245', 'ssp585'], base: true, win: true, hatch: true}
@@ -17,6 +20,8 @@ const STEP_TITLES = {
     'tas-anom': 'Các đường mô hình ấy, thể hiện dưới dạng thay đổi so với trung bình 1985–2014 của chính mỗi mô hình.',
     'tas-245': 'Thay đổi nhiệt độ so với 1985–2014: lịch sử và dự tính SSP2-4.5 đến 2100.',
     'tas-585': 'Thay đổi nhiệt độ so với 1985–2014 theo SSP2-4.5 và SSP5-8.5 đến 2100, tô giai đoạn 2071–2100.',
+    'tas-fork': 'Thay đổi nhiệt độ so với 1985–2014 theo SSP2-4.5 và SSP5-8.5 đến 2100, tô giai đoạn hai con đường còn đi sát nhau.',
+    'close': 'Thay đổi nhiệt độ so với 1985–2014 theo hai kịch bản, tô giai đoạn đã gần định sẵn và giai đoạn 2071–2100.',
     'pr-abs': 'Lượng mưa trung bình tháng, trung bình 10 năm của từng mô hình cho Việt Nam, 1950 đến 2014, tính bằng milimét.',
     'pr-agree': 'Thay đổi lượng mưa so với 1985–2014 theo cả hai kịch bản, gạch chéo nơi các mô hình bất đồng về ẩm hơn hay khô hơn.',
     'pr-hatch': 'Thay đổi lượng mưa so với 1985–2014 theo cả hai kịch bản, gạch chéo nơi các mô hình bất đồng về ẩm hơn hay khô hơn.'
@@ -26,6 +31,8 @@ const STEP_TITLES = {
     'tas-anom': 'The same model lines shown as change from each model\'s 1985–2014 average.',
     'tas-245': 'Temperature change from 1985–2014, history and the SSP2-4.5 projection to 2100.',
     'tas-585': 'Temperature change from 1985–2014 under SSP2-4.5 and SSP5-8.5 to 2100, with 2071–2100 shaded.',
+    'tas-fork': 'Temperature change from 1985–2014 under SSP2-4.5 and SSP5-8.5 to 2100, shading the years when the two paths stay close.',
+    'close': 'Temperature change from 1985–2014 under both scenarios, shading the years that are mostly set and 2071–2100.',
     'pr-abs': 'Each model\'s 10-year average monthly rainfall for Vietnam, 1950 to 2014, in millimetres.',
     'pr-agree': 'Rainfall change from 1985–2014 under both scenarios, hatched where models disagree on wetter or drier.',
     'pr-hatch': 'Rainfall change from 1985–2014 under both scenarios, hatched where models disagree on wetter or drier.'
@@ -47,6 +54,8 @@ function StoryChart(el) {
   const baseTxt = G.notes.append('text').attr('class', 'note').style('opacity', 0);
   const winRect = G.win.append('rect').attr('class', 'winbox').style('opacity', 0);
   const winTxt = G.notes.append('text').attr('class', 'note').text('2071–2100').style('opacity', 0);
+  const lockRect = G.win.append('rect').attr('class', 'winbox').style('opacity', 0);
+  const lockTxt = G.notes.append('text').attr('class', 'note').style('opacity', 0);
   const zero = G.zero.append('line').attr('class', 'zero').style('opacity', 0);
   const split = G.split.append('line').attr('class', 'split').style('opacity', 0);
   const projTxt = G.notes.append('text').attr('class', 'note').style('opacity', 0);
@@ -130,6 +139,10 @@ function StoryChart(el) {
     baseTxt.transition(tr).attr('x', x(1985) + 5).attr('y', H - mg.b - 8).style('opacity', st.base && st.end === 2100 && !narrow ? 1 : 0);
     winRect.transition(tr).attr('x', x(2071)).attr('y', mg.t).attr('width', Math.max(0, x(2100) - x(2071))).attr('height', ih).style('opacity', st.win ? 1 : 0);
     winTxt.transition(tr).attr('x', x(2071) + 5).attr('y', mg.t + 14).style('opacity', st.win ? 1 : 0);
+    const fk = F.fork || 2050;
+    lockRect.transition(tr).attr('x', x(2015)).attr('y', mg.t).attr('width', Math.max(0, x(fk) - x(2015))).attr('height', ih).style('opacity', st.lock ? 1 : 0);
+    lockTxt.text(LANG === 'vi' ? `2015–${fk}: gần như định sẵn` : `2015–${fk}: mostly set`);
+    lockTxt.transition(tr).attr('x', x(2015) + 5).attr('y', mg.t + 30).style('opacity', st.lock ? 1 : 0);
     zero.transition(tr).attr('x1', mg.l).attr('x2', W - mg.r).attr('y1', y(0)).attr('y2', y(0)).style('opacity', st.mode === 'anom' ? 1 : 0);
     split.transition(tr).attr('x1', x(2014.5)).attr('x2', x(2014.5)).attr('y1', mg.t).attr('y2', H - mg.b).style('opacity', st.end === 2100 ? 1 : 0);
     projTxt.transition(tr).attr('x', x(2014.5) + 6).attr('y', mg.t + 14).style('opacity', st.end === 2100 ? 1 : 0);

@@ -4,7 +4,8 @@
 /* ---------- story wiring ---------- */
 const story = StoryChart($('#storyChart'));
 const STEP_CHAPTER = {'tas-abs': 'ch-models', 'tas-anom': 'ch-change', 'tas-245': 'ch-futures', 'tas-585': 'ch-futures',
-  'map-zones': 'ch-regions', 'map-grid': 'ch-regions', 'pr-abs': 'ch-rain', 'pr-agree': 'ch-rain', 'pr-hatch': 'ch-rain'};
+  'map-zones': 'ch-regions', 'map-grid': 'ch-regions', 'map-2023': 'ch-regions', 'pr-abs': 'ch-rain', 'pr-agree': 'ch-rain', 'pr-hatch': 'ch-rain',
+  'tas-fork': 'ch-fork', close: 'ch-close'};
 let activeStep = null, stepObserver = null;
 function markChapter(id) { $$('.chapters a').forEach(a => a.setAttribute('aria-current', a.getAttribute('href') === '#' + id ? 'true' : 'false')); revealChapter(); }
 
@@ -46,9 +47,12 @@ function renderStoryMap(k) {
   $('#storyLegend').innerHTML = lg;
   rampKey($('#storyMapKey'), stripeColor, [0, 1, 2, 3, 4], v => v === 0 ? '0' : v === 4 ? `${fmt('+')(v)}&nbsp;°C` : fmt('+')(v), '');
   $('#storyMap').setAttribute('aria-label', `${t('mapTitle')}, ${SCEN[mapScen].name}: ` + ZF.order[mapScen].map(z => `${zoneName(z)} ${sg(T[z])} °C`).join('; ') + '.');
-  $('#storySource').textContent = LANG === 'vi'
+  $('#storySource').textContent = (LANG === 'vi'
     ? `Nguồn: CMIP6, ${ZF.n} mô hình, trung bình theo diện tích đất liền từng vùng; ranh giới tỉnh Natural Earth (trước sáp nhập 2025). Hai quần đảo nhỏ hơn một ô lưới nên không có số liệu.`
-    : `Source: CMIP6, ${ZF.n} models, land-area-weighted zone means; province boundaries from Natural Earth (before the 2025 mergers). Both archipelagos are smaller than a model cell, so they have no values.`;
+    : `Source: CMIP6, ${ZF.n} models, land-area-weighted zone means; province boundaries from Natural Earth (before the 2025 mergers). Both archipelagos are smaller than a model cell, so they have no values.`) +
+    (k === 'map-2023' ? (LANG === 'vi'
+      ? ' Kỷ lục nhiệt độ: Tổng cục Khí tượng Thủy văn, theo VnExpress và Tuổi Trẻ, 5/2023. Thiệt hại mất điện: Ngân hàng Thế giới, Taking Stock, 8/2023. Bão Yagi: Heinrich Böll Stiftung, 9/2024.'
+      : ' Temperature records: Vietnam\'s meteorological administration, via VnExpress and Tuoi Tre, May 2023. Blackout cost: World Bank, Taking Stock, August 2023. Typhoon Yagi: Heinrich Böll Stiftung, September 2024.') : '');
 }
 $('#mapScen').addEventListener('click', e => {
   const b = e.target.closest('button');

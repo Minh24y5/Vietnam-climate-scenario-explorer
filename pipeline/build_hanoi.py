@@ -403,6 +403,10 @@ def main():
                         for a0, b0 in ((1980, 1994), BASE, (OBS_YEARS[1] + 1, REC_YEARS[1]), TEST_YEARS)},
             'record_tx': round(float(rec_d.tasmax.max()), 1), 'record_tx_date': rec_d.tasmax.idxmax().strftime('%Y-%m-%d')}
         out['calibration'] = cal
+        # the recent years as their own calendar row (calibrated reanalysis, drift carried on)
+        recent = calendar(span(rec_d, OBS_YEARS[1] + 1, REC_YEARS[1]))
+        out['calendar']['recent'] = [round(float(x), 3) for x in recent]
+        out['calendar']['recent_years'] = [OBS_YEARS[1] + 1, REC_YEARS[1]]
         out['humid'] = {**humid, 'observed_only': True,
                         'source': 'ERA5-Land hourly 2 m temperature and dewpoint, not calibrated (the gridded observations '
                                   'and CMIP6-VN have no humidity); NOAA heat index, daily maximum per cell, city mean',

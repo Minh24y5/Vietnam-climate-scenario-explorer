@@ -28,8 +28,12 @@ function dodge(items, along, r = DOT_R, maxOff = Infinity) {
 const yFmt = d => v => fmt(`,.${d}f`)(v);
 
 /* ---------- observed hot days per year: gridded 1980–2014, calibrated reanalysis after ---------- */
-function chartPast(el) {
-  const O = HN.record || HN.obs, cut = HN.record ? HN.record.gridded_to : Infinity;
+/* opt.upTo cuts the record (the first chapter stops at 2014, the "normal" readers remember);
+   opt.turn marks the years after the gridded record, the page's turn, in the heat ink */
+function chartPast(el, opt = {}) {
+  const R0 = HN.record || HN.obs, cut = HN.record ? HN.record.gridded_to : Infinity;
+  const keep = R0.years.map((y, i) => i).filter(i => !opt.upTo || R0.years[i] <= opt.upTo);
+  const O = {years: keep.map(i => R0.years[i]), tx35: keep.map(i => R0.tx35[i])};
   const W = clear(el).clientWidth || 600, H = Math.max(160, el.clientHeight || 400);
   const m = {t: 24, r: 8, b: 26, l: 34};
   const svg = svgIn(el, W, H);
@@ -44,7 +48,7 @@ function chartPast(el) {
     .call(d3.axisBottom(x).tickValues(O.years.filter(v => v % 5 === 0)).tickFormat(d3.format('d')));
   svg.append('text').attr('class', 'unit').attr('x', 0).attr('y', 14).text(t('daysYr'));
   svg.append('g').selectAll('rect').data(O.years.map((yr, i) => ({yr, v: O.tx35[i]}))).join('rect')
-    .attr('class', d => 'hn-bar' + (d.yr > cut ? ' is-rean' : '')).attr('x', d => x(d.yr)).attr('width', x.bandwidth()).attr('y', d => y(d.v)).attr('height', d => y(0) - y(d.v));
+    .attr('class', d => 'hn-bar' + (d.yr > cut ? ' is-rean' : '')).style('fill', d => opt.turn && d.yr > cut ? calColor(1) : null).style('fill-opacity', d => opt.turn && d.yr > cut ? 1 : null).attr('x', d => x(d.yr)).attr('width', x.bandwidth()).attr('y', d => y(d.v)).attr('height', d => y(0) - y(d.v));
   /* linear trend */
   const xs = O.years, ys = O.tx35, xm = mean(xs), ym = mean(ys);
   const s = d3.sum(xs.map((v, i) => (v - xm) * (ys[i] - ym))) / d3.sum(xs.map(v => (v - xm) ** 2));
@@ -55,7 +59,7 @@ function chartPast(el) {
   svg.append('text').attr('class', 'endlabel').attr('x', x(yr) + x.bandwidth() / 2).attr('y', y(top) - 6).attr('text-anchor', 'middle').text(`${yr}: ${nf(top, 0)}`);
   const rean = O.years.some(v => v > cut);
   return `<span><i class="hn-barsw"></i>${rean ? t('gridYears') : t('perYear')}</span>` +
-    (rean ? `<span><i class="hn-barsw is-rean"></i>${t('reanYears')}</span>` : '') +
+    (rean ? `<span><i class="hn-barsw is-rean"${opt.turn ? ` style="background:${calColor(1)};opacity:1"` : ''}></i>${t('reanYears')}</span>` : '') +
     `<span><i class="hn-trendsw"></i>${rean ? t('trendLineRec') : t('trendLine')}</span><span><i class="basesw"></i>${t('baseWin')}</span>`;
 }
 
@@ -107,6 +111,56 @@ function chartTest(el) {
   });
   return `<span><i class="hn-dotsw"></i>${t('modelDotTest')}</span><span><i class="hn-medsw v"></i>${t('median')}</span>` +
     `<span><i class="hn-obssw v"></i>${t('obsTest')}</span><span><i class="basesw"></i>${t('obsTestBand')}</span><span><i class="hn-zerosw"></i>${t('obsLong')}</span>`;
+}
+
+/* ---------- the turn: where Hà Nội's recent years sit among the warming levels ---------- */
+/* one strip per indicator on a days-a-year axis: observed 1995–2014 (graphite dot), observed
+   2015–2025 as a band from the plain to the drift-carrying calibration (the heat ink, never
+   nameplate red), and the model median at each warming level as a labelled ink tick. In the
+   closing mode the span from +2 to +3 °C is shaded: what emission cuts can still avoid. */
+function chartNow(el, mode = 'turn') {
+  const W = clear(el).clientWidth || 600, H = Math.max(200, el.clientHeight || 400);
+  const m = {t: 6, r: 18, b: 4, l: 14};
+  const svg = svgIn(el, W, H), F = HN_F, Rf = F.rec, vi = LANG === 'vi';
+  const rows = (H < 330 ? ['tx35', 'tn28'] : ['tx35', 'tx37', 'tn28']).filter(k => Rf && Rf.P[Rf.rk][k] != null);
+  const rh = (H - m.t - m.b) / rows.length, ink = calColor(1), yrs = Rf.rk.replace('-', '–');
+  rows.forEach((k, i) => {
+    const ob = F.O.base[k], rc = Rf.range(k), lv = LEVELS.map(l => ({l, v: F.L[l][k].abs.med}));
+    const x = d3.scaleLinear([0, d3.max(lv, d => d.v) * 1.08], [m.l, W - m.r]).nice();
+    const y0 = m.t + i * rh, lvY = y0 + 44, yc = y0 + 62, axisY = Math.min(y0 + rh - 22, yc + 40);
+    const f = v => nf(v, 0);
+    svg.append('text').attr('class', 'hn-rowlab').attr('x', 0).attr('y', y0 + 14).text(`${indName(k)}, ${indUnit(k)}`);
+    svg.append('g').attr('class', 'grid').attr('transform', `translate(0,${axisY})`).call(d3.axisBottom(x).ticks(5).tickSize(-(axisY - lvY - 4)).tickFormat(''));
+    svg.append('g').attr('class', 'axis').attr('transform', `translate(0,${axisY})`).call(d3.axisBottom(x).ticks(5).tickFormat(v => fmt(',')(v)));
+    if (mode === 'close') {
+      const a = x(lv[1].v), b = x(lv[2].v);
+      svg.append('rect').attr('class', 'basebox').attr('x', a).attr('width', b - a).attr('y', lvY + 4).attr('height', axisY - lvY - 4);
+      svg.append('text').attr('class', 'note hn-halo').attr('x', (a + b) / 2).attr('y', axisY - 6).attr('text-anchor', 'middle')
+        .text(`${vi ? 'còn tránh được' : 'still avoidable'}: ${f(lv[2].v - lv[1].v)}`);
+    }
+    /* level labels centred on their ticks; one that would touch the label before it steps up a line */
+    let prevR = -Infinity, prevUp = false;
+    for (const d of lv) {
+      const lab = svg.append('text').attr('class', 'endlabel').attr('text-anchor', 'middle').text(`${fmt('+')(+d.l)}: ${f(d.v)}`);
+      const w = lab.node().getComputedTextLength(), cx = Math.min(Math.max(x(d.v), w / 2), W - w / 2);
+      const up = cx - w / 2 < prevR + 6 && !prevUp;
+      lab.attr('x', cx).attr('y', up ? lvY - 14 : lvY);
+      svg.append('line').attr('class', mode === 'close' && d.l === '2.0' ? 'hn-med' : 'hn-med2').attr('x1', x(d.v)).attr('x2', x(d.v)).attr('y1', (up ? lvY - 14 : lvY) + 4).attr('y2', yc + 12);
+      prevR = cx + w / 2; prevUp = up;
+    }
+    svg.append('rect').attr('x', x(rc.lo)).attr('width', Math.max(3, x(rc.hi) - x(rc.lo))).attr('y', yc - 7).attr('height', 14).style('fill', ink);
+    svg.append('circle').attr('class', 'hn-dot').attr('cx', x(ob)).attr('cy', yc).attr('r', DOT_R + 1).style('fill-opacity', 1);
+    /* labels under the marks: 1995–2014 ends at its dot, the recent range starts at its band */
+    const ol = svg.append('text').attr('class', 'note hn-halo').attr('y', yc + 24).text(`1995–2014: ${f(ob)}`);
+    const ow = ol.node().getComputedTextLength(), oEnd = x(ob) + 4;
+    ol.attr('x', Math.max(0, oEnd - ow));
+    const rl = svg.append('text').attr('class', 'note hn-obslab').attr('y', yc + 24).style('fill', ink).text(`${yrs}: ${f(rc.lo)}–${f(rc.hi)}`);
+    const rw = rl.node().getComputedTextLength();
+    rl.attr('x', Math.min(Math.max(x(rc.lo), Math.max(0, oEnd - ow) + ow + 10), W - m.r - rw));
+  });
+  return `<span><i class="hn-dotsw" style="opacity:1"></i>${t('obsLong')}</span><span><i class="hn-barsw" style="background:${ink}"></i>${vi ? `Quan trắc ${yrs}, tùy cách hiệu chỉnh` : `Observed ${yrs}, range across calibrations`}</span>` +
+    `<span><i class="hn-medsw v"></i>${vi ? 'Trung vị các mô hình ở mỗi mức ấm lên toàn cầu' : 'Model median at each global warming level'}</span>` +
+    (mode === 'close' ? `<span><i class="basesw"></i>${vi ? 'Từ +2 đến +3 °C' : 'From +2 to +3 °C'}</span>` : '');
 }
 
 /* ---------- the year each model reaches +2 °C, by scenario ---------- */

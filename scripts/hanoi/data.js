@@ -67,7 +67,7 @@ function hnFacts() {
     hotMax, hotYear,
     obsTrend: O.trend,
     trend: {tas: trends('tas'), tx35: trends('tx35')},
-    cal: {obs: season(HN.calendar.obs), ...Object.fromEntries(LEVELS.map(lv => [lv, season(HN.calendar[lv])]))},
+    cal: {obs: season(HN.calendar.obs), recent: HN.calendar.recent ? season(HN.calendar.recent) : null, ...Object.fromEntries(LEVELS.map(lv => [lv, season(HN.calendar[lv])]))},
     gw0: HN.meta.baseline_global_warming,
     rec: recFacts(), test: testFacts(), humid: HN.humid || null, calib: HN.calibration || null
   };
@@ -78,7 +78,10 @@ function recFacts() {
   if (!R) return null;
   const hotMax = d3.max(R.tx35), i = R.tx35.indexOf(hotMax);
   const top = R.years.map((y, j) => ({y, v: R.tx35[j]})).sort((a, b) => b.v - a.v);
-  return {R, to: d3.max(R.years), cut: R.gridded_to, hotMax, hotYear: R.years[i], top, P: R.periods, trend: R.trend,
+  /* 2015–2025 per indicator as a range: the plain mapping (a low end) to the drift-carrying one */
+  const rk = `${R.gridded_to + 1}-${d3.max(R.years)}`, plain = HN.calibration && HN.calibration.without_drift && HN.calibration.without_drift[rk];
+  const recent = k => { const hi = R.periods[rk][k], lo = plain ? plain[k] : hi; return {lo: Math.min(lo, hi), hi: Math.max(lo, hi)}; };
+  return {R, to: d3.max(R.years), cut: R.gridded_to, hotMax, hotYear: R.years[i], top, P: R.periods, trend: R.trend, rk, range: recent,
     recent: top.filter(d => d.y > R.gridded_to).length, nRecent: R.years.filter(y => y > R.gridded_to).length};
 }
 /* the matched-warming-level test: per indicator, the models' change from their own 1995–2014 and the observed change */

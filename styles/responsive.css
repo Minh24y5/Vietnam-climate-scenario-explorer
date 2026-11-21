@@ -14,7 +14,7 @@
     padding:0 var(--gutter);border-right:0;border-bottom:1px solid var(--rule);overflow-x:auto;overflow-y:hidden;
     overscroll-behavior-x:contain;scrollbar-width:none}
   .chapters::-webkit-scrollbar{display:none}
-  .rail-head{display:none}
+  .rail-head,.chapters .rail-act{display:none}
   .chapters ul{display:flex}
   .chapters li{display:flex}
   .chapters a{min-height:0;padding:0 12px;border-left:0;border-bottom:3px solid transparent;border-top:3px solid transparent;white-space:nowrap;font-size:14px}

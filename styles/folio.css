@@ -19,6 +19,9 @@ main,.imprint{margin-left:var(--rail-w)}
 .chapters a{display:flex;align-items:center;min-height:38px;padding:4px 14px 4px 15px;border-left:3px solid transparent;color:var(--ink);text-decoration:none;font:500 15px/1.25 var(--font)}
 .chapters a:hover{color:var(--red)}
 .chapters a[aria-current="true"]{border-left-color:var(--ink);font-weight:700}
+/* the three acts of the story (what we know, but, therefore) as quiet heads in the rail */
+.rail-act{margin:14px 16px 2px 18px;font:900 11px/1.2 var(--font);text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
+.rail-act:first-child{margin-top:0}
 .rail-other{margin:16px 0 0;padding-top:14px;border-top:1px solid var(--line)}
 .rail-kicker{display:block;margin:0 16px 4px 18px;font:900 12px/1 var(--font);text-transform:uppercase;letter-spacing:.03em;color:var(--muted)}
 .rail-other a{font-weight:700}

@@ -6,7 +6,8 @@ const HN_URL = 'data/hanoi/hanoi.json';
 
 Object.assign(S.vi, {
   skip: 'Bỏ qua, đến phần tự khám phá', section: 'Hà\u00a0Nội', nameplate: 'Kịch bản khí hậu Việt Nam', navLabel: 'Các chương',
-  navPast: 'Đã trải qua', navLevels: 'Mức ấm lên', navHeat: 'Nắng nóng', navRain: 'Mưa', navCheck: 'Độ tin cậy', navExplore: 'Tự khám phá',
+  navPast: 'Đã trải qua', navLevels: 'Mức ấm lên', navHeat: 'Nắng nóng', navRain: 'Mưa', navEarly: 'Đến sớm', navClose: 'Chuẩn bị cho +2 °C', navExplore: 'Tự khám phá',
+  actAnd: 'Điều ta biết', actBut: 'Nhưng', actThen: 'Vì vậy', kickerBut: 'Nhưng', kickerThen: 'Vì vậy',
   navNationalKicker: 'Trang chính', navNational: 'Cả nước',
   storyLabel: 'Bài viết theo chương',
   jumpStory: 'Xem tiếp: Những gì Hà\u00a0Nội đã trải qua', jumpStoryPg: '(chương 1)',
@@ -42,7 +43,8 @@ Object.assign(S.vi, {
 
 Object.assign(S.en, {
   skip: 'Skip to the explorer', section: 'Hanoi', nameplate: 'Vietnam Climate Scenario Explorer', navLabel: 'Chapters',
-  navPast: 'So far', navLevels: 'Warming levels', navHeat: 'Heat', navRain: 'Rain', navCheck: 'Can we trust it', navExplore: 'Explorer',
+  navPast: 'So far', navLevels: 'Warming levels', navHeat: 'Heat', navRain: 'Rain', navEarly: 'Arriving early', navClose: 'Plan for +2 °C', navExplore: 'Explorer',
+  actAnd: 'What we know', actBut: 'But', actThen: 'Therefore', kickerBut: 'But', kickerThen: 'Therefore',
   navNationalKicker: 'Main page', navNational: 'All of Vietnam',
   storyLabel: 'Story in chapters',
   jumpStory: 'Continued: what Hanoi has lived through', jumpStoryPg: '(chapter 1)',
@@ -94,7 +96,7 @@ const LEVELS = ['1.5', '2.0', '3.0'];
 /* where the real world is: human-induced warming in 2025 and its rate (Forster et al. 2026,
    Indicators of Global Climate Change 2025, ESSD 18:3889). The "today's rate" year is a plain
    extrapolation of that rate, not a projection */
-const GW_NOW = {year: 2025, gw: 1.37, rate: 0.27};
+const GW_NOW = {year: 2025, gw: 1.37, rate: 0.27, decade: 1.24};  /* decade: human-induced, 2016–2025 mean */
 const atTodaysRate = lv => Math.round(GW_NOW.year + (+lv - GW_NOW.gw) / GW_NOW.rate * 10);
 /* "+1,5 °C" / "+2 °C" in the reader's locale */
 const lvName = lv => `${fmt('+')(+lv)} °C`;

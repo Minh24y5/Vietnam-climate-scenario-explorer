@@ -3,7 +3,10 @@
    steps the way the national page swaps its chart and map. */
 
 const HN_STEPS = {
-  past:   el => chartPast(el),
+  past:   el => chartPast(el, {upTo: HN.record ? HN.record.gridded_to : null}),
+  now:    el => chartNow(el, 'turn'),
+  record: el => chartPast(el, {turn: true}),
+  close:  el => chartNow(el, 'close'),
   when:   el => chartWhen(el, '2.0'),
   hot:    el => chartLevels(el, 'tx35'),
   bands:  el => chartLevels(el, 'tx37', 'abs', {also: 'tx39'}),
@@ -12,7 +15,8 @@ const HN_STEPS = {
   check:  el => chartTrend(el),
   test:   el => chartTest(el)
 };
-const HN_CHAPTER = {past: 'ch-past', when: 'ch-levels', hot: 'ch-heat', bands: 'ch-heat', nights: 'ch-heat', rain: 'ch-rain', check: 'ch-check', test: 'ch-check'};
+const HN_CHAPTER = {past: 'ch-past', when: 'ch-levels', hot: 'ch-heat', bands: 'ch-heat', nights: 'ch-heat', rain: 'ch-rain',
+  now: 'ch-early', record: 'ch-early', check: 'ch-early', test: 'ch-early', close: 'ch-close'};
 let hnStep = null, hnObserver = null, hnSwapT = null, hnPending = null;
 function markChapter(id) { $$('.chapters a').forEach(a => a.setAttribute('aria-current', a.getAttribute('href') === '#' + id ? 'true' : 'false')); revealChapter(); }
 

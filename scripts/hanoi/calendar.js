@@ -20,7 +20,10 @@ const calTop = () => Math.min(1, Math.ceil(d3.max(calRows(), r => d3.max(r.d)) *
 const MONTH_START = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334];
 
 function calRows() {
-  return [{key: 'obs', d: HN.calendar.obs}, ...LEVELS.filter(lv => HN.calendar[lv]).map(lv => ({key: lv, d: HN.calendar[lv]}))];
+  /* observed 1995–2014, then the observed recent years (the page's turn: they already sit close to
+     the +1.5 °C row), then each warming level */
+  const recent = HN.calendar.recent ? [{key: 'recent', d: HN.calendar.recent}] : [];
+  return [{key: 'obs', d: HN.calendar.obs}, ...recent, ...LEVELS.filter(lv => HN.calendar[lv]).map(lv => ({key: lv, d: HN.calendar[lv]}))];
 }
 function drawCalendar() {
   const rows = calRows(), n = rows.length;
@@ -34,8 +37,10 @@ function drawCalendar() {
 }
 function calText() {
   const rows = calRows();
+  const ry = HN.calendar.recent_years;
   $('#calLabels').innerHTML = rows.map(r => r.key === 'obs'
     ? `<span><b>1995–2014</b> <span class="long">${t('obsShort').toLowerCase()}</span></span>`
+    : r.key === 'recent' ? `<span class="is-turn"><b>${ry[0]}–${ry[1]}</b> <span class="long">${t('obsShort').toLowerCase()}</span></span>`
     : `<span><b>${lvName(r.key)}</b></span>`).join('');
   const mon = LANG === 'vi' ? ['T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T8', 'T9', 'T10', 'T11', 'T12']
     : ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
