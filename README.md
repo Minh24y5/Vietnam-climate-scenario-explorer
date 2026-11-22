@@ -94,5 +94,3 @@ PROJECT_SUMMARY.md       a fuller account of the story, data, methods and open i
 - Projected humidity comes from a different bias correction (NEX-GDDP) than the rest of the Hà Nội report, and only its change is used.
 - Effects on health, work and crops come from published studies; they are not computed for each warming level.
 - There is no comparison yet with the Ministry of Agriculture and Environment's 2025 climate scenarios.
-
-`PROJECT_SUMMARY.md` lists the open issues in full.
