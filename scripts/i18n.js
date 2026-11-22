@@ -26,7 +26,7 @@ const yTick = mode => v => mode === 'anom' ? (v === 0 ? '0' : fmt('+')(v)) : fmt
 const S = {
   vi: {
     skip: 'Bỏ qua, đến phần tự khám phá', section: 'Khí hậu', nameplate: 'Kịch bản khí hậu Việt Nam', navLabel: 'Các chương',
-    navModels: 'Mô hình', navChange: 'Thay đổi', navFutures: 'Hai tương lai', navRegions: 'Các vùng', navRain: 'Lượng mưa', navExplore: 'Tự khám phá',
+    navModels: 'Mô hình', navChange: 'Thay đổi', navFutures: 'Hai tương lai', navRegions: 'Các vùng', navRain: 'Lượng mưa', navDrought: 'Khô hạn', navLives: 'Đời sống', navExplore: 'Tự khám phá',
     navFork: 'Đã gần định sẵn', navClose: 'Hai việc',
     actAnd: 'Điều ta biết', actBut: 'Nhưng', actThen: 'Vì vậy',
     navHanoiKicker: 'Bài riêng', navHanoi: 'Hà\u00a0Nội nóng lên',
@@ -71,7 +71,7 @@ const S = {
   },
   en: {
     skip: 'Skip to the explorer', section: 'Climate', nameplate: 'Vietnam Climate Scenario Explorer', navLabel: 'Chapters',
-    navModels: 'Models', navChange: 'Change', navFutures: 'Two futures', navRegions: 'Regions', navRain: 'Rain', navExplore: 'Explorer',
+    navModels: 'Models', navChange: 'Change', navFutures: 'Two futures', navRegions: 'Regions', navRain: 'Rain', navDrought: 'Drought', navLives: 'Lives', navExplore: 'Explorer',
     navFork: 'Mostly set', navClose: 'Two jobs',
     actAnd: 'What we know', actBut: 'But', actThen: 'Therefore',
     navHanoiKicker: 'Special report', navHanoi: 'Hanoi heats up',

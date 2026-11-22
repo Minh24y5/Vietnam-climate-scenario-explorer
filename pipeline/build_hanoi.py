@@ -242,7 +242,30 @@ def daily_r(obs, cal, years):
     return out
 
 
-def observed_record(obs, era_path):
+def rain_source(obs, cal, chirps_path):
+    """CHIRPS against ERA5 for rain after 2014: both quantile-mapped to OBS on the fit years and checked on the
+    held-out years. CHIRPS is chosen when its daily and yearly correlations with OBS both beat ERA5's.
+    Returns (CHIRPS frame mapped on all of CAL_YEARS or None, report)."""
+    if not chirps_path or not os.path.exists(chirps_path):
+        return None, {'source': 'era5', 'note': 'no CHIRPS series'}
+    c = pd.read_csv(chirps_path)
+    ch = pd.DataFrame({'pr': c.pr.values}, index=pd.to_datetime(c.date))
+    held = calibrate(ch, obs, (1981, FIT_YEARS[1]), cols=('pr',), carry_drift=False)
+    chk = lambda d: yearly(span(d, *CHECK_YEARS))
+    sc = scores(chk(obs[['pr']]), chk(ch), chk(held), RAIN)
+    d = span(pd.concat([obs.pr, held.pr], axis=1, keys=['o', 'c']).dropna(), *CHECK_YEARS)
+    r_daily = round(float(np.corrcoef(d.o, d.c)[0, 1]), 3)
+    e_daily, e_year = cal['held_out']['daily_r']['pr'], cal['held_out']['check']['pr']['r_yearly']
+    win = r_daily > e_daily and (sc['pr']['r_yearly'] or 0) >= (e_year or 0)
+    rep = {'source': 'chirps' if win else 'era5',
+           'chirps_held_out': {'check': sc, 'daily_r': r_daily},
+           'era5_held_out': {'daily_r': e_daily, 'r_yearly': e_year},
+           'note': 'CHIRPS v2.0 and ERA5 each quantile-mapped to OBS per calendar month on 1981-2004, checked on 2005-2014'}
+    full = calibrate(ch, obs, (1981, CAL_YEARS[1]), cols=('pr',), carry_drift=False) if win else None
+    return full, rep
+
+
+def observed_record(obs, era_path, chirps_path=None):
     """OBS 1980-2014 continued by calibrated reanalysis to 2025; the held-out check; humid heat.
     Returns (daily record, calibration report, humid heat, calibrated-only indicators over TEST_YEARS)."""
     if not era_path or not os.path.exists(era_path):
@@ -268,6 +291,13 @@ def observed_record(obs, era_path):
                      'daily_r': daily_r(obs, held, CHECK_YEARS)},
         'in_sample': scores(*(yearly(span(d, *CAL_YEARS)) for d in (obs, era, full)), keys),
     }
+    ch_full, rain = rain_source(obs, cal, chirps_path)
+    cal['rain'] = rain
+    if ch_full is not None:
+        # rain after 2014 from CHIRPS (it beat ERA5 on the held-out years); temperatures stay ERA5-Land
+        after = span(ch_full, OBS_YEARS[1] + 1, REC_YEARS[1]).pr
+        for d in (full, plain):
+            d.loc[after.index.intersection(d.index), 'pr'] = after.reindex(d.index.intersection(after.index)).values
     cols = ['tas', 'tasmax', 'tasmin', 'pr']
     rec = pd.concat([span(obs, *OBS_YEARS)[cols], span(full, OBS_YEARS[1] + 1, REC_YEARS[1])[cols]]).sort_index()
     rec_plain = pd.concat([span(obs, *OBS_YEARS)[cols], span(plain, OBS_YEARS[1] + 1, REC_YEARS[1])[cols]]).sort_index()
@@ -289,6 +319,7 @@ def main():
     p = argparse.ArgumentParser(description=__doc__.split('\n')[0])
     p.add_argument('--series', default='D:/cmip6vn/hanoi/series')
     p.add_argument('--era5land', default='D:/era5land/hanoi/ERA5L.csv.gz', help='daily reanalysis city series (pipeline/fetch_era5land.py)')
+    p.add_argument('--chirps', default='D:/chirps/hanoi_chirps.csv.gz', help='CHIRPS daily rain (pipeline/fetch_chirps.py); used after 2014 if it beats ERA5')
     p.add_argument('--gwl', default=GWL, help='warming levels JSON (default data/hanoi/warming_levels.json)')
     p.add_argument('--out', default=OUT, help='output JSON (default data/hanoi/hanoi.json)')
     a = p.parse_args()
@@ -297,7 +328,7 @@ def main():
     obs = wide(pd.read_csv(os.path.join(a.series, 'OBS.csv.gz')))
     oy = yearly(obs).loc[OBS_YEARS[0]:OBS_YEARS[1]]
     ob = obs[(obs.index.year >= BASE[0]) & (obs.index.year <= BASE[1])]
-    rec_d, cal, humid, era_only = observed_record(obs, a.era5land)
+    rec_d, cal, humid, era_only = observed_record(obs, a.era5land, a.chirps)
     ry = yearly(rec_d) if rec_d is not None else None
     test_lv = str(gwl['observed_level']['level']) if gwl.get('observed_level') else None
 
@@ -394,9 +425,11 @@ def main():
             '(Hersbach et al. 2020, QJRMS 146:1999), Copernicus Climate Change Service, via the Open-Meteo archive API '
             '(CC BY 4.0); pipeline/fetch_era5land.py')
         out['meta']['record_years'] = list(REC_YEARS)
+        if cal['rain']['source'] == 'chirps':
+            out['meta']['sources']['chirps'] = 'CHIRPS v2.0 (Funk et al. 2015, Sci Data 2:150066), daily, via the IRI Data Library; rain after 2014'
         out['record'] = {
             'years': [int(y) for y in ry.index], 'gridded_to': OBS_YEARS[1],
-            'source': 'gridded observations 1980-2014, then ERA5-Land (temperature) and ERA5 (rain) quantile-mapped to them',
+            'source': 'gridded observations 1980-2014, then ERA5-Land (temperature) and ' + ('CHIRPS' if cal['rain']['source'] == 'chirps' else 'ERA5') + ' (rain) quantile-mapped to them',
             **{k: [round(float(v), 2) for v in ry[k]] for k in ry.columns},
             'trend': rnd({'tas': trend(ry.tas), 'tx35': trend(ry.tx35)}, 3),
             'periods': {f'{a0}-{b0}': rnd(ry.loc[a0:b0].mean().to_dict())

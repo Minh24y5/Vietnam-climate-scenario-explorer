@@ -33,7 +33,7 @@ function writeExUrl() {
 function buildExControls() {
   const grp = (kind, label) => `<optgroup label="${label}">` + Object.keys(IND).filter(k => IND[k].kind === kind)
     .map(k => `<option value="${k}"${k === EX.k ? ' selected' : ''}>${indName(k)}</option>`).join('') + '</optgroup>';
-  $('#ind').innerHTML = grp('t', LANG === 'vi' ? 'Nhiệt độ' : 'Temperature') + grp('r', LANG === 'vi' ? 'Mưa' : 'Rain');
+  $('#ind').innerHTML = grp('t', LANG === 'vi' ? 'Nhiệt độ' : 'Temperature') + grp('r', LANG === 'vi' ? 'Mưa' : 'Rain') + (Object.keys(IND).some(k => IND[k].kind === 'w') ? grp('w', t('grpWater')) : '');
   const ms = modelsFor(EX.k).sort();
   if (EX.hl && !ms.includes(EX.hl)) EX.hl = '';
   $('#hl').innerHTML = `<option value="">${t('hlNone')}</option>` + ms.map(m => `<option value="${m}"${m === EX.hl ? ' selected' : ''}>${m}</option>`).join('');

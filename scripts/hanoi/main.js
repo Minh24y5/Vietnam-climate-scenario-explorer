@@ -7,7 +7,7 @@ let HN_F = null, HN_C = null;
 function writeHn() {
   applyStatic();
   HN_F = hnFacts();
-  HN_C = hnCopy(HN_F);
+  HN_C = applyWaterCopy(hnCopy(HN_F), HN_F);
   const C = HN_C;
   /* print setting for justified columns, as on the national page */
   const pr = s => s.replace(/&nbsp;(°C|mm)/g, ' $1').replace(/SSP(\d)-(\d\.\d)/g, '<span class="nw">SSP$1-$2</span>');
@@ -73,6 +73,16 @@ async function initHn() {
     if (!r.ok) throw new Error(`${HN_URL}: HTTP ${r.status}`);
     HN = await r.json();
     if (!Object.values(HN.models).some(m => m.temperature)) throw new Error('no model with temperature in hanoi.json yet');
+    /* the water file is optional: without it its indicators and steps leave the page */
+    try {
+      const w = await fetch(HN_WATER_URL, {cache: 'no-cache'});
+      if (!w.ok) throw new Error(`${HN_WATER_URL}: HTTP ${w.status}`);
+      mergeWater(await w.json());
+    } catch (err) {
+      console.warn('Hà Nội water data not loaded:', err);
+      HN.water = null;
+      for (const k of WATER_KEYS) delete IND[k];
+    }
   } catch (err) {
     console.warn('Hà Nội data not loaded. Serve the site over http(s), and run pipeline/build_hanoi.py if data/hanoi/hanoi.json is missing.', err);
     HN = null;

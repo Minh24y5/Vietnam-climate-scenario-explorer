@@ -51,10 +51,12 @@
             <li><a href="#ch-models" data-i18n="navModels"></a></li>
             <li><a href="#ch-change" data-i18n="navChange"></a></li>
             <li><a href="#ch-futures" data-i18n="navFutures"></a></li>
-            <li><a href="#ch-rain" data-i18n="navRain"></a></li>
             <li class="rail-act" aria-hidden="true" data-i18n="actBut"></li>
             <li><a href="#ch-fork" data-i18n="navFork"></a></li>
             <li><a href="#ch-regions" data-i18n="navRegions"></a></li>
+            <li><a href="#ch-rain" data-i18n="navRain"></a></li>
+            <li><a href="#ch-drought" data-i18n="navDrought"></a></li>
+            <li><a href="#ch-lives" data-i18n="navLives"></a></li>
             <li class="rail-act" aria-hidden="true" data-i18n="actThen"></li>
             <li><a href="#ch-close" data-i18n="navClose"></a></li>
             <li><a href="#explore" data-i18n="navExplore"></a></li>
@@ -109,6 +111,9 @@
             <div class="story-graphic">
                 <div class="story-frame">
                     <div id="storyChart" class="story-chart" role="img"></div>
+                    <div id="storyScatter" class="story-chart" role="img" hidden></div>
+                    <div id="storySeasons" class="story-chart" role="img" hidden></div>
+                    <div id="storyLives" class="story-chart" role="img" hidden></div>
                     <div id="storyMapWrap" class="story-map" hidden>
                         <div class="map-head">
                             <span class="map-title" id="storyMapTitle"></span>
@@ -129,13 +134,17 @@
                 <article class="step" data-step="tas-anom" id="ch-change"><div class="step-body" data-text="tas-anom"></div></article>
                 <article class="step" data-step="tas-245" id="ch-futures"><div class="step-body" data-text="tas-245"></div></article>
                 <article class="step" data-step="tas-585"><div class="step-body" data-text="tas-585"></div></article>
-                <article class="step" data-step="pr-abs" id="ch-rain"><div class="step-body" data-text="pr-abs"></div></article>
-                <article class="step" data-step="pr-agree"><div class="step-body" data-text="pr-agree"></div></article>
-                <article class="step" data-step="pr-hatch"><div class="step-body" data-text="pr-hatch"></div></article>
                 <article class="step" data-step="tas-fork" id="ch-fork"><div class="step-body" data-text="tas-fork"></div></article>
                 <article class="step" data-step="map-zones" id="ch-regions"><div class="step-body" data-text="map-zones"></div></article>
                 <article class="step" data-step="map-grid"><div class="step-body" data-text="map-grid"></div></article>
                 <article class="step" data-step="map-2023"><div class="step-body" data-text="map-2023"></div></article>
+                <article class="step" data-step="pr-abs" id="ch-rain"><div class="step-body" data-text="pr-abs"></div></article>
+                <article class="step" data-step="pr-agree"><div class="step-body" data-text="pr-agree"></div></article>
+                <article class="step" data-step="pr-hatch"><div class="step-body" data-text="pr-hatch"></div></article>
+                <article class="step" data-step="pr-scale"><div class="step-body" data-text="pr-scale"></div></article>
+                <article class="step" data-step="pr-season"><div class="step-body" data-text="pr-season"></div></article>
+                <article class="step" data-step="map-drought" id="ch-drought"><div class="step-body" data-text="map-drought"></div></article>
+                <article class="step" data-step="lives" id="ch-lives"><div class="step-body" data-text="lives"></div></article>
                 <article class="step" data-step="close" id="ch-close"><div class="step-body" data-text="close"></div></article>
             </div>
         </section>
@@ -287,6 +296,8 @@ json.dump(out, open("vietnam_cmip6.json", "w"))</code></pre>
     <script src="scripts/regions.js"></script>
     <script src="scripts/zone-map.js"></script>
     <script src="scripts/story-chart.js"></script>
+    <script src="scripts/story-scatter.js"></script>
+    <script src="scripts/water.js"></script>
     <script src="scripts/explorer.js"></script>
     <script src="scripts/explorer-controls.js"></script>
     <script src="scripts/story.js"></script>

@@ -11,6 +11,10 @@
 .story-chart svg{display:block;overflow:visible}
 .story-legend{display:flex;flex-wrap:wrap;gap:6px 16px;padding-top:10px;font-size:13px;color:var(--muted)}
 .story-legend span{display:inline-flex;align-items:center;gap:7px}
+.story-legend .dot{display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--c);flex-shrink:0}
+.story-legend .ln.dash{height:0;background:none;border-top:2px dashed var(--c)}
+.life-ev{font:400 14px/1.35 var(--font);color:var(--ink);max-width:46ch}
+.life-ev.is-narrow{font-size:12.5px;line-height:1.3}
 .story-source{margin:6px 0 0;font-size:13px;line-height:1.45;color:var(--muted);max-width:72ch;border-top:1px solid var(--line);padding-top:6px}
 .story-steps{grid-column:1;grid-row:1;padding:12vh clamp(24px,3.5vw,48px) 30vh 0}
 .step{min-height:88vh;display:flex;align-items:center}

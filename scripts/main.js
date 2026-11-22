@@ -17,7 +17,7 @@ function writePage() {
   $('#stripesCap').innerHTML = pr(REAL ? C.cap : `${t('synthetic')}. ${C.cap}`);
   $('#stripesFig').setAttribute('aria-label', C.stripesAria);
   stripesKey(C);
-  const MC = ZF ? mapCopy(ZF) : {};
+  const MC = {...(ZF ? mapCopy(ZF) : {}), ...(WF && REAL ? waterCopy(WF, ZF) : {})};
   $$('.step-body').forEach(b => { b.innerHTML = pr(C.steps[b.dataset.text] ?? MC[b.dataset.text] ?? ''); });
   buildRegionSelect();
   $('#storySource').textContent = REAL ? C.source : `${t('synthetic')}.`;
@@ -38,7 +38,7 @@ function setLang(l) {
   writePage();
   syncTheme();
   $('#modelHint').textContent = '';
-  if (figMode === 'map') renderStoryMap(activeStep); else story.redraw();
+  redrawFig();
   render();
   sizeStripeAxis();
 }
@@ -52,7 +52,7 @@ async function getJson(url) {
 }
 async function init() {
   applyStatic();
-  const [nat, reg, topo] = await Promise.allSettled([getJson(REAL_URL), getJson(REG_URL), getJson(TOPO_URL)]);
+  const [nat, reg, topo, wat] = await Promise.allSettled([getJson(REAL_URL), getJson(REG_URL), getJson(TOPO_URL), getJson(WATER_URL)]);
   try {
     if (nat.status === 'rejected') throw nat.reason;
     checkData(nat.value);
@@ -77,6 +77,18 @@ async function init() {
     $$('.step[data-step^="map-"]').forEach(s => s.remove());
     const nav = $('.chapters a[href="#ch-regions"]'); if (nav) nav.parentElement.remove();
     $('#regionCtl').hidden = true;
+  }
+  try {
+    if (!REG) throw new Error('no regional data');
+    if (wat.status === 'rejected') throw wat.reason;
+    checkWater(wat.value);
+    WAT = wat.value; WF = waterFacts(WAT);
+  } catch (err) {
+    /* no water data: its steps and rail links leave the page */
+    console.warn('Water data not loaded:', err);
+    WAT = null; WF = null;
+    for (const k of ['pr-season', 'map-drought', 'lives']) { const s = $(`.step[data-step="${k}"]`); if (s) s.parentNode.removeChild(s); }
+    for (const h of ['#ch-drought', '#ch-lives']) { const a = $(`.chapters a[href="${h}"]`); if (a) a.parentElement.parentNode.removeChild(a.parentElement); }
   }
   SITE = REAL || SAMPLE;
   drawStripes(SITE);
