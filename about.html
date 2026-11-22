@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Về dự án · About the project</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <meta name="description" content="Giới thiệu dự án Kịch bản khí hậu Việt Nam: dữ liệu, cách dựng lại số liệu và giới hạn. About the Vietnam Climate Scenario Explorer: its data, how to rebuild it, and its limits.">
+    <meta name="theme-color" content="#f7f6f2" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#1e1e1c" media="(prefers-color-scheme: dark)">
+    <script>
+        /* apply the reader's saved light/dark choice before the page paints */
+        try { var th = localStorage.getItem('theme'); if (th === 'light' || th === 'dark') document.documentElement.setAttribute('data-theme', th); } catch (e) {}
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400&family=Roboto:ital,wght@0,400;0,500;0,700;1,400&display=swap">
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/readme.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
+</head>
+<body class="readme-page">
+    <a class="skip" href="#readme" data-i18n="rmSkip"></a>
+
+    <header class="folio">
+        <div class="folio-in">
+            <span class="sec-block" data-i18n="rmSection"></span>
+            <a class="nameplate" href="index.html" data-i18n="nameplate"></a>
+            <div class="folio-ctl">
+                <div class="lang" id="langSeg" role="group" data-i18n-attr="aria-label:langLabel">
+                    <button type="button" data-lang="vi" lang="vi" aria-pressed="true">VI</button>
+                    <button type="button" data-lang="en" lang="en" aria-pressed="false">EN</button>
+                </div>
+                <div class="lang theme" id="themeSeg" role="group" data-i18n-attr="aria-label:themeLabel">
+                    <button type="button" data-theme="light" aria-pressed="false" data-i18n-attr="aria-label:themeLight">
+                        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.6M12 18.9v2.6M2.5 12h2.6M18.9 12h2.6M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8"/></svg>
+                    </button>
+                    <button type="button" data-theme="dark" aria-pressed="false" data-i18n-attr="aria-label:themeDark">
+                        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19.5 14.6A8 8 0 0 1 9.4 4.5a8 8 0 1 0 10.1 10.1z"/></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main id="top">
+        <div class="wrap readme-wrap">
+            <p class="readme-back"><a href="index.html" data-i18n="rmBackVn"></a> <span aria-hidden="true">·</span> <a href="hanoi.html" data-i18n="rmBackHn"></a></p>
+            <p class="readme-note" id="readmeNote" hidden></p>
+            <article class="readme" id="readme" aria-busy="true"></article>
+            <p class="readme-src" id="readmeSrc"></p>
+        </div>
+    </main>
+
+    <footer class="imprint">
+        <div class="wrap">
+            <p data-i18n="imprint"></p>
+        </div>
+    </footer>
+
+    <!-- shared helpers, language and theme, then the page script; order matters -->
+    <script src="scripts/util.js"></script>
+    <script src="scripts/i18n.js"></script>
+    <script src="scripts/theme.js"></script>
+    <script src="scripts/readme.js"></script>
+</body>
+</html>
